@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="warning"/>
+    <property name="fileExtensions" value="java, properties, xml"/>
+
+    <!-- Bỏ qua các file không cần thiết -->
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value="module\-info\.java$"/>
+    </module>
+
+    <!-- Kiểm tra cấu trúc file -->
+    <module name="FileLength">
+        <property name="max" value="2000"/>
+    </module>
+
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+    </module>
+
+    <!-- Kiểm tra whitespace -->
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
+    <module name="TreeWalker">
+        <!-- BỎ QUA CÁC BIẾN UNUSED - ĐÂY LÀ CẤU HÌNH CHÍNH -->
+        <module name="UnusedImports">
+            <property name="processJavadoc" value="false"/>
+        </module>
+        
+        <!-- Bỏ qua unused variables trong một số trường hợp -->
+        <module name="UnusedLocalVariable">
+            <property name="tokens" value="VARIABLE_DEF"/>
+        </module>
+
+        <!-- Bỏ qua unused parameters trong methods -->
+        <module name="UnusedParameter">
+            <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
+        </module>
+
+        <!-- Kiểm tra naming conventions -->
+        <module name="ConstantName"/>
+        <module name="LocalFinalVariableName"/>
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <module name="MethodName"/>
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
+        <module name="TypeName"/>
+
+        <!-- Kiểm tra imports -->
+        <module name="AvoidStarImport"/>
+        <module name="IllegalImport"/>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
+
+        <!-- Kiểm tra size -->
+        <module name="MethodLength">
+            <property name="max" value="150"/>
+        </module>
+        <module name="ParameterNumber">
+            <property name="max" value="7"/>
+        </module>
+
+        <!-- Kiểm tra whitespace -->
+        <module name="EmptyForIteratorPad"/>
+        <module name="GenericWhitespace"/>
+        <module name="MethodParamPad"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
+        <module name="OperatorWrap"/>
+        <module name="ParenPad"/>
+        <module name="TypecastParenPad"/>
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround"/>
+
+        <!-- Kiểm tra modifier -->
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+
+        <!-- Kiểm tra blocks -->
+        <module name="AvoidNestedBlocks"/>
+        <module name="EmptyBlock"/>
+        <module name="LeftCurly"/>
+        <module name="NeedBraces"/>
+        <module name="RightCurly"/>
+
+        <!-- Kiểm tra common coding problems -->
+        <module name="EmptyStatement"/>
+        <module name="EqualsHashCode"/>
+        <module name="HiddenField">
+            <property name="tokens" value="VARIABLE_DEF"/>
+        </module>
+        <module name="IllegalInstantiation"/>
+        <module name="InnerAssignment"/>
+        <module name="MagicNumber"/>
+        <module name="MissingSwitchDefault"/>
+        <module name="MultipleVariableDeclarations"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+
+        <!-- Kiểm tra class design -->
+        <module name="DesignForExtension"/>
+        <module name="FinalClass"/>
+        <module name="HideUtilityClassConstructor"/>
+        <module name="InterfaceIsType"/>
+        <module name="VisibilityModifier"/>
+
+        <!-- Kiểm tra miscellaneous -->
+        <module name="ArrayTypeStyle"/>
+        <module name="FinalParameters"/>
+        <module name="TodoComment"/>
+        <module name="UpperEll"/>
+
+        <!-- Kiểm tra annotations -->
+        <module name="AnnotationLocation">
+            <property name="id" value="AnnotationLocationMostCases"/>
+            <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF"/>
+        </module>
+        <module name="AnnotationLocation">
+            <property name="id" value="AnnotationLocationVariables"/>
+            <property name="tokens" value="VARIABLE_DEF"/>
+            <property name="allowSamelineMultipleAnnotations" value="true"/>
+        </module>
+    </module>
+</module>

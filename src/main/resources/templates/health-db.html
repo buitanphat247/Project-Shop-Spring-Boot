@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Health Check</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-xl font-bold">Spring Boot Shop</a>
+                <div class="space-x-4">
+                    <a href="/" class="hover:text-blue-300">Trang chủ</a>
+                    <a href="/about" class="hover:text-blue-300">Giới thiệu</a>
+                    <a href="/health-db" class="text-blue-300 font-semibold">Database Health</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Database Health Check</h1>
+                <p class="text-gray-600">Kiểm tra trạng thái kết nối MongoDB</p>
+            </div>
+
+            <!-- Status Card -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="text-center">
+                    <!-- Status Icon -->
+                    <div class="mb-4">
+                        <div th:if="${isUp}" class="text-6xl text-green-500">✓</div>
+                        <div th:unless="${isUp}" class="text-6xl text-red-500">✗</div>
+                    </div>
+                    
+                    <!-- Status Message -->
+                    <h2 th:if="${isUp}" class="text-2xl font-bold text-green-600 mb-2">Kết nối thành công!</h2>
+                    <h2 th:unless="${isUp}" class="text-2xl font-bold text-red-600 mb-2">Kết nối thất bại!</h2>
+                    
+                    <p class="text-lg text-gray-600 mb-4">
+                        Trạng thái: <span class="font-semibold" th:text="${status}">Status</span>
+                    </p>
+                </div>
+
+                <!-- Details -->
+                <div class="bg-gray-50 rounded-lg p-4" th:if="${details}">
+                    <h3 class="font-semibold text-gray-700 mb-3">Chi tiết kết nối:</h3>
+                    <div class="space-y-2">
+                        <div th:each="detail : ${details}" class="flex justify-between">
+                            <span class="font-medium" th:text="${detail.key}">Key:</span>
+                            <span class="text-gray-600" th:text="${detail.value}">Value</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timestamp -->
+                <div class="text-center text-gray-500 mt-4">
+                    Cập nhật lúc: <span th:text="${timestamp}">Timestamp</span>
+                </div>
+
+                <!-- Refresh Button -->
+                <div class="text-center mt-6">
+                    <a href="/health-db" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
+                        Kiểm tra lại
+                    </a>
+                </div>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Technical Info -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">Thông tin kỹ thuật</h3>
+                    <div class="space-y-2">
+                        <p><span class="font-semibold">Endpoint:</span> /health-db</p>
+                        <p><span class="font-semibold">Config:</span> CheckDb.java</p>
+                        <p><span class="font-semibold">Database:</span> MongoDB</p>
+                        <p><span class="font-semibold">Template:</span> health-db.html</p>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold mb-4">Thao tác</h3>
+                    <div class="space-y-3">
+                        <a href="/health-db" class="block w-full bg-green-500 text-white text-center py-2 px-4 rounded hover:bg-green-600">
+                            Kiểm tra
+                        </a>
+                        <a href="/actuator/health" target="_blank" class="block w-full bg-yellow-500 text-white text-center py-2 px-4 rounded hover:bg-yellow-600">
+                            API Health
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Spring Boot Shop. Database Health Check powered by CheckDb</p>
+        </div>
+    </footer>
+</body>
+</html>
