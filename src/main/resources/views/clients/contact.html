@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Liên hệ</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.14/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://cdn.vaadin.com/vaadin-icons/vaadin-icons.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+  </head>
+  <body class="bg-gray-50">
+    <header th:replace="layouts/header :: header"></header>
+
+    <!-- Map banner -->
+    <section class="w-full">
+      <div class="container mx-auto px-4 py-8">
+        <div class="rounded-2xl overflow-hidden shadow-sm border border-gray-200">
+          <iframe
+            title="map"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.211673930152!2d106.65042137507966!3d10.79685188934603!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175292dcf0b3d8f%3A0x5c0f2df3c2e2a6fc!2zMTA3My8yMyBDw6FjaCBN4bqhbmcgVGjDoG5nIDgsIFBoxrDhu51uZyA3LCBUw6JuIEJpbmgsIFRow6BuaCBwaOG6p24gSMOgIE7hu5lp!5e0!3m2!1svi!2svi!4v1731540000000!5m2!1svi!2svi"
+            width="100%"
+            height="420"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact content -->
+    <main class="container mx-auto px-4 py-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <!-- Info -->
+        <section class="lg:col-span-4 space-y-8">
+          <div>
+            <h2 class="text-2xl font-bold text-[#2f604a] mb-4">Địa chỉ</h2>
+            <p class="text-gray-700 leading-relaxed">1073/23 Cách Mạng Tháng 8, P.7,<br />Q.Tân Bình, TP.HCM</p>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-[#2f604a] mb-4">Email</h2>
+            <a href="mailto:info@themona.global" class="text-[#cb5439] font-medium hover:underline">info@themona.global</a>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-[#2f604a] mb-4">Hotline</h2>
+            <p class="text-gray-700">0313 728 397</p>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-[#2f604a] mb-4">Giờ làm việc</h2>
+            <p class="text-gray-700">Mở cửa: 8:00AM – Đóng cửa: 18:00PM, Từ T2–T6<br />T7 – CN: Đóng cửa</p>
+          </div>
+
+          <div>
+            <h2 class="text-2xl font-bold text-[#2f604a] mb-4">Theo dõi chúng tôi</h2>
+            <div class="flex items-center gap-3">
+              <a href="#" class="w-9 h-9 grid place-items-center rounded-full bg-[#3b5998] text-white"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="w-9 h-9 grid place-items-center rounded-full bg-[#1da1f2] text-white"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="w-9 h-9 grid place-items-center rounded-full bg-[#e4405f] text-white"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="w-9 h-9 grid place-items-center rounded-full bg-[#cd201f] text-white"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Form -->
+        <section class="lg:col-span-8">
+          <h2 class="text-2xl font-bold text-[#2f604a] mb-5">Liên hệ với chúng tôi</h2>
+          <form class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                placeholder="Tên của bạn"
+                class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#2f604a] focus:outline-none"
+              />
+              <input
+                type="email"
+                placeholder="Email của bạn"
+                class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#2f604a] focus:outline-none"
+              />
+            </div>
+            <input
+              type="tel"
+              placeholder="Số điện thoại"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#2f604a] focus:outline-none"
+            />
+            <textarea
+              rows="6"
+              placeholder="Tin nhắn của bạn"
+              class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-[#2f604a] focus:outline-none"
+            ></textarea>
+            <button type="submit" class="px-6 py-3 rounded-full bg-[#cb5439] text-white font-semibold hover:bg-[#a0452e] transition-colors">
+              Gửi tin nhắn
+            </button>
+          </form>
+        </section>
+      </div>
+    </main>
+
+    <footer th:replace="layouts/footer :: footer"></footer>
+  </body>
+</html>
