@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tin tức</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.14/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://cdn.vaadin.com/vaadin-icons/vaadin-icons.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+  </head>
+  <body class="bg-gray-50">
+    <header th:replace="layouts/header :: header"></header>
+
+    <!-- Hero -->
+   
+
+    <main class="container mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Sidebar -->
+        <aside class="lg:col-span-3 space-y-6">
+          <!-- Categories -->
+          <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+            <h2 class="text-[#2f604a] font-bold text-lg mb-4">Chuyên mục</h2>
+            <ul class="space-y-2 text-gray-700">
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Dinh dưỡng</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Công thức nấu ăn</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Kinh nghiệm mua sắm</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Vệ sinh an toàn thực phẩm</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Khuyến mãi</a></li>
+            </ul>
+          </section>
+
+          <!-- Tags -->
+          <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+            <h2 class="text-[#2f604a] font-bold text-lg mb-4">Từ khóa</h2>
+            <div class="flex flex-wrap gap-2">
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">hữu cơ</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">rau củ</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">nước ép</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">món chay</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">healthy</a>
+            </div>
+          </section>
+        </aside>
+
+        <!-- News list -->
+        <section class="lg:col-span-9">
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6" id="news-grid">
+            <!-- sample cards (will keep static for now) -->
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <a href="#" class="block aspect-[4/3] overflow-hidden">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1500&auto=format&fit=crop" alt="Bí quyết chọn rau củ tươi" />
+              </a>
+              <div class="p-4">
+                <div class="text-xs text-gray-500">12/10/2025 • Dinh dưỡng</div>
+                <h3 class="mt-1 font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">Bí quyết chọn rau củ tươi ngon đúng mùa</h3>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-3">Mẹo nhỏ giúp bạn chọn rau củ quả tươi giòn, giàu dưỡng chất và an toàn cho gia đình.</p>
+                <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-3">Đọc tiếp <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <a href="#" class="block aspect-[4/3] overflow-hidden">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1500&auto=format&fit=crop" alt="Công thức nước ép" />
+              </a>
+              <div class="p-4">
+                <div class="text-xs text-gray-500">09/10/2025 • Công thức</div>
+                <h3 class="mt-1 font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">3 công thức nước ép detox giúp da sáng khoẻ</h3>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-3">Kết hợp trái cây hữu cơ để tạo nên ly nước ép mát lạnh, giàu vitamin cho ngày mới.</p>
+                <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-3">Đọc tiếp <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <a href="#" class="block aspect-[4/3] overflow-hidden">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src="https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?q=80&w=1500&auto=format&fit=crop" alt="Bữa sáng healthy" />
+              </a>
+              <div class="p-4">
+                <div class="text-xs text-gray-500">05/10/2025 • Lối sống</div>
+                <h3 class="mt-1 font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">Gợi ý bữa sáng healthy nhanh gọn cho dân văn phòng</h3>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-3">Chỉ 10 phút chuẩn bị, bạn đã có bữa sáng ngon lành, cân bằng dinh dưỡng cho một ngày hiệu quả.</p>
+                <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-3">Đọc tiếp <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </article>
+
+            <!-- add 6 more simple duplicates -->
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <a href="#" class="block aspect-[4/3] overflow-hidden">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?q=80&w=1500&auto=format&fit=crop" alt="Thực phẩm sạch" />
+              </a>
+              <div class="p-4">
+                <div class="text-xs text-gray-500">03/10/2025 • Vệ sinh ATTP</div>
+                <h3 class="mt-1 font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">Cách bảo quản thực phẩm hữu cơ đúng chuẩn</h3>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-3">Giữ trọn dưỡng chất và hương vị bằng các mẹo bảo quản đơn giản tại nhà.</p>
+                <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-3">Đọc tiếp <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <a href="#" class="block aspect-[4/3] overflow-hidden">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?q=80&w=1500&auto=format&fit=crop" alt="Tập thói quen xanh" />
+              </a>
+              <div class="p-4">
+                <div class="text-xs text-gray-500">30/09/2025 • Lối sống</div>
+                <h3 class="mt-1 font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">5 thói quen xanh giúp bạn sống khoẻ mỗi ngày</h3>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-3">Những thay đổi nhỏ nhưng bền vững cho sức khoẻ và môi trường.</p>
+                <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-3">Đọc tiếp <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <a href="#" class="block aspect-[4/3] overflow-hidden">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1500&auto=format&fit=crop" alt="Bí quyết mua sắm" />
+              </a>
+              <div class="p-4">
+                <div class="text-xs text-gray-500">27/09/2025 • Mua sắm</div>
+                <h3 class="mt-1 font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">Bí quyết mua sắm thực phẩm tiết kiệm mà vẫn chất lượng</h3>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-3">Danh sách mẹo nhỏ giúp bạn quản lý chi tiêu thông minh khi đi chợ.</p>
+                <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-3">Đọc tiếp <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <a href="#" class="block aspect-[4/3] overflow-hidden">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src="https://images.unsplash.com/photo-1506084868230-bb9d95c24759?q=80&w=1500&auto=format&fit=crop" alt="Món chay" />
+              </a>
+              <div class="p-4">
+                <div class="text-xs text-gray-500">25/09/2025 • Công thức</div>
+                <h3 class="mt-1 font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">Thực đơn chay 7 ngày cho người mới bắt đầu</h3>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-3">Gợi ý phong phú, cân đối dinh dưỡng và dễ chế biến tại nhà.</p>
+                <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-3">Đọc tiếp <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <a href="#" class="block aspect-[4/3] overflow-hidden">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src="https://images.unsplash.com/photo-1478144592103-25e218a04891?q=80&w=1500&auto=format&fit=crop" alt="Vitamin tự nhiên" />
+              </a>
+              <div class="p-4">
+                <div class="text-xs text-gray-500">22/09/2025 • Dinh dưỡng</div>
+                <h3 class="mt-1 font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">Top 6 nguồn vitamin tự nhiên bạn nên bổ sung hằng ngày</h3>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-3">Danh sách thực phẩm giàu vitamin, tốt cho miễn dịch và làn da.</p>
+                <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-3">Đọc tiếp <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </article>
+
+            <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <a href="#" class="block aspect-[4/3] overflow-hidden">
+                <img class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src="https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?q=80&w=1500&auto=format&fit=crop" alt="Ưu đãi" />
+              </a>
+              <div class="p-4">
+                <div class="text-xs text-gray-500">20/09/2025 • Khuyến mãi</div>
+                <h3 class="mt-1 font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">Ưu đãi tháng 10: Giảm đến 30% cho nước ép hữu cơ</h3>
+                <p class="mt-2 text-sm text-gray-600 line-clamp-3">Đừng bỏ lỡ chương trình ưu đãi cực hấp dẫn trong tháng này.</p>
+                <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-3">Đọc tiếp <i class="fas fa-arrow-right text-xs"></i></a>
+              </div>
+            </article>
+          </div>
+
+          <!-- Pagination -->
+          <div class="mt-8 flex items-center justify-center gap-2">
+            <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">&laquo;</button>
+            <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-[#cb5439] text-white">1</button>
+            <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">2</button>
+            <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">3</button>
+            <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">&raquo;</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer th:replace="layouts/footer :: footer"></footer>
+  </body>
+</html>
