@@ -1,0 +1,75 @@
+/* Global smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Dropdown animation */
+.animated-dropdown {
+  display: block;
+  opacity: 0;
+  transform: translateY(8px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.animated-dropdown.show {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Category dropdown UI (match screenshot style) */
+.category-menu {
+  min-width: 300px;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
+}
+.category-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #eef2ef;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2f604a;
+}
+.category-menu .dropdown-item:hover {
+  background: #f7faf8;
+  color: #2f604a;
+}
+.category-menu .dropdown-item .icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f4;
+  color: #2f604a;
+  flex: 0 0 auto;
+}
+.category-menu .menu-title {
+  font-weight: 800;
+  color: #2f604a;
+  padding: 0.25rem 0.5rem 0.5rem;
+}
+.category-menu .menu-footer a {
+  color: #cb5439;
+  font-weight: 700;
+}
+
+/* Header buttons */
+.btn-category {
+  background: #cb5439;
+  color: #fff;
+  border: none;
+}
+.btn-category:hover {
+  background: #b64a33;
+  color: #fff;
+}

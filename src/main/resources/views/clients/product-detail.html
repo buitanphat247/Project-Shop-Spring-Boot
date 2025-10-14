@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi tiết sản phẩm - THE MONA</title>
+    <!-- Tailwind (utility) + Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.14/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      .badge-sale {
+        position: absolute;
+        left: 1rem;
+        top: 1rem;
+        background: #cb5439;
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.75rem;
+        border-radius: 9999px;
+        padding: 0.25rem 0.75rem;
+      }
+      /* Swiper gallery - unify height */
+      .pd-main {
+        height: 450px;
+      }
+      @media (max-width: 768px) {
+        .pd-main {
+          height: 250px;
+        }
+      }
+      .pd-main .swiper-slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        height: 100%;
+      }
+
+      .pd-thumbs {
+        padding: 1rem;
+      }
+      .pd-thumbs .swiper-slide {
+        width: 120px;
+        height: 80px;
+        opacity: 0.6;
+        cursor: pointer;
+      }
+      .pd-thumbs .swiper-slide-thumb-active {
+        opacity: 1;
+        outline: 2px solid #cb5439;
+        border-radius: 0.5rem;
+      }
+      /* Related product card */
+      .rp-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 1rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+      .rp-title {
+        color: #1f2d3d;
+        font-weight: 600;
+      }
+      .rp-price {
+        color: #cb5439;
+        font-weight: 800;
+        font-size: 1.25rem;
+      }
+      .rp-progress {
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 9999px;
+        overflow: hidden;
+      }
+      .rp-progress > span {
+        display: block;
+        height: 100%;
+        background: #2f604a;
+        border-radius: 9999px;
+      }
+      .rp-cart {
+        width: 40px;
+        height: 40px;
+        border-radius: 9999px;
+        background: #2f604a;
+        color: #fff;
+        display: grid;
+        place-items: center;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <header th:replace="layouts/header :: header"></header>
+    <main class="container mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Gallery -->
+        <section class="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
+          <span class="badge-sale z-50">SALE!</span>
+          <!-- Swiper main gallery -->
+          <div class="swiper pd-main">
+            <div class="swiper-wrapper" id="pdMainWrapper"></div>
+          </div>
+          <!-- Thumbs -->
+          <div class="swiper pd-thumbs">
+            <div class="swiper-wrapper" id="pdThumbsWrapper"></div>
+          </div>
+        </section>
+
+        <!-- Info -->
+        <section class="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col gap-4">
+          <h1 class="text-3xl font-bold text-[#1f2d3d]">Bơ hữu cơ</h1>
+          <div class="flex items-center gap-3">
+            <span class="text-gray-400 line-through">134.000 đ</span>
+            <span class="text-[#cb5439] text-2xl font-extrabold">95.000 đ</span>
+          </div>
+          <p class="text-gray-600">
+            Curabitur laoreet rhoncus blandit. Aenean vel diam ut arcu pharetra dignissim at sed leo. Vivamus faucibus, ipsum in vestibulum vulputate,
+            lorem orci convallis quam, sit amet consequat nulla felis pharetra lacus.
+          </p>
+
+          <div class="flex items-center gap-3">
+            <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+              <button class="w-10 h-10 grid place-items-center" onclick="chgQty(-1)">-</button>
+              <input id="qty" class="w-12 h-10 text-center border-x border-gray-300" value="1" />
+              <button class="w-10 h-10 grid place-items-center" onclick="chgQty(1)">+</button>
+            </div>
+            <button class="flex-1 bg-[#1f553f] hover:bg-[#164232] text-white px-6 py-3 rounded-full font-semibold">THÊM VÀO GIỎ HÀNG</button>
+            <button class="w-10 h-10 rounded-full border border-gray-300 text-gray-600 hover:text-[#cb5439]"><i class="fas fa-heart"></i></button>
+          </div>
+
+          <div class="text-sm text-gray-600 space-y-1 pt-2">
+            <div><span class="font-semibold">SKU:</span> A0002</div>
+            <div><span class="font-semibold">DANH MỤC:</span> Nước ép hữu cơ, Trái cây & hạt</div>
+            <div><span class="font-semibold">TỪ KHÓA:</span> Fresh, Organic</div>
+            <div class="flex items-center gap-3">
+              <span class="font-semibold">CHIA SẺ:</span>
+              <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-pinterest"></i></a>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Tabs -->
+      <section class="mt-10 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center gap-6 border-b mb-6">
+          <button class="py-3 font-bold text-[#cb5439] border-b-2 border-[#cb5439]" onclick="showTab('desc')">MÔ TẢ</button>
+          <button class="py-3 font-bold  text-gray-600 hover:text-[#cb5439] border-b-2 border-transparent" onclick="showTab('info')">THÔNG TIN BỔ SUNG</button>
+          <button class="py-3 font-bold  text-gray-600 hover:text-[#cb5439] border-b-2 border-transparent" onclick="showTab('review')">ĐÁNH GIÁ (0)</button>
+        </div>
+        <div id="tab-desc" class="text-gray-700 leading-relaxed">
+          <p class="mb-4">
+            Quisque varius diam vel metus mattis, id aliquam diam rhoncus. Proin vitae magna in dui finibus malesuada et at nulla. Morbi elit ex,
+            viverra vitae ante vel, blandit feugiat ligula.
+          </p>
+          <p class="mb-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation ullamco laboris.
+          </p>
+          <p>
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+        </div>
+        <div id="tab-info" class="text-gray-700 leading-relaxed hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+              <tbody>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="w-1/3 font-medium text-[#1f2d3d] p-3 border-b border-gray-200">Xuất xứ</td>
+                  <td class="p-3 border-b border-gray-200">Việt Nam</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="font-medium text-[#1f2d3d] p-3 border-b border-gray-200">Trọng lượng</td>
+                  <td class="p-3 border-b border-gray-200">1kg</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="font-medium text-[#1f2d3d] p-3 border-b border-gray-200">Bảo quản</td>
+                  <td class="p-3 border-b border-gray-200">0-5°C</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="font-medium text-[#1f2d3d] p-3 border-b border-gray-200">Hạn sử dụng</td>
+                  <td class="p-3 border-b border-gray-200">7 ngày</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="font-medium text-[#1f2d3d] p-3 border-b border-gray-200">Thành phần</td>
+                  <td class="p-3 border-b border-gray-200">100% hữu cơ</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="font-medium text-[#1f2d3d] p-3 border-b border-gray-200">Chứng nhận</td>
+                  <td class="p-3 border-b border-gray-200">USDA Organic</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="font-medium text-[#1f2d3d] p-3 border-b border-gray-200">Đóng gói</td>
+                  <td class="p-3 border-b border-gray-200">Túi hút chân không</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="font-medium text-[#1f2d3d] p-3 border-b border-gray-200">Vận chuyển</td>
+                  <td class="p-3 border-b border-gray-200">Lạnh</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="font-medium text-[#1f2d3d] p-3 border-b border-gray-200">Đơn vị</td>
+                  <td class="p-3 border-b border-gray-200">Cái</td>
+                </tr>
+                <tr class="odd:bg-white even:bg-gray-50">
+                  <td class="font-medium text-[#1f2d3d] p-3">Mã sản phẩm</td>
+                  <td class="p-3">A0002</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="tab-review" class="hidden">
+          <h4 class="text-lg font-semibold text-[#1f2d3d] mb-4">Be the first to review “Bơ hữu cơ”</h4>
+          <form id="reviewForm" class="space-y-4">
+            <div>
+              <label class="block text-sm text-gray-700 mb-1">Tên*</label>
+              <input
+                type="text"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#cb5439]"
+                placeholder="Nguyễn Văn A"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-700 mb-1">Email*</label>
+              <input
+                type="email"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#cb5439]"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+            <label class="inline-flex items-center gap-2 text-sm text-gray-600"
+              ><input type="checkbox" class="accent-[#cb5439]" /> Lưu tên của tôi, email, và trang web trong trình duyệt này cho lần bình luận kế tiếp
+              của tôi.</label
+            >
+            <div>
+              <label class="block text-sm text-gray-700 mb-1">Đánh giá của bạn</label>
+              <div id="rvStars" class="flex gap-1 text-xl text-gray-300 cursor-pointer select-none">
+                <i data-v="1" class="fa-solid fa-star"></i>
+                <i data-v="2" class="fa-solid fa-star"></i>
+                <i data-v="3" class="fa-solid fa-star"></i>
+                <i data-v="4" class="fa-solid fa-star"></i>
+                <i data-v="5" class="fa-solid fa-star"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm text-gray-700 mb-1">Đánh giá của bạn</label>
+              <textarea
+                rows="6"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#cb5439]"
+                placeholder="Hãy chia sẻ cảm nhận của bạn..."
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="bg-[#cb5439] text-white px-5 py-2 rounded-full hover:bg-[#a8442f]">GỬI ĐÁNH GIÁ</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Related products -->
+      <section class="mt-10">
+        <h2 class="text-2xl font-bold text-center text-[#2f604a] mb-6">SẢN PHẨM LIÊN QUAN</h2>
+        <div id="relatedProducts" class="grid grid-cols-2 md:grid-cols-4 gap-5"></div>
+      </section>
+    </main>
+    <footer th:replace="layouts/footer :: footer"></footer>
+
+    <script>
+      // Swiper init with thumbs + dynamic rendering
+      document.addEventListener("DOMContentLoaded", function () {
+        try {
+          const images = [
+            "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
+            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+            "https://media.istockphoto.com/id/1155240408/vi/anh/b%C3%A0n-ch%E1%BB%A9a-nhi%E1%BB%81u-lo%E1%BA%A1i-th%E1%BB%B1c-ph%E1%BA%A9m.jpg?s=612x612&w=0&k=20&c=IbFG8N9b41uM-RBYw8r0ASDoJX5RSWz9oDBN4m9gFcY=",
+          ];
+          // Render slides
+          const mainWrap = document.getElementById("pdMainWrapper");
+          const thumbWrap = document.getElementById("pdThumbsWrapper");
+          if (mainWrap && thumbWrap) {
+            mainWrap.innerHTML = images
+              .map((src) => `<div class="swiper-slide"><img src="${src}" alt="slide" class="block w-full h-full object-cover"/></div>`)
+              .join("");
+            thumbWrap.innerHTML = images
+              .map(
+                (src) => `<div class="swiper-slide"><img src="${src}" class="w-full h-full object-cover rounded-lg border border-gray-200"/></div>`
+              )
+              .join("");
+          }
+
+          var thumbs = new Swiper(".pd-thumbs", {
+            spaceBetween: 12,
+            slidesPerView: 5,
+            freeMode: true,
+            watchSlidesProgress: true,
+            watchSlidesVisibility: true,
+            breakpoints: { 0: { slidesPerView: 3 }, 640: { slidesPerView: 4 }, 1024: { slidesPerView: 5 } },
+          });
+          const main = new Swiper(".pd-main", {
+            loop: true,
+            spaceBetween: 10,
+            autoplay: { delay: 1500, disableOnInteraction: false },
+            thumbs: {
+              swiper: thumbs,
+            },
+          });
+        } catch (e) {}
+      });
+
+      // Simple star rating for review form
+      (function () {
+        document.addEventListener("DOMContentLoaded", function () {
+          var wrap = document.getElementById("rvStars");
+          if (!wrap) return;
+          var current = 0;
+          function paint(n) {
+            Array.from(wrap.querySelectorAll("i")).forEach(function (el) {
+              var v = parseInt(el.getAttribute("data-v") || "0", 10);
+              el.classList.toggle("text-yellow-400", v <= n);
+              el.classList.toggle("text-gray-300", v > n);
+            });
+          }
+          wrap.addEventListener("mousemove", function (e) {
+            var t = e.target.closest("i");
+            if (!t) return;
+            paint(parseInt(t.getAttribute("data-v"), 10));
+          });
+          wrap.addEventListener("mouseleave", function () {
+            paint(current);
+          });
+          wrap.addEventListener("click", function (e) {
+            var t = e.target.closest("i");
+            if (!t) return;
+            current = parseInt(t.getAttribute("data-v"), 10);
+            paint(current);
+          });
+          paint(0);
+        });
+      })();
+
+      function chgQty(delta) {
+        const i = document.getElementById("qty");
+        let v = parseInt(i.value || 1, 10) + delta;
+        if (v < 1) v = 1;
+        i.value = v;
+      }
+      function showTab(name) {
+        // Hide all tab contents
+        document.getElementById("tab-desc").classList.toggle("hidden", name !== "desc");
+        document.getElementById("tab-info").classList.toggle("hidden", name !== "info");
+        document.getElementById("tab-review").classList.toggle("hidden", name !== "review");
+
+        // Update tab button styles
+        const buttons = document.querySelectorAll('[onclick^="showTab"]');
+         buttons.forEach((btn) => {
+           btn.classList.remove("text-[#cb5439]", "border-[#cb5439]");
+           btn.classList.add("text-gray-600", "border-b-2", "border-transparent");
+         });
+
+        // Set active tab
+        const activeBtn = document.querySelector(`[onclick="showTab('${name}')"]`);
+         if (activeBtn) {
+           activeBtn.classList.remove("text-gray-600", "border-transparent");
+           activeBtn.classList.add("font-bold", "text-[#cb5439]", "border-b-2", "border-[#cb5439]");
+         }
+      }
+
+      // Related products (mock)
+      const rel = [
+        {
+          id: 1,
+          name: "Sản phẩm Hữu Cơ 1",
+          price: 45000,
+          img: "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
+          available: 8,
+          sold: 15,
+          progress: 65,
+          rating: 5,
+        },
+        {
+          id: 2,
+          name: "Sản phẩm Hữu Cơ 2",
+          price: 95000,
+          img: "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+          available: 12,
+          sold: 9,
+          progress: 45,
+          rating: 4,
+        },
+        {
+          id: 3,
+          name: "Sản phẩm Hữu Cơ 3",
+          price: 130000,
+          img: "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
+          available: 5,
+          sold: 20,
+          progress: 80,
+          rating: 4,
+        },
+        {
+          id: 4,
+          name: "Sản phẩm Hữu Cơ 4",
+          price: 47000,
+          img: "https://media.istockphoto.com/id/1208790371/vi/anh/n%E1%BB%81n-tr%C3%A1i-c%C3%A2y-v%C3%A0-rau-qu%E1%BA%A3-m%C3%A0u-c%E1%BA%A7u-v%E1%BB%93ng-t%C6%B0%C6%A1i-t%E1%BB%91t-cho-s%E1%BB%A9c-kh%E1%BB%8Fe.jpg?s=612x612&w=0&k=20&c=btxH1rlvCP6JlpfvUv2T_ijTNOCKV5qJ6lfDUTU6FGg=",
+          available: 20,
+          sold: 11,
+          progress: 55,
+          rating: 5,
+        },
+      ];
+      function fmtPrice(v) {
+        return v.toLocaleString("vi-VN") + " đ";
+      }
+      function stars(n) {
+        let s = "";
+        for (let i = 1; i <= 5; i++) {
+          s += `<i class="fa-solid fa-star ${i <= n ? "text-yellow-400" : "text-gray-300"}"></i>`;
+        }
+        return s;
+      }
+      const host = document.getElementById("relatedProducts");
+      if (host)
+        host.innerHTML = rel
+          .map(
+            (p) => `
+        <article class="rp-card overflow-hidden">
+          <a class="block aspect-[4/3] overflow-hidden" href="/product/detail/${p.id}">
+            <img src="${p.img}" class="w-full h-full object-cover" alt="${p.name}">
+          </a>
+          <div class="p-4">
+            <h4 class="rp-title text-sm mb-1"><a href="/product/detail/${p.id}" class="hover:text-[#cb5439]">${p.name}</a></h4>
+            <div class="flex items-center gap-1 mb-2">${stars(p.rating)}</div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="rp-price">${fmtPrice(p.price)}</div>
+              <button class="rp-cart"><i class="fa-solid fa-basket-shopping"></i></button>
+            </div>
+            <div class="flex items-center justify-between text-xs text-gray-600 mb-1"><span>Có sẵn: ${p.available}</span><span>Đã bán: ${
+              p.sold
+            }</span></div>
+            <div class="rp-progress"><span style="width:${p.progress}%"></span></div>
+          </div>
+        </article>
+      `
+          )
+          .join("");
+    </script>
+  </body>
+</html>

@@ -9,6 +9,11 @@
     <link href="https://cdn.vaadin.com/vaadin-icons/vaadin-icons.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+    <!-- Owl Carousel 2 (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
   </head>
   <body>
     <header th:fragment="header">
@@ -51,9 +56,9 @@
 
             <!-- User Icons -->
             <div class="flex items-center space-x-4">
-              <a href="#" class="text-gray-600 hover:text-green-600 transition-colors">
+              <button id="userIcon" class="text-gray-600 hover:text-green-600 transition-colors">
                 <i class="fas fa-user text-xl"></i>
-              </a>
+              </button>
               <a href="#" class="text-gray-600 hover:text-green-600 transition-colors relative">
                 <i class="fas fa-heart text-xl"></i>
                 <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
@@ -70,14 +75,13 @@
       <!-- Navigation Bar -->
       <nav class="bg-white text-white border-t border-gray-300">
         <div class="container mx-auto px-4">
-       
           <div class="flex justify-between items-center py-3">
             <!-- Navigation Links -->
             <div class="hidden md:flex items-center space-x-6 text-black font-semibold">
               <a href="/" class="text-black hover:text-[#cb5439] transition-colors">Trang chủ</a>
-              <a href="/about" class="text-black hover:text-[#cb5439] transition-colors">Giới thiệu</a>
               <a href="/products" class="text-black hover:text-[#cb5439] transition-colors font-medium">Sản phẩm</a>
               <a href="/news" class="text-black hover:text-[#cb5439] transition-colors">Tin tức</a>
+              <a href="/about" class="text-black hover:text-[#cb5439] transition-colors">Giới thiệu</a>
               <a href="/contact" class="text-black hover:text-[#cb5439] transition-colors">Liên hệ</a>
             </div>
 
@@ -90,6 +94,8 @@
               <i class="fas fa-chevron-down"></i>
             </div>
           </div>
+
+      
 
           <!-- Mobile Menu -->
           <div id="mobile-menu" class="md:hidden hidden pb-4">
@@ -104,5 +110,5 @@
         </div>
       </nav>
     </header>
-  </body>
+</body>
 </html>

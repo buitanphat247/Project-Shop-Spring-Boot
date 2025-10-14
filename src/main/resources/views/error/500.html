@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Lỗi Server - Spring Boot Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .error-bg {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+        }
+        .error-animation {
+            animation: shake 0.5s ease-in-out infinite;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .gear-animation {
+            animation: rotate 2s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .pulse-animation {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="error-bg min-vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5 text-center">
+                        <!-- 500 Icon -->
+                        <div class="error-animation mb-4">
+                            <i class="fas fa-cog text-danger gear-animation" style="font-size: 5rem;"></i>
+                        </div>
+                        
+                        <!-- Error Code -->
+                        <h1 class="display-1 fw-bold text-danger mb-3">500</h1>
+                        
+                        <!-- Error Message -->
+                        <h2 class="h3 text-dark mb-4">Lỗi Máy Chủ Nội Bộ</h2>
+                        
+                        <!-- Description -->
+                        <p class="text-muted mb-4 fs-5">
+                            Xin lỗi, đã xảy ra lỗi kỹ thuật. Đội ngũ kỹ thuật của chúng tôi đang khắc phục sự cố.
+                        </p>
+                        
+                        <!-- Status Info -->
+                        <div class="row text-center mb-4">
+                            <div class="col-md-4 mb-3">
+                                <div class="pulse-animation">
+                                    <i class="fas fa-tools text-warning fs-4 mb-2"></i>
+                                    <p class="mb-0 fw-semibold">Đang Sửa Chữa</p>
+                                    <p class="text-muted small">Kỹ thuật viên đang làm việc</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="pulse-animation" style="animation-delay: 0.5s;">
+                                    <i class="fas fa-clock text-info fs-4 mb-2"></i>
+                                    <p class="mb-0 fw-semibold">Thời Gian</p>
+                                    <p class="text-muted small">5-10 phút</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="pulse-animation" style="animation-delay: 1s;">
+                                    <i class="fas fa-bell text-success fs-4 mb-2"></i>
+                                    <p class="mb-0 fw-semibold">Thông Báo</p>
+                                    <p class="text-muted small">Sẽ thông báo khi sửa xong</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mb-4">
+                            <a href="/" class="btn btn-primary btn-lg px-4 py-3 rounded-pill">
+                                <i class="fas fa-home me-2"></i>
+                                Về Trang Chủ
+                            </a>
+                            <button onclick="location.reload()" class="btn btn-warning btn-lg px-4 py-3 rounded-pill">
+                                <i class="fas fa-redo me-2"></i>
+                                Thử Lại
+                            </button>
+                            <button onclick="history.back()" class="btn btn-outline-secondary btn-lg px-4 py-3 rounded-pill">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Quay Lại
+                            </button>
+                        </div>
+                        
+                        <!-- Contact Support -->
+                        <div class="alert alert-info" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-info-circle me-3 fs-4"></i>
+                                <div>
+                                    <h6 class="alert-heading mb-1">Cần Hỗ Trợ?</h6>
+                                    <p class="mb-0">Nếu sự cố vẫn tiếp tục, vui lòng liên hệ với chúng tôi qua email: <strong>support@shop.com</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="mt-4">
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-warning progress-bar-striped progress-bar-animated" 
+                                     role="progressbar" style="width: 75%"></div>
+                            </div>
+                            <p class="text-muted small mt-2 mb-0">
+                                <i class="fas fa-cog fa-spin me-1"></i>
+                                Đang khắc phục sự cố... 75%
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="text-center mt-4">
+                    <p class="text-white-50">
+                        © 2024 Spring Boot Shop. Tất cả quyền được bảo lưu.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto refresh after 30 seconds
+        setTimeout(function() {
+            location.reload();
+        }, 30000);
+        
+        // Show refresh button after 10 seconds
+        setTimeout(function() {
+            const refreshBtn = document.querySelector('button[onclick="location.reload()"]');
+            if (refreshBtn) {
+                refreshBtn.classList.remove('btn-warning');
+                refreshBtn.classList.add('btn-success');
+                refreshBtn.innerHTML = '<i class="fas fa-check me-2"></i>Thử Lại Ngay';
+            }
+        }, 10000);
+    </script>
+</body>
+</html>

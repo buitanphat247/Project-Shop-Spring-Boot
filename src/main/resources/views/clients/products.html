@@ -1,17 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sản phẩm</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.14/dist/tailwind.min.css" rel="stylesheet" />
-    <link href="https://cdn.vaadin.com/vaadin-icons/vaadin-icons.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
-  </head>
-  <body class="bg-gray-50">
-    <header th:replace="layouts/header :: header"></header>
+<body>
+  <div th:replace="~{layouts/main-layout :: layout('Sản phẩm - THE MONA', ~{::content})}">
+    <div th:fragment="content">
 
     <main class="container mx-auto px-4 py-8">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -95,8 +86,9 @@
       </div>
     </main>
 
-    <footer th:replace="layouts/footer :: footer"></footer>
-  </body>
+    </div>
+  </div>
+</body>
 </html>
 <script>
   // Sample data (20+ items)
@@ -142,14 +134,16 @@
       <article class=\"bg-white rounded-2xl shadow border border-gray-200 overflow-hidden\">
         <div class=\"p-4\">
           <div class=\"relative aspect-[4/3] bg-white rounded-xl overflow-hidden\">
-            <img src=\"${p.img}\" alt=\"${p.name}\" class=\"w-full h-full object-cover\" />
+            <a href=\"products/detail/${p.id}\" class=\"block w-full h-full\">
+              <img src=\"${p.img}\" alt=\"${p.name}\" class=\"w-full h-full object-cover\" />
+            </a>
             ${
               p.discount
                 ? `<span class=\\\"absolute left-3 top-3 bg-[#e2553f] text-white text-xs font-semibold px-2 py-1 rounded-full\\\">${p.discount}</span>`
                 : ""
             }
           </div>
-          <h4 class=\"mt-3 text-[15px] font-semibold text-[#1f2d3d]\">${p.name}</h4>
+          <h4 class=\"mt-3 text-[15px] font-semibold text-[#1f2d3d]\"><a href=\"product/detail/${p.id}\" class=\"hover:text-[#cb5439]\">${p.name}</a></h4>
           <div class=\"mt-2\">${renderStars(p.rating)}</div>
           <div class=\"mt-2 flex items-center justify-between\">
             <div class=\"text-[#cb5439] font-extrabold text-xl\">${formatPrice(p.price)}</div>

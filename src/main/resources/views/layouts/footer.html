@@ -50,7 +50,7 @@
      </style>
    </head>
   <body>
-    <footer th:fragment="footer" class="footer-bg bg-[#fcf6f5] border-t border-[#fdba74]">
+    <footer th:fragment="footer" class="footer-bg bg-[#fcf6f5] border-t border-gray-300">
       <!-- Newsletter Subscription Section -->
       <div class="newsletter-bg py-8">
         <div class="container mx-auto px-4">
@@ -71,7 +71,7 @@
       </div>
 
       <!-- Divider -->
-      <div class="border-t border-[#fdba74]"></div>
+      <div class="border-t border-gray-300"></div>
 
       <!-- Main Footer Content -->
       <div class="footer-bg py-8">
@@ -143,7 +143,7 @@
       </div>
 
       <!-- Divider -->
-      <div class="border-t border-[#fdba74]"></div>
+      <div class="border-t border-gray-300"></div>
 
       <!-- Copyright Bar -->
       <div class="footer-bg py-4">
@@ -163,51 +163,7 @@
       </button>
     </footer>
 
-    <script>
-      // Scroll to top functionality
-      const scrollToTopBtn = document.getElementById("scrollToTop");
-
-      window.addEventListener("scroll", function () {
-        if (window.pageYOffset > 300) {
-          scrollToTopBtn.classList.remove("opacity-0", "pointer-events-none");
-          scrollToTopBtn.classList.add("opacity-100");
-        } else {
-          scrollToTopBtn.classList.add("opacity-0", "pointer-events-none");
-          scrollToTopBtn.classList.remove("opacity-100");
-        }
-      });
-
-      scrollToTopBtn.addEventListener("click", function () {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      });
-
-      // Active link detection
-      function setActiveLink() {
-        const currentPath = window.location.pathname;
-        const footerLinks = document.querySelectorAll("footer a[href]");
-
-        footerLinks.forEach((link) => {
-          const linkPath = link.getAttribute("href");
-
-          // Remove existing active classes
-          link.classList.remove("active", "text-[#cb5439]");
-
-          // Check if current path matches link path
-          if (currentPath === linkPath || (linkPath === "/" && currentPath === "/") || (linkPath !== "/" && currentPath.startsWith(linkPath))) {
-            link.classList.add("active", "text-[#cb5439]");
-          }
-        });
-      }
-
-      // Set active links when page loads
-      document.addEventListener("DOMContentLoaded", setActiveLink);
-
-      // Update active links when navigating (for SPA-like behavior)
-      window.addEventListener("popstate", setActiveLink);
-    </script>
+   
   
   </body>
 </html>

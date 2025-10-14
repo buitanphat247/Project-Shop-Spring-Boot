@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-  <body>
+<body>
     <div th:replace="~{layouts/main-layout :: layout('Trang chủ - Spring Boot Shop', ~{::content})}">
-      <div th:fragment="content">
+        <div th:fragment="content">
+        <div></div>
+
         <!-- Features Banner -->
         <div class="bg-white border-t border-orange-300">
           <div class="container mx-auto px-4 py-6">
@@ -54,97 +56,10 @@
           </div>
         </div>
 
-        <!-- Promotional Cards Section -->
-        <div class="bg-[#fcf6f5] py-16 border-t border-b border-[#fdba74]">
+        <!-- Promotional Cards Section (render by JS) -->
+        <div class="bg-[#fcf6f5] py-16 border-t border-b border-gray-300">
           <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <!-- Card 1: Fresh Vegetables -->
-              <div
-                class="group rounded-3xl p-8 relative overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                style="
-                  background-image: url('https://vnn-imgs-f.vgcloud.vn/2019/05/22/10/cach-chon-rau-cu-qua-sach-tuoi-ngon-khong-ngam-doc.jpg?width=0&s=kF_8EzU5qugnDebVP2h6Lg');
-                  background-size: cover;
-                  background-position: center;
-                "
-              >
-                <div class="absolute inset-0 bg-green-900 bg-opacity-60 rounded-3xl"></div>
-                <div class="relative z-10">
-                  <div class="inline-block bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold mb-4">ƯU ĐÃI 50%</div>
-                  <h3 class="text-white text-3xl font-bold mb-4">RAU CỦ TƯƠI</h3>
-                  <p class="text-white text-opacity-90 mb-6">Rau củ tươi ngon, được chọn lọc kỹ càng từ những trang trại hữu cơ</p>
-                  <button
-                    class="bg-[#d9624a] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#b8544a] transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    XEM NGAY
-                  </button>
-                </div>
-                <!-- Decorative elements -->
-                <div class="absolute top-4 right-4 w-12 h-12 bg-green-200 rounded-full opacity-60"></div>
-                <div class="absolute top-8 right-8 w-6 h-6 bg-green-300 rounded-full opacity-40"></div>
-              </div>
-
-              <!-- Card 2: Natural Herbs -->
-              <div
-                class="group bg-white rounded-3xl p-8 relative overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                style="
-                  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLRZ2j5v_8WDZDR3aVKPD4GZDhhaDCPTmArA&s');
-                  background-size: cover;
-                  background-position: center;
-                "
-              >
-                <div class="absolute inset-0 bg-black bg-opacity-40 rounded-3xl"></div>
-                <div class="relative z-10">
-                  <div class="inline-block bg-green-700 text-white px-4 py-2 rounded-full text-sm font-bold mb-4">GIẢM NGAY 30%</div>
-                  <div class="mb-4">
-                    <h3 class="text-white text-3xl font-bold">THẢO MỘC</h3>
-                    <h3 class="text-white text-3xl font-bold">TỰ NHIÊN</h3>
-                  </div>
-                  <p class="text-white text-opacity-90 mb-6">Thảo mộc tự nhiên, tươi ngon và giàu dinh dưỡng</p>
-                  <button
-                    class="bg-green-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    XEM NGAY
-                  </button>
-                </div>
-                <!-- Scattered peppercorns -->
-                <div class="absolute top-6 right-6 w-3 h-3 bg-red-500 rounded-full opacity-80"></div>
-                <div class="absolute top-10 right-10 w-2 h-2 bg-black rounded-full opacity-60"></div>
-                <div class="absolute top-14 right-8 w-2 h-2 bg-red-600 rounded-full opacity-70"></div>
-                <div class="absolute top-18 right-12 w-1.5 h-1.5 bg-black rounded-full opacity-50"></div>
-              </div>
-
-              <!-- Card 3: Organic Juice -->
-              <div
-                class="group rounded-3xl p-8 relative overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                style="
-                  background-image: url('https://lh6.googleusercontent.com/OgV3IWncnOD3uywgEeU350463ICty9MTfxf8c0MKJCd5a-bzZTCDN-lDTJMH_7q1sT7d1pABFnFKarFOJZnL6KOp2jtgpsKrBY5eGxgVPSIwuhJKhkLz8bpINdCFssT9YFQIqDHz=s0');
-                  background-size: cover;
-                  background-position: center;
-                "
-              >
-                <div class="absolute inset-0 bg-pink-900 bg-opacity-50 rounded-3xl"></div>
-                <div class="relative z-10">
-                  <div class="inline-block bg-green-700 text-white px-4 py-2 rounded-full text-sm font-bold mb-4">GIẢM NGAY 30%</div>
-                  <h3 class="text-white text-3xl font-bold mb-4">NƯỚC ÉP HỮU CƠ</h3>
-                  <p class="text-white text-opacity-90 mb-6">Nước ép tươi ngon, được ép từ trái cây hữu cơ 100%</p>
-                  <button
-                    class="bg-[#d9624a] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#b8544a] transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    XEM NGAY
-                  </button>
-                </div>
-                <!-- Decorative elements -->
-                <div class="absolute top-6 right-6 w-8 h-8 bg-orange-200 rounded-full opacity-60"></div>
-                <div class="absolute top-10 right-10 w-4 h-4 bg-pink-200 rounded-full opacity-40"></div>
-              </div>
-            </div>
-
-            <!-- Call to Action -->
-            <!-- <div class="text-center mt-12">
-              <button class="bg-[#2f604a] text-white px-12 py-4 rounded-full text-lg font-semibold hover:bg-[#1e3d2e] transition-all duration-300 transform hover:scale-105 shadow-lg">
-                Xem Tất Cả Sản Phẩm
-              </button>
-            </div> -->
+            <div id="promo-cards" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
           </div>
         </div>
 
@@ -230,7 +145,7 @@
                     class="w-20 h-20 mx-auto mb-4 bg-white border-3 border-[#2f604a] rounded-full flex items-center justify-center group-hover:bg-[#cd5d4a] transition-all duration-300 shadow-lg"
                   >
                     <i class="fas fa-coffee text-[#2f604a] text-xl group-hover:text-white transition-colors duration-300"></i>
-                  </div>
+                    </div>
                   <!-- Decorative ring -->
                   <div
                     class="absolute inset-0 w-20 h-20 mx-auto rounded-full border-2 border-[#2f604a] border-opacity-30 group-hover:border-[#cd5d4a] group-hover:border-opacity-60 transition-all duration-300"
@@ -242,13 +157,13 @@
 
             <!-- Products Section -->
             <div class="bg-white">
-              <div class="container mx-auto px-4">
+                <div class="container mx-auto px-4">
                 <!-- Products Grid -->
                 <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                   <!-- Products will be rendered here by JavaScript -->
                 </div>
               </div>
-            </div>
+                    </div>
 
             <!-- Best Selling Products Section -->
             <div class="bg-gray-50">
@@ -267,15 +182,15 @@
                     >
                       <i class="fas fa-chevron-right"></i>
                     </button>
-                  </div>
-                </div>
+                            </div>
+                        </div>
 
                 <!-- Best Selling Products Grid -->
                 <div id="best-selling-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                   <!-- Products will be rendered here by JavaScript -->
                 </div>
-              </div>
-            </div>
+                            </div>
+                        </div>
 
             <!-- Promotional Banners Section -->
             <div class="bg-white">
@@ -307,7 +222,7 @@
                     <div class="absolute top-4 right-4 w-16 h-16 bg-orange-200 rounded-full opacity-60"></div>
                     <div class="absolute top-8 right-8 w-8 h-8 bg-yellow-300 rounded-full opacity-40"></div>
                     <div class="absolute top-12 right-12 w-4 h-4 bg-orange-300 rounded-full opacity-50"></div>
-                  </div>
+                            </div>
 
                   <!-- Banner 2: Rau củ tươi -->
                   <div
@@ -324,7 +239,7 @@
                       <div class="mb-6">
                         <h3 class="text-white text-4xl font-bold mb-2">RAU CỦ</h3>
                         <h3 class="text-white text-4xl font-bold">TƯƠI</h3>
-                      </div>
+                        </div>
                       <button
                         class="bg-[#cd5d4a] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#b8544a] transition-all duration-300 transform hover:scale-105 shadow-lg"
                       >
@@ -379,262 +294,28 @@
 
           <!-- Customer Reviews Section -->
           <div class="bg-[#fcf6f5] py-8 border-y border-[#fdba74]">
-            <div class="container mx-auto px-4">
+                <div class="container mx-auto px-4">
               <!-- Section Title -->
               <div class="text-center">
                 <h2 class="text-3xl font-bold text-[#2f604a] mb-4">ĐÁNH GIÁ TỪ KHÁCH HÀNG</h2>
               </div>
 
               <!-- Reviews Grid -->
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Review 1 -->
-                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                  <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-[#2f604a] rounded-full flex items-center justify-center text-white font-bold text-lg">M</div>
-                    <div class="ml-4">
-                      <h4 class="font-bold text-gray-800">Minh Anh</h4>
-                      <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <p class="text-gray-600 mb-4">
-                    "Nước ép cam hữu cơ rất tươi ngon, vị đậm đà tự nhiên. Giao hàng nhanh, đóng gói cẩn thận. Sẽ tiếp tục ủng hộ shop!"
-                  </p>
-                  <div class="text-sm text-gray-500">2 ngày trước</div>
-                </div>
-
-                <!-- Review 2 -->
-                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                  <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-[#cd5d4a] rounded-full flex items-center justify-center text-white font-bold text-lg">T</div>
-                    <div class="ml-4">
-                      <h4 class="font-bold text-gray-800">Thu Hà</h4>
-                      <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <p class="text-gray-600 mb-4">
-                    "Rau củ tươi ngon, chất lượng tốt. Gia đình tôi rất hài lòng với sản phẩm hữu cơ của shop. Cảm ơn shop!"
-                  </p>
-                  <div class="text-sm text-gray-500">1 tuần trước</div>
-                </div>
-
-                <!-- Review 3 -->
-                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                  <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-lg">L</div>
-                    <div class="ml-4">
-                      <h4 class="font-bold text-gray-800">Lan Anh</h4>
-                      <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <p class="text-gray-600 mb-4">"Sản phẩm chất lượng, giá cả hợp lý. Nhân viên tư vấn nhiệt tình. Sẽ giới thiệu cho bạn bè!"</p>
-                  <div class="text-sm text-gray-500">3 ngày trước</div>
-                </div>
-
-                <!-- Review 4 -->
-                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                  <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-lg">H</div>
-                    <div class="ml-4">
-                      <h4 class="font-bold text-gray-800">Hồng Nhung</h4>
-                      <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <p class="text-gray-600 mb-4">
-                    "Nước ép táo hữu cơ rất ngon, vị ngọt tự nhiên. Con tôi rất thích. Shop giao hàng đúng giờ, đóng gói đẹp."
-                  </p>
-                  <div class="text-sm text-gray-500">5 ngày trước</div>
-                </div>
-
-                <!-- Review 5 -->
-                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                  <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg">D</div>
-                    <div class="ml-4">
-                      <h4 class="font-bold text-gray-800">Đức Minh</h4>
-                      <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <p class="text-gray-600 mb-4">"Rau xanh hữu cơ tươi ngon, không có thuốc trừ sâu. Gia đình tôi yên tâm sử dụng. Cảm ơn shop!"</p>
-                  <div class="text-sm text-gray-500">1 tuần trước</div>
-                </div>
-
-                <!-- Review 6 -->
-                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                  <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-lg">N</div>
-                    <div class="ml-4">
-                      <h4 class="font-bold text-gray-800">Ngọc Trinh</h4>
-                      <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <p class="text-gray-600 mb-4">"Nước ép dứa hữu cơ rất thơm ngon, vị chua ngọt vừa phải. Sẽ mua thêm lần sau. Shop phục vụ tốt!"</p>
-                  <div class="text-sm text-gray-500">4 ngày trước</div>
-                </div>
+              <div id="reviews-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Reviews will be rendered here by JavaScript -->
               </div>
             </div>
           </div>
 
           <!-- Knowledge Articles Section -->
           <div class="bg-white pt-8">
-            <div class="container mx-auto px-4">
+                <div class="container mx-auto px-4">
               <!-- Section Title -->
-              <div class="mb-12">
-                <h2 class="text-3xl font-bold text-[#2f604a] mb-4">KIẾN THỨC VỀ NÔNG TRẠI</h2>
-              </div>
+              <h2 class="text-3xl font-bold text-[#2f604a] mb-8">KIẾN THỨC VỀ NÔNG TRẠI</h2>
 
               <!-- Articles Grid -->
-              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Article 1 -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                  <div class="relative">
-                    <img
-                      src="https://cdn.tgdd.vn/Files/2021/02/05/1325829/thanh-loc-lan-da-cho-ngay-tet-them-xinh-voi-cac-loai-nuoc-ep-cam-202201171029377144.jpg"
-                      alt="Rau củ hữu cơ"
-                      class="w-full h-48 object-cover"
-                    />
-                    <div class="absolute top-3 left-3 bg-[#cd5d4a] text-white px-3 py-1 rounded text-sm font-bold">
-                      <div class="text-center">
-                        <div class="text-xs">TH3</div>
-                        <div class="text-lg font-bold">08</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-6">
-                    <div class="flex items-center text-sm text-gray-500 mb-3">
-                      <i class="fas fa-user mr-2"></i>
-                      <i class="fas fa-tag mr-2"></i>
-                      <span>Monamedia — Dairy Farm, Healthy Foods</span>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-3">Rau Củ Hữu Cơ và Tương Lai Thực Phẩm</h3>
-                    <p class="text-gray-600 text-sm mb-4">
-                      Khám phá những lợi ích tuyệt vời của rau củ hữu cơ và cách chúng góp phần vào tương lai bền vững của ngành thực phẩm...
-                    </p>
-                    <button class="bg-[#2f604a] text-white px-4 py-2 rounded text-sm font-semibold hover:bg-[#1e3d2e] transition-colors">
-                      XEM THÊM
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Article 2 -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                  <div class="relative">
-                    <img src="https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg" alt="Dinh dưỡng theo nhu cầu" class="w-full h-48 object-cover" />
-                    <div class="absolute top-3 left-3 bg-[#cd5d4a] text-white px-3 py-1 rounded text-sm font-bold">
-                      <div class="text-center">
-                        <div class="text-xs">TH2</div>
-                        <div class="text-lg font-bold">25</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-6">
-                    <div class="flex items-center text-sm text-gray-500 mb-3">
-                      <i class="fas fa-user mr-2"></i>
-                      <i class="fas fa-tag mr-2"></i>
-                      <span>Monamedia — Healthy Foods, Lifestyle</span>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-3">Dinh Dưỡng Theo Nhu Cầu và Sản Xuất</h3>
-                    <p class="text-gray-600 text-sm mb-4">
-                      Tìm hiểu về dinh dưỡng cá nhân hóa và cách sản xuất thực phẩm đáp ứng nhu cầu dinh dưỡng cụ thể của từng người...
-                    </p>
-                    <button class="bg-[#2f604a] text-white px-4 py-2 rounded text-sm font-semibold hover:bg-[#1e3d2e] transition-colors">
-                      XEM THÊM
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Article 3 -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                  <div class="relative">
-                    <img src="https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg" alt="Trái cây đa dạng" class="w-full h-48 object-cover" />
-                    <div class="absolute top-3 left-3 bg-[#cd5d4a] text-white px-3 py-1 rounded text-sm font-bold">
-                      <div class="text-center">
-                        <div class="text-xs">TH2</div>
-                        <div class="text-lg font-bold">25</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-6">
-                    <div class="flex items-center text-sm text-gray-500 mb-3">
-                      <i class="fas fa-user mr-2"></i>
-                      <i class="fas fa-tag mr-2"></i>
-                      <span>Monamedia — Healthy Foods, Lifestyle</span>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-3">Ăn Nhiều Loại Trái Cây Cải Thiện Sức Khỏe</h3>
-                    <p class="text-gray-600 text-sm mb-4">
-                      Khám phá lợi ích của việc ăn đa dạng các loại trái cây và cách chúng giúp cải thiện sức khỏe tổng thể...
-                    </p>
-                    <button class="bg-[#2f604a] text-white px-4 py-2 rounded text-sm font-semibold hover:bg-[#1e3d2e] transition-colors">
-                      XEM THÊM
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Article 4 -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                  <div class="relative">
-                    <img
-                      src="https://media.istockphoto.com/id/1208790371/vi/anh/n%E1%BB%81n-tr%C3%A1i-c%C3%A2y-v%C3%A0-rau-qu%E1%BA%A3-m%C3%A0u-c%E1%BA%A7u-v%E1%BB%93ng-t%C6%B0%C6%A1i-t%E1%BB%91t-cho-s%E1%BB%A9c-kh%E1%BB%8Fe.jpg?s=612x612&w=0&k=20&c=btxH1rlvCP6JlpfvUv2T_ijTNOCKV5qJ6lfDUTU6FGg="
-                      alt="Thịt tươi"
-                      class="w-full h-48 object-cover"
-                    />
-                    <div class="absolute top-3 left-3 bg-[#cd5d4a] text-white px-3 py-1 rounded text-sm font-bold">
-                      <div class="text-center">
-                        <div class="text-xs">TH2</div>
-                        <div class="text-lg font-bold">25</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="p-6">
-                    <div class="flex items-center text-sm text-gray-500 mb-3">
-                      <i class="fas fa-user mr-2"></i>
-                      <i class="fas fa-tag mr-2"></i>
-                      <span>Monamedia — Healthy Foods</span>
-                    </div>
-                    <h3 class="font-bold text-lg text-gray-800 mb-3">Thịt Tươi Kể Tất Cả: Cách Tôi Tìm Thấy</h3>
-                    <p class="text-gray-600 text-sm mb-4">
-                      Chia sẻ kinh nghiệm về cách chọn và sử dụng thịt tươi chất lượng cao từ nông trại hữu cơ...
-                    </p>
-                    <button class="bg-[#2f604a] text-white px-4 py-2 rounded text-sm font-semibold hover:bg-[#1e3d2e] transition-colors">
-                      XEM THÊM
-                    </button>
-                  </div>
-                </div>
+              <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Articles will be rendered here by JavaScript -->
               </div>
             </div>
           </div>
@@ -887,9 +568,11 @@
         return `
           <div class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 ${opacityClass}">
             <div class="relative">
-              <div class="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
-                <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" />
-              </div>
+              <a href="products/detail/${product.id}" class="block">
+                <div class="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+                  <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" />
+                </div>
+              </a>
               ${
                 product.discount
                   ? `
@@ -916,7 +599,9 @@
               }
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-lg text-[#2f604a] mb-2">${product.name}</h3>
+              <h3 class="font-bold text-lg text-[#2f604a] mb-2">
+                <a href="products/detail/${product.id}" class="hover:text-[#cd5d4a] transition-colors">${product.name}</a>
+              </h3>
               <div class="flex items-center mb-2">
                 <div class="flex text-yellow-400">
                   ${renderStars(product.rating)}
@@ -972,9 +657,11 @@
         return `
           <div class="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 ${opacityClass}">
             <div class="relative">
-              <div class="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
-                <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" />
-              </div>
+              <a href="products/detail/${product.id}" class="block">
+                <div class="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+                  <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" />
+                </div>
+              </a>
               ${
                 product.outOfStock
                   ? `
@@ -990,7 +677,9 @@
               </button>
             </div>
             <div class="p-4">
-              <h3 class="font-bold text-lg text-[#2f604a] mb-2">${product.name}</h3>
+              <h3 class="font-bold text-lg text-[#2f604a] mb-2">
+                <a href="products/detail/${product.id}" class="hover:text-[#cd5d4a] transition-colors">${product.name}</a>
+              </h3>
               <div class="flex items-center mb-2">
                 <div class="flex text-yellow-400">
                   ${renderStars(product.rating)}
@@ -1046,7 +735,213 @@
         renderProducts();
         renderNewProducts();
         renderBestSellingProducts();
+        renderPromoCards();
+        renderReviews();
+        renderArticles();
       });
+
+      // Promo cards data + renderer
+      const promoCards = [
+        {
+          bg: "https://vnn-imgs-f.vgcloud.vn/2019/05/22/10/cach-chon-rau-cu-qua-sach-tuoi-ngon-khong-ngam-doc.jpg?width=0&s=kF_8EzU5qugnDebVP2h6Lg",
+          overlay: "bg-green-900 bg-opacity-60",
+          badge: { text: "ƯU ĐÃI 50%", cls: "bg-orange-500" },
+          title: ["RAU CỦ TƯƠI"],
+          desc: "Rau củ tươi ngon, được chọn lọc kỹ càng từ những trang trại hữu cơ",
+          btnCls: "bg-[#d9624a] hover:bg-[#b8544a]",
+          deco: [
+            { cls: "w-12 h-12 bg-green-200 rounded-full opacity-60", style: "top:1rem;right:1rem" },
+            { cls: "w-6 h-6 bg-green-300 rounded-full opacity-40", style: "top:2rem;right:2rem" },
+          ],
+        },
+        {
+          bg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLRZ2j5v_8WDZDR3aVKPD4GZDhhaDCPTmArA&s",
+          overlay: "bg-black bg-opacity-40",
+          badge: { text: "GIẢM NGAY 30%", cls: "bg-green-700" },
+          title: ["THẢO MỘC", "TỰ NHIÊN"],
+          desc: "Thảo mộc tự nhiên, tươi ngon và giàu dinh dưỡng",
+          btnCls: "bg-green-700 hover:bg-green-800",
+          deco: [
+            { cls: "w-3 h-3 bg-red-500 rounded-full opacity-80", style: "top:1.5rem;right:1.5rem" },
+            { cls: "w-2 h-2 bg-black rounded-full opacity-60", style: "top:2.5rem;right:2.5rem" },
+            { cls: "w-2 h-2 bg-red-600 rounded-full opacity-70", style: "top:3.5rem;right:2rem" },
+            { cls: "w-1.5 h-1.5 bg-black rounded-full opacity-50", style: "top:4.5rem;right:3rem" },
+          ],
+        },
+        {
+          bg: "https://lh6.googleusercontent.com/OgV3IWncnOD3uywgEeU350463ICty9MTfxf8c0MKJCd5a-bzZTCDN-lDTJMH_7q1sT7d1pABFnFKarFOJZnL6KOp2jtgpsKrBY5eGxgVPSIwuhJKhkLz8bpINdCFssT9YFQIqDHz=s0",
+          overlay: "bg-pink-900 bg-opacity-50",
+          badge: { text: "GIẢM NGAY 30%", cls: "bg-green-700" },
+          title: ["NƯỚC ÉP HỮU CƠ"],
+          desc: "Nước ép tươi ngon, được ép từ trái cây hữu cơ 100%",
+          btnCls: "bg-[#d9624a] hover:bg-[#b8544a]",
+          deco: [
+            { cls: "w-8 h-8 bg-orange-200 rounded-full opacity-60", style: "top:1.5rem;right:1.5rem" },
+            { cls: "w-4 h-4 bg-pink-200 rounded-full opacity-40", style: "top:2.5rem;right:2.5rem" },
+          ],
+        },
+      ];
+
+      function renderPromoCards() {
+        const host = document.getElementById("promo-cards");
+        if (!host) return;
+        host.innerHTML = promoCards
+          .map((c) => `
+          <div class="group rounded-3xl p-8 relative overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2" style="background-image:url('${c.bg}');background-size:cover;background-position:center;">
+            <div class="absolute inset-0 ${c.overlay} rounded-3xl"></div>
+            <div class="relative z-10">
+              <div class="inline-block ${c.badge.cls} text-white px-4 py-2 rounded-full text-sm font-bold mb-4">${c.badge.text}</div>
+              ${c.title.map(t=>`<h3 class="text-white text-3xl font-bold mb-1">${t}</h3>`).join('')}
+              <p class="text-white text-opacity-90 mb-6">${c.desc}</p>
+              <button class="${c.btnCls} text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">XEM NGAY</button>
+            </div>
+            ${c.deco.map(d=>`<div class="absolute ${d.cls}" style="${d.style}"></div>`).join('')}
+          </div>
+        `)
+          .join("");
+      }
+
+      // Customer Reviews data + renderer
+      const reviews = [
+        {
+          name: "Minh Anh",
+          initial: "M",
+          bgColor: "bg-[#2f604a]",
+          rating: 5,
+          comment: "Nước ép cam hữu cơ rất tươi ngon, vị đậm đà tự nhiên. Giao hàng nhanh, đóng gói cẩn thận. Sẽ tiếp tục ủng hộ shop!",
+          time: "2 ngày trước"
+        },
+        {
+          name: "Thu Hà",
+          initial: "T",
+          bgColor: "bg-[#cd5d4a]",
+          rating: 5,
+          comment: "Rau củ tươi ngon, chất lượng tốt. Gia đình tôi rất hài lòng với sản phẩm hữu cơ của shop. Cảm ơn shop!",
+          time: "1 tuần trước"
+        },
+        {
+          name: "Lan Anh",
+          initial: "L",
+          bgColor: "bg-green-500",
+          rating: 4,
+          comment: "Sản phẩm chất lượng, giá cả hợp lý. Nhân viên tư vấn nhiệt tình. Sẽ giới thiệu cho bạn bè!",
+          time: "3 ngày trước"
+        },
+        {
+          name: "Hồng Nhung",
+          initial: "H",
+          bgColor: "bg-purple-500",
+          rating: 5,
+          comment: "Nước ép táo hữu cơ rất ngon, vị ngọt tự nhiên. Con tôi rất thích. Shop giao hàng đúng giờ, đóng gói đẹp.",
+          time: "5 ngày trước"
+        },
+        {
+          name: "Đức Minh",
+          initial: "D",
+          bgColor: "bg-blue-500",
+          rating: 5,
+          comment: "Rau xanh hữu cơ tươi ngon, không có thuốc trừ sâu. Gia đình tôi yên tâm sử dụng. Cảm ơn shop!",
+          time: "1 tuần trước"
+        },
+        {
+          name: "Ngọc Trinh",
+          initial: "N",
+          bgColor: "bg-orange-500",
+          rating: 4,
+          comment: "Nước ép dứa hữu cơ rất thơm ngon, vị chua ngọt vừa phải. Sẽ mua thêm lần sau. Shop phục vụ tốt!",
+          time: "4 ngày trước"
+        }
+      ];
+
+      function renderReviews() {
+        const host = document.getElementById("reviews-grid");
+        if (!host) return;
+        host.innerHTML = reviews
+          .map((r) => `
+          <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 ${r.bgColor} rounded-full flex items-center justify-center text-white font-bold text-lg">${r.initial}</div>
+              <div class="ml-4">
+                <h4 class="font-bold text-gray-800">${r.name}</h4>
+                <div class="flex text-yellow-400">
+                  ${renderStars(r.rating)}
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600 mb-4">"${r.comment}"</p>
+            <div class="text-sm text-gray-500">${r.time}</div>
+          </div>
+        `)
+          .join("");
+      }
+
+      // Knowledge Articles data + renderer
+      const articles = [
+        {
+          image: "https://cdn.tgdd.vn/Files/2021/02/05/1325829/thanh-loc-lan-da-cho-ngay-tet-them-xinh-voi-cac-loai-nuoc-ep-cam-202201171029377144.jpg",
+          alt: "Rau củ hữu cơ",
+          date: { day: "08", month: "TH3" },
+          author: "Monamedia — Dairy Farm, Healthy Foods",
+          title: "Rau Củ Hữu Cơ và Tương Lai Thực Phẩm",
+          excerpt: "Khám phá những lợi ích tuyệt vời của rau củ hữu cơ và cách chúng góp phần vào tương lai bền vững của ngành thực phẩm..."
+        },
+        {
+          image: "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+          alt: "Dinh dưỡng theo nhu cầu",
+          date: { day: "25", month: "TH2" },
+          author: "Monamedia — Healthy Foods, Lifestyle",
+          title: "Dinh Dưỡng Theo Nhu Cầu và Sản Xuất",
+          excerpt: "Tìm hiểu về dinh dưỡng cá nhân hóa và cách sản xuất thực phẩm đáp ứng nhu cầu dinh dưỡng cụ thể của từng người..."
+        },
+        {
+          image: "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
+          alt: "Trái cây đa dạng",
+          date: { day: "25", month: "TH2" },
+          author: "Monamedia — Healthy Foods, Lifestyle",
+          title: "Ăn Nhiều Loại Trái Cây Cải Thiện Sức Khỏe",
+          excerpt: "Khám phá lợi ích của việc ăn đa dạng các loại trái cây và cách chúng giúp cải thiện sức khỏe tổng thể..."
+        },
+        {
+          image: "https://media.istockphoto.com/id/1208790371/vi/anh/n%E1%BB%81n-tr%C3%A1i-c%C3%A2y-v%C3%A0-rau-qu%E1%BA%A3-m%C3%A0u-c%E1%BA%A7u-v%E1%BB%93ng-t%C6%B0%C6%A1i-t%E1%BB%91t-cho-s%E1%BB%A9c-kh%E1%BB%8Fe.jpg?s=612x612&w=0&k=20&c=btxH1rlvCP6JlpfvUv2T_ijTNOCKV5qJ6lfDUTU6FGg=",
+          alt: "Thịt tươi",
+          date: { day: "25", month: "TH2" },
+          author: "Monamedia — Healthy Foods",
+          title: "Thịt Tươi Kể Tất Cả: Cách Tôi Tìm Thấy",
+          excerpt: "Chia sẻ kinh nghiệm về cách chọn và sử dụng thịt tươi chất lượng cao từ nông trại hữu cơ..."
+        }
+      ];
+
+      function renderArticles() {
+        const host = document.getElementById("articles-grid");
+        if (!host) return;
+        host.innerHTML = articles
+          .map((a) => `
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <div class="relative">
+              <img src="${a.image}" alt="${a.alt}" class="w-full h-48 object-cover" />
+              <div class="absolute top-3 left-3 bg-[#cd5d4a] text-white px-3 py-1 rounded text-sm font-bold">
+                <div class="text-center">
+                  <div class="text-xs">${a.date.month}</div>
+                  <div class="text-lg font-bold">${a.date.day}</div>
+                </div>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center text-sm text-gray-500 mb-3">
+                <i class="fas fa-user mr-2"></i>
+                <i class="fas fa-tag mr-2"></i>
+                <span>${a.author}</span>
+              </div>
+              <h3 class="font-bold text-lg text-gray-800 mb-3">${a.title}</h3>
+              <p class="text-gray-600 text-sm mb-4">${a.excerpt}</p>
+              <button class="bg-[#2f604a] text-white px-4 py-2 rounded text-sm font-semibold hover:bg-[#1e3d2e] transition-colors">
+                XEM THÊM
+              </button>
+            </div>
+          </div>
+        `)
+          .join("");
+      }
     </script>
-  </body>
+</body>
 </html>

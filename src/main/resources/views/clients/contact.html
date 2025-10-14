@@ -1,17 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Liên hệ</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.14/dist/tailwind.min.css" rel="stylesheet" />
-    <link href="https://cdn.vaadin.com/vaadin-icons/vaadin-icons.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
-  </head>
-  <body class="bg-gray-50">
-    <header th:replace="layouts/header :: header"></header>
+<body>
+  <div th:replace="~{layouts/main-layout :: layout('Liên hệ - THE MONA', ~{::content})}">
+    <div th:fragment="content">
 
     <!-- Map banner -->
     <section class="w-full">
@@ -98,6 +89,7 @@
       </div>
     </main>
 
-    <footer th:replace="layouts/footer :: footer"></footer>
-  </body>
+    </div>
+  </div>
+</body>
 </html>
