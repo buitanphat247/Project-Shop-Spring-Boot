@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:mode="LEGACYHTML5">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>THE MONA - Fresh & Natural</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.14/dist/tailwind.min.css" rel="stylesheet" />
+    <link href="https://cdn.vaadin.com/vaadin-icons/vaadin-icons.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+  </head>
+  <body>
+    <header th:fragment="header">
+      <!-- Top Bar -->
+      <div class="bg-[#2f604a] text-white py-2">
+        <div class="flex justify-center items-center container mx-auto">
+          <span class="text-sm">Phiễn phí vận chuyển cho đơn hàng trên 1tr</span>
+          <a href="#" class="ml-2 text-sm font-bold underline hover:no-underline">Xem thêm</a>
+        </div>
+      </div>
+
+      <!-- Main Header -->
+      <div class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4">
+          <div class="flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center">
+              <div class="text-center">
+                <div class="flex items-center justify-center mb-1">
+                  <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-2">
+                    <i class="fas fa-leaf text-white text-sm"></i>
+                  </div>
+                  <span class="text-[#2f604a] text-2xl font-bold">THE MONA</span>
+                </div>
+                <div class="text-[#4a7c59] text-sm font-medium">FRESH & NATURAL</div>
+              </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="flex-1 max-w-2xl mx-8">
+              <div class="flex">
+                <input
+                  type="text"
+                  placeholder="Tìm kiếm sản phẩm..."
+                  class="flex-1 px-6 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                />
+                <button class="bg-[#2f604a] text-white px-8 py-3 rounded-full hover:bg-[#1e3d2e] transition-colors ml-2 font-bold">Tìm kiếm</button>
+              </div>
+            </div>
+
+            <!-- User Icons -->
+            <div class="flex items-center space-x-4">
+              <a href="#" class="text-gray-600 hover:text-green-600 transition-colors">
+                <i class="fas fa-user text-xl"></i>
+              </a>
+              <a href="#" class="text-gray-600 hover:text-green-600 transition-colors relative">
+                <i class="fas fa-heart text-xl"></i>
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+              </a>
+              <a href="#" class="text-gray-600 hover:text-green-600 transition-colors relative">
+                <i class="fas fa-shopping-cart text-xl"></i>
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Bar -->
+      <nav class="bg-white text-white border-t border-gray-300">
+        <div class="container mx-auto px-4">
+       
+          <div class="flex justify-between items-center py-3">
+            <!-- Navigation Links -->
+            <div class="hidden md:flex items-center space-x-6 text-black font-semibold">
+              <a href="/" class="text-black hover:text-[#cb5439] transition-colors">Trang chủ</a>
+              <a href="/about" class="text-black hover:text-[#cb5439] transition-colors">Giới thiệu</a>
+              <a href="/products" class="text-black hover:text-[#cb5439] transition-colors font-medium">Sản phẩm</a>
+              <a href="/news" class="text-black hover:text-[#cb5439] transition-colors">Tin tức</a>
+              <a href="/contact" class="text-black hover:text-[#cb5439] transition-colors">Liên hệ</a>
+            </div>
+
+            <!-- Discount Section -->
+            <div class="flex items-center space-x-2">
+              <div class="bg-[#cb5439] rounded-full w-[30px] h-[30px] flex items-center justify-center">
+                <i class="fas fa-percentage text-white"></i>
+              </div>
+              <span class="text-sm text-black font-semibold">Sản phẩm đang giảm giá</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+
+          <!-- Mobile Menu -->
+          <div id="mobile-menu" class="md:hidden hidden pb-4">
+            <div class="flex flex-col space-y-2">
+              <a href="/" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Trang chủ</a>
+              <a href="/about" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Giới thiệu</a>
+              <a href="/products" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Sản phẩm</a>
+              <a href="/news" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Tin tức</a>
+              <a href="/contact" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Liên hệ</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </body>
+</html>

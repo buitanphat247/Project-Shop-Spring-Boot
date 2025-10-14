@@ -38,6 +38,6 @@ public class HealthController {
         model.addAttribute("timestamp", System.currentTimeMillis());
         model.addAttribute("isUp", health.getStatus().getCode().equals("UP"));
         
-        return "health-db";
+        return "clients/health-db";
     }
 }

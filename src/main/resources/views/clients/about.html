@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:replace="~{layouts/main-layout :: layout('Giới thiệu - Spring Boot Shop', ~{::content})}">
+        <div th:fragment="content">
+            <!-- Hero Section -->
+            <section class="gradient-bg text-white py-16">
+                <div class="container mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-4" th:text="${title}">Giới thiệu</h1>
+                    <p class="text-xl" th:text="${message}">Đây là trang giới thiệu về ứng dụng shop.</p>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <section class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <div class="max-w-4xl mx-auto">
+                        <!-- About Content -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                            <!-- Technology Stack -->
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-800 mb-6">Công nghệ sử dụng</h2>
+                                <div class="space-y-4">
+                                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                                        <i class="fas fa-code text-2xl text-green-500 mr-4"></i>
+                                        <div>
+                                            <h3 class="font-semibold">Spring Boot 3.5.6</h3>
+                                            <p class="text-gray-600 text-sm">Framework Java hiện đại</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                                        <i class="fas fa-database text-2xl text-blue-500 mr-4"></i>
+                                        <div>
+                                            <h3 class="font-semibold">MongoDB Atlas</h3>
+                                            <p class="text-gray-600 text-sm">NoSQL Database trên cloud</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                                        <i class="fas fa-leaf text-2xl text-green-600 mr-4"></i>
+                                        <div>
+                                            <h3 class="font-semibold">Thymeleaf</h3>
+                                            <p class="text-gray-600 text-sm">Template engine cho Java</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                                        <i class="fas fa-book text-2xl text-purple-500 mr-4"></i>
+                                        <div>
+                                            <h3 class="font-semibold">Swagger/OpenAPI</h3>
+                                            <p class="text-gray-600 text-sm">API Documentation</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Features -->
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-800 mb-6">Tính năng chính</h2>
+                                <div class="space-y-4">
+                                    <div class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mr-3 mt-1"></i>
+                                        <div>
+                                            <h3 class="font-semibold">Health Check Database</h3>
+                                            <p class="text-gray-600 text-sm">Kiểm tra kết nối MongoDB real-time</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mr-3 mt-1"></i>
+                                        <div>
+                                            <h3 class="font-semibold">REST API Monitoring</h3>
+                                            <p class="text-gray-600 text-sm">Theo dõi trạng thái API endpoints</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mr-3 mt-1"></i>
+                                        <div>
+                                            <h3 class="font-semibold">Responsive Design</h3>
+                                            <p class="text-gray-600 text-sm">Giao diện thân thiện với mọi thiết bị</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <i class="fas fa-check-circle text-green-500 mr-3 mt-1"></i>
+                                        <div>
+                                            <h3 class="font-semibold">UTF-8 Support</h3>
+                                            <p class="text-gray-600 text-sm">Hỗ trợ đầy đủ tiếng Việt</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Architecture Diagram -->
+                        <div class="mt-16">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">Kiến trúc hệ thống</h2>
+                            <div class="bg-gray-50 rounded-lg p-8">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="text-center">
+                                        <div class="bg-blue-500 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                                            <i class="fas fa-user text-2xl"></i>
+                                        </div>
+                                        <h3 class="font-semibold mb-2">Client</h3>
+                                        <p class="text-gray-600 text-sm">Web Browser</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="bg-green-500 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                                            <i class="fas fa-server text-2xl"></i>
+                                        </div>
+                                        <h3 class="font-semibold mb-2">Spring Boot</h3>
+                                        <p class="text-gray-600 text-sm">Application Server</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="bg-purple-500 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                                            <i class="fas fa-database text-2xl"></i>
+                                        </div>
+                                        <h3 class="font-semibold mb-2">MongoDB</h3>
+                                        <p class="text-gray-600 text-sm">Database</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

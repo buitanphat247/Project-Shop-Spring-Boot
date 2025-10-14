@@ -23,7 +23,7 @@ public class HomeController {
     public String home(Model model) {
         model.addAttribute("title", "Trang chủ");
         model.addAttribute("message", "Chào mừng đến với Spring Boot Shop!");
-        return "index";
+        return "clients/index";
     }
     
     /**
@@ -34,7 +34,7 @@ public class HomeController {
     public String about(Model model) {
         model.addAttribute("title", "Giới thiệu");
         model.addAttribute("message", "Đây là trang giới thiệu về ứng dụng shop.");
-        return "about";
+        return "clients/about";
     }
     
     

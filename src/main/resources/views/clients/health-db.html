@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:replace="~{layouts/main-layout :: layout('Database Health Check - Spring Boot Shop', ~{::content})}">
+        <div th:fragment="content">
+            <!-- Hero Section -->
+            <section class="gradient-bg text-white py-16">
+                <div class="container mx-auto px-4 text-center">
+                    <h1 class="text-4xl font-bold mb-4">
+                        <i class="fas fa-heartbeat mr-3"></i>Database Health Check
+                    </h1>
+                    <p class="text-xl">Kiểm tra trạng thái kết nối MongoDB</p>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <section class="py-16 bg-gray-50">
+                <div class="container mx-auto px-4">
+                    <div class="max-w-4xl mx-auto">
+                        <!-- Status Card -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden" 
+                             th:class="${isUp} ? 'border-l-4 border-green-500' : 'border-l-4 border-red-500'">
+                            
+                            <div class="bg-gray-50 px-6 py-4 border-b">
+                                <div class="flex justify-between items-center">
+                                    <h2 class="text-xl font-semibold">
+                                        <i class="fas fa-database mr-2"></i>Trạng thái Database
+                                    </h2>
+                                    <a href="/health-db" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
+                                        <i class="fas fa-sync-alt mr-1"></i> Kiểm tra lại
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="p-6">
+                                <!-- Status Icon & Message -->
+                                <div class="text-center mb-6">
+                                    <div th:if="${isUp}" class="text-6xl text-green-500 mb-4">✓</div>
+                                    <div th:unless="${isUp}" class="text-6xl text-red-500 mb-4">✗</div>
+                                    
+                                    <h3 th:if="${isUp}" class="text-2xl font-bold text-green-600 mb-2">Kết nối thành công!</h3>
+                                    <h3 th:unless="${isUp}" class="text-2xl font-bold text-red-600 mb-2">Kết nối thất bại!</h3>
+                                    
+                                    <p class="text-lg text-gray-600 mb-4">
+                                        Trạng thái: <span class="font-semibold" th:text="${status}">Status</span>
+                                    </p>
+                                </div>
+
+                                <!-- Details từ CheckDb -->
+                                <div class="bg-gray-50 rounded-lg p-4 mb-6" th:if="${details}">
+                                    <h3 class="font-semibold text-gray-700 mb-3">Chi tiết kết nối:</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div th:each="detail : ${details}" class="flex justify-between items-center p-3 bg-white rounded">
+                                            <span class="font-medium" th:text="${detail.key}">Key:</span>
+                                            <span class="text-gray-600" th:text="${detail.value}">Value</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Timestamp -->
+                                <div class="text-center text-gray-500">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    Cập nhật lúc: <span th:text="${timestamp}">Timestamp</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                            <!-- Technical Info -->
+                            <div class="bg-white rounded-lg shadow-lg p-6">
+                                <h3 class="text-lg font-semibold mb-4">
+                                    <i class="fas fa-info-circle mr-2"></i>Thông tin kỹ thuật
+                                </h3>
+                                <div class="space-y-2">
+                                    <p><span class="font-semibold">Endpoint:</span> <code class="bg-gray-100 px-2 py-1 rounded">/health-db</code></p>
+                                    <p><span class="font-semibold">Config:</span> CheckDb.java</p>
+                                    <p><span class="font-semibold">Database:</span> MongoDB Atlas</p>
+                                    <p><span class="font-semibold">Template:</span> health-db.html</p>
+                                </div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div class="bg-white rounded-lg shadow-lg p-6">
+                                <h3 class="text-lg font-semibold mb-4">
+                                    <i class="fas fa-cogs mr-2"></i>Thao tác
+                                </h3>
+                                <div class="space-y-3">
+                                    <a href="/health-db" class="block w-full bg-green-500 text-white text-center py-2 px-4 rounded hover:bg-green-600 transition-colors duration-200">
+                                        <i class="fas fa-play mr-1"></i> Kiểm tra
+                                    </a>
+                                    <a href="/actuator/health" target="_blank" class="block w-full bg-yellow-500 text-white text-center py-2 px-4 rounded hover:bg-yellow-600 transition-colors duration-200">
+                                        <i class="fas fa-external-link-alt mr-1"></i> API Health
+                                    </a>
+                                    <a href="/swagger-ui.html" target="_blank" class="block w-full bg-blue-500 text-white text-center py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-200">
+                                        <i class="fas fa-book mr-1"></i> API Docs
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>
