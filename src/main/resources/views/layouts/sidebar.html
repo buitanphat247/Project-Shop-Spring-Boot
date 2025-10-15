@@ -1,0 +1,11 @@
+<div th:fragment="sidebar">
+  <!-- Sidebar below header -->
+  <div
+    id="sidebar"
+    class="sticky top-16 h-[calc(100vh-4rem)] w-64 bg-white shadow-lg sidebar-transition sidebar-expanded overflow-y-auto transform transition-transform duration-300 -translate-x-full lg:translate-x-0 border-r-2"
+  >
+    <!-- Navigation (rendered by JS) -->
+    <nav id="adminSidebarNav" class="p-4 space-y-2 select-none"></nav>
+    <script defer src="/js/admin-sidebar.js"></script>
+  </div>
+</div>

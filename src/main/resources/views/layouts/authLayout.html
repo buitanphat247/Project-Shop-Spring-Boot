@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content)">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title} + ' - Admin'">Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <style>
+      .sidebar-transition { transition: all 0.3s ease; }
+      .sidebar-collapsed { width: 4rem; }
+      .sidebar-expanded { width: 16rem; }
+      .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+      .submenu.open { max-height: 200px; }
+      /* Backdrop for mobile */
+      #sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; z-index: 40; }
+      #sidebar-backdrop.show { display: block; }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <div>
+      <!-- Backdrop for mobile -->
+      <div id="sidebar-backdrop"></div>
+
+      <!-- Header fixed -->
+      <header class="fixed top-0 left-0 right-0 z-30 bg-white border-b border-gray-200 h-16 px-4 lg:px-6 flex items-center justify-between border-b-2">
+        <div class="flex items-center gap-3">
+          <button id="top-toggle-sidebar" class="p-2 rounded-lg">
+            <i class="fas fa-bars text-gray-600"></i>
+          </button>
+          <h1 class="text-xl lg:text-2xl font-bold text-gray-800" th:text="${title}">Dashboard</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <button class="p-2 rounded-lg hover:bg-gray-100">
+            <i class="fas fa-bell text-gray-600"></i>
+          </button>
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+              <i class="fas fa-user text-white text-sm"></i>
+            </div>
+            <span class="text-sm font-medium text-gray-700 hidden sm:inline">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Body: sidebar + content in one container -->
+      <div id="main-content" class="pt-16 min-h-screen flex bg-gray-50">
+        <!-- Sidebar container (desktop visible by default) -->
+        <aside id="sidebar-container" class="w-64 lg:block sidebar-transition overflow-hidden">
+          <div th:replace="~{layouts/sidebar :: sidebar}"></div>
+        </aside>
+
+        <!-- Page content -->
+        <main id="page-content" class="flex-1 px-4 lg:px-6 py-6">
+          <div th:replace="${content}"></div>
+        </main>
+      </div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const sidebar = document.getElementById('sidebar');
+          const sidebarContainer = document.getElementById('sidebar-container');
+          const mainContent = document.getElementById('main-content');
+          const headerToggle = document.getElementById('top-toggle-sidebar');
+          const backdrop = document.getElementById('sidebar-backdrop');
+
+          function setDesktopVisible(visible) {
+            if (!sidebarContainer) return;
+            const $sc = $('#sidebar-container');
+            const targetWidth = visible ? 256 : 0; // px
+            const duration = visible ? 180 : 140; // đóng nhanh hơn
+            $sc.stop(true, false).animate({ width: targetWidth }, duration, 'swing');
+          }
+
+          function setMobileVisible(visible) {
+            if (!sidebar) return;
+            if (visible) {
+              sidebar.classList.remove('-translate-x-full');
+              if (backdrop) backdrop.classList.add('show');
+            } else {
+              sidebar.classList.add('-translate-x-full');
+              if (backdrop) backdrop.classList.remove('show');
+            }
+          }
+
+          function initByViewport() {
+            if (window.innerWidth < 1024) {
+              setMobileVisible(false);
+              setDesktopVisible(true); // để container có width mặc định, panel mobile trượt riêng
+            } else {
+              $('#sidebar-container').css('width', '256px');
+              setDesktopVisible(true);
+            }
+          }
+          initByViewport();
+          window.addEventListener('resize', initByViewport);
+
+          function handleToggle() {
+            if (window.innerWidth < 1024) {
+              const hidden = sidebar && sidebar.classList.contains('-translate-x-full');
+              setMobileVisible(hidden);
+            } else {
+              const currentWidth = $('#sidebar-container').width() || 0;
+              setDesktopVisible(currentWidth === 0);
+            }
+          }
+
+          if (headerToggle) headerToggle.addEventListener('click', handleToggle);
+
+          document.querySelectorAll('.menu-header').forEach((header) => {
+            header.addEventListener('click', () => {
+              const submenu = header.nextElementSibling;
+              const chevron = header.querySelector('.fa-chevron-down');
+              if (submenu) submenu.classList.toggle('open');
+              if (chevron) chevron.classList.toggle('rotate-180');
+            });
+          });
+
+          if (backdrop) {
+            backdrop.addEventListener('click', function () { setMobileVisible(false); });
+          }
+        });
+      </script>
+    </div>
+  </body>
+</html>
