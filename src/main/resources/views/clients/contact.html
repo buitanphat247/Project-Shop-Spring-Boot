@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<body>
-  <div th:replace="~{layouts/main-layout :: layout('Liên hệ - THE MONA', ~{::content})}">
-    <div th:fragment="content">
-
+<div th:replace="~{layouts/main-layout :: layout('Liên hệ - THE MONA', ~{::content})}">
+  <div th:fragment="content">
     <!-- Map banner -->
     <section class="w-full">
       <div class="container mx-auto px-4 py-8">
@@ -88,8 +84,5 @@
         </section>
       </div>
     </main>
-
-    </div>
   </div>
-</body>
-</html>
+</div>

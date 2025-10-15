@@ -1,114 +1,418 @@
-<!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:mode="LEGACYHTML5">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>THE MONA - Fresh & Natural</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.14/dist/tailwind.min.css" rel="stylesheet" />
-    <link href="https://cdn.vaadin.com/vaadin-icons/vaadin-icons.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
-    <!-- Owl Carousel 2 (CDN) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-  </head>
-  <body>
-    <header th:fragment="header">
-      <!-- Top Bar -->
-      <div class="bg-[#2f604a] text-white py-2">
-        <div class="flex justify-center items-center container mx-auto">
-          <span class="text-sm">Phiễn phí vận chuyển cho đơn hàng trên 1tr</span>
-          <a href="#" class="ml-2 text-sm font-bold underline hover:no-underline">Xem thêm</a>
+<header th:fragment="header">
+  <!-- Top Bar -->
+  <div class="bg-[#2f604a] text-white py-2">
+    <div class="flex justify-center items-center container mx-auto">
+      <span class="text-sm">Phiễn phí vận chuyển cho đơn hàng trên 1tr</span>
+      <a href="#" class="ml-2 text-sm font-bold underline hover:no-underline">Xem thêm</a>
+    </div>
+  </div>
+
+  <!-- Main Header -->
+  <div class="bg-white shadow-md">
+    <div class="container mx-auto px-4 py-4">
+      <div class="flex justify-between items-center">
+                <!-- Logo -->
+        <div class="flex items-center">
+          <div class="text-center">
+            <div class="flex items-center justify-center mb-1">
+              <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-2">
+                <i class="fas fa-leaf text-white text-sm"></i>
+              </div>
+              <span class="text-[#2f604a] text-2xl font-bold">THE MONA</span>
+            </div>
+            <div class="text-[#4a7c59] text-sm font-medium">FRESH & NATURAL</div>
+          </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="flex-1 max-w-2xl mx-8">
+          <div class="flex">
+            <input
+              type="text"
+              placeholder="Tìm kiếm sản phẩm..."
+              class="flex-1 px-6 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+            />
+            <button class="bg-[#2f604a] text-white px-8 py-3 rounded-full hover:bg-[#1e3d2e] transition-colors ml-2 font-bold">Tìm kiếm</button>
+          </div>
+        </div>
+
+        <!-- User Icons -->
+        <div class="flex items-center space-x-4">
+          <button id="userIcon" class="text-gray-600 hover:text-green-600 transition-colors">
+            <i class="fas fa-user text-xl"></i>
+          </button>
+          <a href="products/wishlist" class="text-gray-600 hover:text-green-600 transition-colors relative">
+            <i class="fas fa-heart text-xl"></i>
+            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+          </a>
+          <a href="/cart" class="text-gray-600 hover:text-green-600 transition-colors relative">
+            <i class="fas fa-shopping-cart text-xl"></i>
+            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+          </a>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Main Header -->
-      <div class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-4">
-          <div class="flex justify-between items-center">
-            <!-- Logo -->
-            <div class="flex items-center">
-              <div class="text-center">
-                <div class="flex items-center justify-center mb-1">
-                  <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-2">
-                    <i class="fas fa-leaf text-white text-sm"></i>
-                  </div>
-                  <span class="text-[#2f604a] text-2xl font-bold">THE MONA</span>
+  <!-- Navigation Bar -->
+  <nav class="bg-white text-white border-t border-gray-300">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center py-3">
+        <div class="flex-1 flex items-center gap-10">
+          <!-- Category Dropdown -->
+          <div class="relative">
+            <button
+              id="categoryDropdown"
+              class="flex items-center justify-between w-full bg-[#cb5439] text-white px-4 gap-10 py-2 rounded-md hover:bg-[#a03d2a] transition-colors"
+            >
+              <!-- Bên trái -->
+              <div class="flex items-center gap-2">
+                <i class="fas fa-bars"></i>
+                <span class="font-semibold">Danh Mục Sản Phẩm</span>
                 </div>
-                <div class="text-[#4a7c59] text-sm font-medium">FRESH & NATURAL</div>
-              </div>
-            </div>
 
-            <!-- Search Section -->
-            <div class="flex-1 max-w-2xl mx-8">
-              <div class="flex">
-                <input
-                  type="text"
-                  placeholder="Tìm kiếm sản phẩm..."
-                  class="flex-1 px-6 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
-                />
-                <button class="bg-[#2f604a] text-white px-8 py-3 rounded-full hover:bg-[#1e3d2e] transition-colors ml-2 font-bold">Tìm kiếm</button>
-              </div>
-            </div>
+              <!-- Bên phải -->
+              <i class="fas fa-chevron-down transition-transform duration-300" id="categoryArrow"></i>
+                </button>
 
-            <!-- User Icons -->
-            <div class="flex items-center space-x-4">
-              <button id="userIcon" class="text-gray-600 hover:text-green-600 transition-colors">
-                <i class="fas fa-user text-xl"></i>
-              </button>
-              <a href="#" class="text-gray-600 hover:text-green-600 transition-colors relative">
-                <i class="fas fa-heart text-xl"></i>
-                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-              </a>
-              <a href="#" class="text-gray-600 hover:text-green-600 transition-colors relative">
-                <i class="fas fa-shopping-cart text-xl"></i>
-                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
-              </a>
+            <!-- Dropdown Menu -->
+            <div
+              id="categoryMenu"
+              class="absolute top-full left-0 mt-1 w-80 opacity-0 invisible transform translate-y-[-10px] transition-all duration-300 z-50"
+            >
+              <!-- Menu Items -->
+              <div class="space-y-0">
+                <!-- Menu items will be rendered by JavaScript -->
+              </div>
             </div>
           </div>
+
+          <!-- Navigation Links -->
+          <div class="hidden md:flex items-center space-x-6 text-black">
+            <a href="/" class="text-black hover:text-[#cb5439] transition-colors font-bold">Trang chủ</a>
+            <a href="/products" class="text-black hover:text-[#cb5439] transition-colors font-bold">Sản phẩm</a>
+            <a href="/news" class="text-black hover:text-[#cb5439] transition-colors font-bold">Tin tức</a>
+            <a href="/about" class="text-black hover:text-[#cb5439] transition-colors font-bold">Giới thiệu</a>
+            <a href="/contact" class="text-black hover:text-[#cb5439] transition-colors font-bold">Liên hệ</a>
+          </div>
         </div>
+
+        <!-- Discount Section -->
+        <div class="flex items-center space-x-2">
+          <div class="bg-[#cb5439] rounded-full w-[30px] h-[30px] flex items-center justify-center">
+            <i class="fas fa-percentage text-white"></i>
+          </div>
+          <span class="text-sm text-black font-semibold">Sản phẩm đang giảm giá</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-2">
+          <a href="/" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors font-bold">Trang chủ</a>
+          <a href="/about" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors font-bold">Giới thiệu</a>
+          <a href="/products" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors font-bold">Sản phẩm</a>
+          <a href="/news" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors font-bold">Tin tức</a>
+          <a href="/contact" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors font-bold">Liên hệ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+  <!-- Modal HTML -->
+  <!-- User Modal -->
+  <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 hidden modal-hidden z-50 flex items-center justify-center">
+    <div id="modalContent" class="bg-white rounded-lg p-6 w-full max-w-md mx-4 scale-95 opacity-0 modal-content-hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Đăng nhập</h2>
+        <button id="closeUserModal" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
 
-      <!-- Navigation Bar -->
-      <nav class="bg-white text-white border-t border-gray-300">
-        <div class="container mx-auto px-4">
-          <div class="flex justify-between items-center py-3">
-            <!-- Navigation Links -->
-            <div class="hidden md:flex items-center space-x-6 text-black font-semibold">
-              <a href="/" class="text-black hover:text-[#cb5439] transition-colors">Trang chủ</a>
-              <a href="/products" class="text-black hover:text-[#cb5439] transition-colors font-medium">Sản phẩm</a>
-              <a href="/news" class="text-black hover:text-[#cb5439] transition-colors">Tin tức</a>
-              <a href="/about" class="text-black hover:text-[#cb5439] transition-colors">Giới thiệu</a>
-              <a href="/contact" class="text-black hover:text-[#cb5439] transition-colors">Liên hệ</a>
-            </div>
-
-            <!-- Discount Section -->
-            <div class="flex items-center space-x-2">
-              <div class="bg-[#cb5439] rounded-full w-[30px] h-[30px] flex items-center justify-center">
-                <i class="fas fa-percentage text-white"></i>
-              </div>
-              <span class="text-sm text-black font-semibold">Sản phẩm đang giảm giá</span>
-              <i class="fas fa-chevron-down"></i>
-            </div>
-          </div>
-
-      
-
-          <!-- Mobile Menu -->
-          <div id="mobile-menu" class="md:hidden hidden pb-4">
-            <div class="flex flex-col space-y-2">
-              <a href="/" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Trang chủ</a>
-              <a href="/about" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Giới thiệu</a>
-              <a href="/products" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Sản phẩm</a>
-              <a href="/news" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Tin tức</a>
-              <a href="/contact" class="block py-2 px-4 hover:bg-red-600 rounded transition-colors">Liên hệ</a>
-            </div>
-          </div>
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input
+            type="email"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Nhập email của bạn"
+          />
         </div>
-      </nav>
-    </header>
-</body>
-</html>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
+          <input
+            type="password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Nhập mật khẩu"
+          />
+        </div>
+        <div class="flex items-center justify-between">
+          <label class="flex items-center">
+            <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+            <span class="ml-2 text-sm text-gray-600">Ghi nhớ đăng nhập</span>
+          </label>
+          <button id="forgotPasswordBtn" class="text-sm text-green-600 hover:text-green-800">Quên mật khẩu?</button>
+        </div>
+        <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Đăng nhập</button>
+      </form>
+
+      <div class="mt-4 text-center">
+        <p class="text-sm text-gray-600">
+          Chưa có tài khoản?
+          <button id="switchToSignup" class="text-green-600 hover:text-green-800 font-medium">Đăng ký ngay</button>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden modal-hidden z-50 flex items-center justify-center">
+    <div id="signupModalContent" class="bg-white rounded-lg p-6 w-full max-w-md mx-4 scale-95 opacity-0 modal-content-hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Đăng ký</h2>
+        <button id="closeSignupModal" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <form id="signupForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Họ và tên</label>
+          <input
+            type="text"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Nhập họ và tên"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input
+            type="email"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Nhập email của bạn"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
+          <input
+            type="password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Nhập mật khẩu"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Xác nhận mật khẩu</label>
+          <input
+            type="password"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Nhập lại mật khẩu"
+          />
+        </div>
+        <div class="flex items-center">
+          <input type="checkbox" class="rounded border-gray-300 text-green-600 focus:ring-green-500" />
+          <span class="ml-2 text-sm text-gray-600"
+            >Tôi đồng ý với <a href="#" class="text-green-600 hover:text-green-800">điều khoản sử dụng</a></span
+          >
+        </div>
+        <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Đăng ký</button>
+      </form>
+
+      <div class="mt-4 text-center">
+        <p class="text-sm text-gray-600">
+          Đã có tài khoản?
+          <button id="switchToLogin" class="text-green-600 hover:text-green-800 font-medium">Đăng nhập ngay</button>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 hidden modal-hidden z-50 flex items-center justify-center">
+    <div id="forgotPasswordModalContent" class="bg-white rounded-lg p-6 w-full max-w-md mx-4 scale-95 opacity-0 modal-content-hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Quên mật khẩu</h2>
+        <button id="closeForgotPasswordModal" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <form id="forgotPasswordForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email hoặc số điện thoại</label>
+          <input
+            type="text"
+            id="forgotEmailOrPhone"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Nhập email hoặc số điện thoại"
+          />
+        </div>
+        <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Gửi mã OTP</button>
+      </form>
+
+      <div class="mt-4 text-center">
+        <p class="text-sm text-gray-600">
+          Nhớ mật khẩu?
+          <button id="backToLogin" class="text-green-600 hover:text-green-800 font-medium">Đăng nhập ngay</button>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTP Modal -->
+  <div id="otpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden modal-hidden z-50 flex items-center justify-center">
+    <div id="otpModalContent" class="bg-white rounded-lg p-6 w-full max-w-md mx-4 scale-95 opacity-0 modal-content-hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Xác thực OTP</h2>
+        <button id="closeOtpModal" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="text-center mb-4">
+        <p class="text-sm text-gray-600">Mã OTP đã được gửi đến</p>
+        <p class="text-sm font-medium text-gray-800" id="otpEmailOrPhone"></p>
+      </div>
+
+      <form id="otpForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Mã OTP</label>
+          <input
+            type="text"
+            id="otpCode"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-center text-lg tracking-widest"
+            placeholder="Nhập mã OTP"
+            maxlength="6"
+          />
+        </div>
+        <div class="flex items-center justify-between">
+          <button type="button" id="resendOtp" class="text-sm text-green-600 hover:text-green-800">Gửi lại mã</button>
+          <span class="text-sm text-gray-500" id="otpTimer">02:00</span>
+        </div>
+        <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors">Xác thực</button>
+      </form>
+
+      <div class="mt-4 text-center">
+        <p class="text-sm text-gray-600">
+          Không nhận được mã?
+          <button id="changeEmailOrPhone" class="text-green-600 hover:text-green-800 font-medium">Thay đổi</button>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal CSS -->
+  <style>
+    .modal-hidden {
+      display: none !important;
+    }
+    .modal-visible {
+      display: flex !important;
+    }
+    .modal-content-hidden {
+      transform: scale(0.95);
+      opacity: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .modal-content-visible {
+      transform: scale(1);
+      opacity: 1;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Category Dropdown CSS */
+    #categoryMenu {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #categoryMenu.opacity-0 {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+    }
+
+    #categoryMenu.opacity-100 {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    #categoryArrow {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #categoryArrow.rotate-180 {
+      transform: rotate(180deg);
+    }
+
+    /* Dropdown header styling */
+    #categoryMenu .bg-\[#cb5439\] {
+      background-color: #cb5439;
+    }
+
+    /* Menu items styling */
+    #categoryMenu a {
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      transform: translateY(-20px);
+      margin-bottom: 0;
+    }
+
+    #categoryMenu a:hover {
+      background-color: #f3f4f6;
+      color: #cb5439;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* No background for dropdown container */
+    #categoryMenu {
+      background: transparent;
+    }
+
+    /* When dropdown is open, no background */
+    #categoryMenu.opacity-100 {
+      background: transparent;
+    }
+
+    /* Dotted border styling */
+    #categoryMenu .border-dotted {
+      border-style: dotted;
+    }
+
+    /* Chevron right icons */
+    #categoryMenu .fa-chevron-right {
+      transition: transform 0.2s ease;
+    }
+
+    #categoryMenu a:hover .fa-chevron-right {
+      transform: translateX(2px);
+    }
+
+    /* Active navigation link styling */
+    .nav-link-active {
+      color: #cb5439 !important;
+    }
+
+    .nav-link-active:hover {
+      color: #a03d2a !important;
+    }
+
+    /* Mobile menu active styling */
+    #mobile-menu .nav-link-active {
+      background-color: #cb5439 !important;
+      color: white !important;
+    }
+
+    #mobile-menu .nav-link-active:hover {
+      background-color: #a03d2a !important;
+      color: white !important;
+    }
+  </style>
+
+  <!-- Modal JavaScript -->
+  <script defer src="/js/main-modal.js"></script>
+  <script defer src="/js/header-menu.js"></script>
+</header>

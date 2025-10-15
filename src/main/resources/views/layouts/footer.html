@@ -1,169 +1,112 @@
-<!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-   <head>
-     <meta charset="UTF-8" />
-     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-     <style>
-       .footer-bg {
-         background-color: #F5F5DC;
-       }
-       .newsletter-bg {
-         background-color: #F5F5DC;
-       }
-       .brand-text {
-         color: #2F604A;
-       }
-       .email-link {
-         color: #D9624A;
-       }
-       .section-title {
-         color: #2F604A;
-         font-weight: bold;
-       }
-       .footer-link {
-         color: #666666;
-       }
-       .phone-text {
-         color: #D9624A;
-         font-weight: bold;
-       }
-       .copyright-text {
-         color: #666666;
-       }
-       .purple-highlight {
-         color: #8B5CF6;
-       }
-       .subscribe-btn {
-         background-color: #D9624A;
-       }
-       .subscribe-btn:hover {
-         background-color: #B8544A;
-       }
-       .scroll-btn {
-         background-color: #D9624A;
-       }
-       .scroll-btn:hover {
-         background-color: #B8544A;
-       }
-     </style>
-   </head>
-  <body>
-    <footer th:fragment="footer" class="footer-bg bg-[#fcf6f5] border-t border-gray-300">
-      <!-- Newsletter Subscription Section -->
-      <div class="newsletter-bg py-8">
-        <div class="container mx-auto px-4">
+<footer th:fragment="footer" class="footer-bg bg-[#fcf6f5] border-t border-gray-300">
+  <!-- Newsletter Subscription Section -->
+  <div class="newsletter-bg py-8">
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h3 class="brand-text text-lg font-bold mb-4">ĐĂNG KÝ NHẬN TIN TỨC MỚI NHẤT HÀNG TUẦN</h3>
+        <div class="flex justify-center items-center max-w-2xl mx-auto">
+          <input
+            type="email"
+            placeholder="Nhập email..."
+            class="flex-1 px-6 py-3 w-full border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+          />
+          <button class="subscribe-btn text-white bg-[#2f604a] px-8 py-3 rounded-full hover:bg-red-600 transition-colors ml-2 font-bold">
+            ĐĂNG KÝ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="border-t border-gray-300"></div>
+
+  <!-- Main Footer Content -->
+  <div class="footer-bg py-8">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+        <!-- Column 1: Brand Information -->
+        <div class="md:col-span-1">
+          <div class="text-center mb-4">
+            <div class="flex items-center justify-center mb-2">
+              <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-2">
+                <i class="fas fa-leaf text-white text-sm"></i>
+              </div>
+              <span class="brand-text text-2xl font-bold">THE MONA</span>
+            </div>
+            <div class="brand-text text-sm font-medium">FRESH & NATURAL</div>
+          </div>
           <div class="text-center">
-            <h3 class="brand-text text-lg font-bold mb-4">ĐĂNG KÝ NHẬN TIN TỨC MỚI NHẤT HÀNG TUẦN</h3>
-            <div class="flex justify-center items-center max-w-2xl mx-auto">
-              <input
-                type="email"
-                placeholder="Nhập email..."
-                class="flex-1 px-6 py-3 w-full border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
-              />
-              <button class="subscribe-btn text-white bg-[#cb5439] px-8 py-3 rounded-full hover:bg-red-600 transition-colors ml-2 font-bold">
-                ĐĂNG KÝ
-              </button>
+            <a href="mailto:info@themona.global" class="email-link text-sm underline">info@themona.global</a>
+            <div class="mt-4 text-sm footer-link">
+              <div>Thứ 2 - thứ 6: 8:00 am – 4:00pm</div>
+              <div>Thứ 7 - Chủ nhật: 9:00 am – 5:00pm</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Divider -->
-      <div class="border-t border-gray-300"></div>
+        <!-- Column 2: DANH MỤC -->
+        <div>
+          <h4 class="section-title text-sm mb-4">DANH MỤC</h4>
+          <ul class="space-y-2">
+            <li><a href="/about" class="footer-link text-sm hover:text-green-600 transition-colors">Giới thiệu</a></li>
+            <li><a href="/products" class="footer-link text-sm hover:text-green-600 transition-colors">Sản phẩm</a></li>
+            <li><a href="/news" class="footer-link text-sm hover:text-green-600 transition-colors">Tin tức</a></li>
+            <li><a href="/contact" class="footer-link text-sm hover:text-green-600 transition-colors">Liên hệ</a></li>
+          </ul>
+        </div>
 
-      <!-- Main Footer Content -->
-      <div class="footer-bg py-8">
-        <div class="container mx-auto px-4">
-          <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
-            <!-- Column 1: Brand Information -->
-            <div class="md:col-span-1">
-              <div class="text-center mb-4">
-                <div class="flex items-center justify-center mb-2">
-                  <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-2">
-                    <i class="fas fa-leaf text-white text-sm"></i>
-                  </div>
-                  <span class="brand-text text-2xl font-bold">THE MONA</span>
-                </div>
-                <div class="brand-text text-sm font-medium">FRESH & NATURAL</div>
-              </div>
-              <div class="text-center">
-                <a href="mailto:info@themona.global" class="email-link text-sm underline">info@themona.global</a>
-                <div class="mt-4 text-sm footer-link">
-                  <div>Thứ 2 - thứ 6: 8:00 am – 4:00pm</div>
-                  <div>Thứ 7 - Chủ nhật: 9:00 am – 5:00pm</div>
-                </div>
-              </div>
-            </div>
+        <!-- Column 3: SẢN PHẨM -->
+        <div>
+          <h4 class="section-title text-sm mb-4">SẢN PHẨM</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Sữa & kem</a></li>
+            <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Thịt hữu cơ</a></li>
+            <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Thực phẩm sạch</a></li>
+            <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Trái cây & hạt</a></li>
+          </ul>
+        </div>
 
-            <!-- Column 2: DANH MỤC -->
-            <div>
-              <h4 class="section-title text-sm mb-4">DANH MỤC</h4>
-              <ul class="space-y-2">
-                <li><a href="/about" class="footer-link text-sm hover:text-green-600 transition-colors">Giới thiệu</a></li>
-                <li><a href="/products" class="footer-link text-sm hover:text-green-600 transition-colors">Sản phẩm</a></li>
-                <li><a href="/news" class="footer-link text-sm hover:text-green-600 transition-colors">Tin tức</a></li>
-                <li><a href="/contact" class="footer-link text-sm hover:text-green-600 transition-colors">Liên hệ</a></li>
-              </ul>
-            </div>
+        <!-- Column 4: CHÍNH SÁCH -->
+        <div>
+          <h4 class="section-title text-sm mb-4">CHÍNH SÁCH</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Điều khoản & điều kiện</a></li>
+            <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Chính sách bảo mật</a></li>
+            <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Chính sách mua hàng</a></li>
+          </ul>
+        </div>
 
-            <!-- Column 3: SẢN PHẨM -->
-            <div>
-              <h4 class="section-title text-sm mb-4">SẢN PHẨM</h4>
-              <ul class="space-y-2">
-                <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Sữa & kem</a></li>
-                <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Thịt hữu cơ</a></li>
-                <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Thực phẩm sạch</a></li>
-                <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Trái cây & hạt</a></li>
-              </ul>
-            </div>
-
-            <!-- Column 4: CHÍNH SÁCH -->
-            <div>
-              <h4 class="section-title text-sm mb-4">CHÍNH SÁCH</h4>
-              <ul class="space-y-2">
-                <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Điều khoản & điều kiện</a></li>
-                <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Chính sách bảo mật</a></li>
-                <li><a href="#" class="footer-link text-sm hover:text-green-600 transition-colors">Chính sách mua hàng</a></li>
-              </ul>
-            </div>
-
-            <!-- Column 5: ĐỊA CHỈ CỬA HÀNG -->
-            <div>
-              <h4 class="section-title text-sm mb-4">ĐỊA CHỈ CỬA HÀNG</h4>
-              <div class="footer-link text-sm mb-4">1073/23 Cách Mạng Tháng 8, P.7, Q.Tân Bình, TP.HCM</div>
-              <div class="flex items-center">
-                <i class="fas fa-phone phone-text mr-2"></i>
-                <span class="phone-text text-sm">(+84) 0313-728-397</span>
-              </div>
-            </div>
+        <!-- Column 5: ĐỊA CHỈ CỬA HÀNG -->
+        <div>
+          <h4 class="section-title text-sm mb-4">ĐỊA CHỈ CỬA HÀNG</h4>
+          <div class="footer-link text-sm mb-4">1073/23 Cách Mạng Tháng 8, P.7, Q.Tân Bình, TP.HCM</div>
+          <div class="flex items-center">
+            <i class="fas fa-phone phone-text mr-2"></i>
+            <span class="phone-text text-sm">(+84) 0313-728-397</span>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- Divider -->
-      <div class="border-t border-gray-300"></div>
+  <!-- Divider -->
+  <div class="border-t border-gray-300"></div>
 
-      <!-- Copyright Bar -->
-      <div class="footer-bg py-4">
-        <div class="container mx-auto px-4">
-          <div class="text-center">
-            <p class="copyright-text text-sm">© Thiết kế và lập trình bởi <span class="purple-highlight">MONA.Media / Website</span></p>
-          </div>
-        </div>
+  <!-- Copyright Bar -->
+  <div class="footer-bg py-4">
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <p class="copyright-text text-sm">© Thiết kế và lập trình bởi <span class="purple-highlight">MONA.Media / Website</span></p>
       </div>
+    </div>
+  </div>
 
-      <!-- Scroll to Top Button -->
-      <button
-        id="scrollToTop"
-        class="fixed bottom-4 right-4 scroll-btn text-white w-12 h-12 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 pointer-events-none"
-      >
-        <i class="fas fa-arrow-up"></i>
-      </button>
-    </footer>
-
-   
-  
-  </body>
-</html>
+  <!-- Scroll to Top Button -->
+  <button
+    id="scrollToTop"
+    class="fixed bottom-4 right-4 scroll-btn text-white w-12 h-12 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 pointer-events-none"
+  >
+    <i class="fas fa-arrow-up"></i>
+  </button>
+</footer>

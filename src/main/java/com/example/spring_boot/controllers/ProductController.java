@@ -20,4 +20,8 @@ public class ProductController {
         return "clients/product-detail";
     }
 
+    @GetMapping("wishlist")
+    public String getWishlist() {
+        return "clients/wishlist";
+    }
 }

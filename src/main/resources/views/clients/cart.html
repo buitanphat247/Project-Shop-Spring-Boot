@@ -1,0 +1,298 @@
+<style>
+  .cart-item {
+    transition: all 0.3s ease;
+  }
+  .cart-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+  .quantity-btn {
+    transition: all 0.2s ease;
+  }
+  .quantity-btn:hover {
+    background-color: #2f604a;
+    color: white;
+  }
+  .remove-btn {
+    transition: all 0.2s ease;
+  }
+  .remove-btn:hover {
+    background-color: #dc2626;
+    color: white;
+  }
+  .checkout-btn {
+    background: linear-gradient(135deg, #2f604a 0%, #1e3d2e 100%);
+    transition: all 0.3s ease;
+  }
+  .checkout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(47, 96, 74, 0.3);
+  }
+</style>
+
+<div th:replace="~{layouts/main-layout :: layout('Giỏ hàng - THE MONA', ~{::content})}">
+  <div th:fragment="content">
+    <main class="container mx-auto px-4 py-8">
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Cart Items -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- Cart Header -->
+            <div class="bg-[#f8f9fa] px-6 py-4 border-b border-gray-200">
+              <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-[#2f604a]">Sản phẩm trong giỏ</h2>
+                <span class="text-sm text-gray-600" id="itemCount">3 sản phẩm</span>
+              </div>
+            </div>
+
+            <!-- Cart Items List -->
+            <div class="divide-y divide-gray-200" id="cartItems">
+              <!-- Cart Item 1 -->
+              <div class="cart-item p-6">
+                <div class="flex items-center space-x-4">
+                  <!-- Product Image -->
+                  <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                    <img src="https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg" alt="Bơ hữu cơ" class="w-full h-full object-cover" />
+                  </div>
+
+                  <!-- Product Info -->
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-semibold text-[#1f2d3d] mb-1">Bơ hữu cơ</h3>
+                    <p class="text-sm text-gray-600 mb-2">SKU: A0002</p>
+                    <div class="flex items-center space-x-4">
+                      <span class="text-[#cb5439] font-bold text-lg">95.000 đ</span>
+                      <span class="text-gray-400 line-through text-sm">134.000 đ</span>
+                    </div>
+                  </div>
+
+                  <!-- Quantity Controls -->
+                  <div class="flex items-center space-x-2">
+                    <button
+                      class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-[#2f604a] hover:text-white"
+                      onclick="updateQuantity(this, -1)"
+                    >
+                      <i class="fas fa-minus text-xs"></i>
+                    </button>
+                    <input
+                      type="number"
+                      value="2"
+                      min="1"
+                      class="w-12 h-8 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2f604a]"
+                    />
+                    <button
+                      class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-[#2f604a] hover:text-white"
+                      onclick="updateQuantity(this, 1)"
+                    >
+                      <i class="fas fa-plus text-xs"></i>
+                    </button>
+                  </div>
+
+                  <!-- Total Price -->
+                  <div class="text-right">
+                    <div class="text-lg font-bold text-[#2f604a]">190.000 đ</div>
+                    <div class="text-sm text-gray-500">95.000 đ × 2</div>
+                  </div>
+
+                  <!-- Remove Button -->
+                  <button
+                    class="remove-btn w-8 h-8 rounded-full border border-red-300 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white"
+                    onclick="removeItem(this)"
+                  >
+                    <i class="fas fa-trash text-xs"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Cart Item 2 -->
+              <div class="cart-item p-6">
+                <div class="flex items-center space-x-4">
+                  <!-- Product Image -->
+                  <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                    <img src="https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg" alt="Rau xanh" class="w-full h-full object-cover" />
+                  </div>
+
+                  <!-- Product Info -->
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-semibold text-[#1f2d3d] mb-1">Rau xanh hữu cơ</h3>
+                    <p class="text-sm text-gray-600 mb-2">SKU: A0003</p>
+                    <div class="flex items-center space-x-4">
+                      <span class="text-[#cb5439] font-bold text-lg">45.000 đ</span>
+                    </div>
+                  </div>
+
+                  <!-- Quantity Controls -->
+                  <div class="flex items-center space-x-2">
+                    <button
+                      class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-[#2f604a] hover:text-white"
+                      onclick="updateQuantity(this, -1)"
+                    >
+                      <i class="fas fa-minus text-xs"></i>
+                    </button>
+                    <input
+                      type="number"
+                      value="1"
+                      min="1"
+                      class="w-12 h-8 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2f604a]"
+                    />
+                    <button
+                      class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-[#2f604a] hover:text-white"
+                      onclick="updateQuantity(this, 1)"
+                    >
+                      <i class="fas fa-plus text-xs"></i>
+                    </button>
+                  </div>
+
+                  <!-- Total Price -->
+                  <div class="text-right">
+                    <div class="text-lg font-bold text-[#2f604a]">45.000 đ</div>
+                    <div class="text-sm text-gray-500">45.000 đ × 1</div>
+                  </div>
+
+                  <!-- Remove Button -->
+                  <button
+                    class="remove-btn w-8 h-8 rounded-full border border-red-300 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white"
+                    onclick="removeItem(this)"
+                  >
+                    <i class="fas fa-trash text-xs"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Cart Item 3 -->
+              <div class="cart-item p-6">
+                <div class="flex items-center space-x-4">
+                  <!-- Product Image -->
+                  <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                    <img
+                      src="https://media.istockphoto.com/id/1155240408/vi/anh/b%C3%A0n-ch%E1%BB%A9a-nhi%E1%BB%81u-lo%E1%BA%A1i-th%E1%BB%B1c-ph%E1%BA%A9m.jpg?s=612x612&w=0&k=20&c=IbFG8N9b41uM-RBYw8r0ASDoJX5RSWz9oDBN4m9gFcY="
+                      alt="Thực phẩm sạch"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <!-- Product Info -->
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-semibold text-[#1f2d3d] mb-1">Thực phẩm sạch mix</h3>
+                    <p class="text-sm text-gray-600 mb-2">SKU: A0004</p>
+                    <div class="flex items-center space-x-4">
+                      <span class="text-[#cb5439] font-bold text-lg">120.000 đ</span>
+                    </div>
+                  </div>
+
+                  <!-- Quantity Controls -->
+                  <div class="flex items-center space-x-2">
+                    <button
+                      class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-[#2f604a] hover:text-white"
+                      onclick="updateQuantity(this, -1)"
+                    >
+                      <i class="fas fa-minus text-xs"></i>
+                    </button>
+                    <input
+                      type="number"
+                      value="1"
+                      min="1"
+                      class="w-12 h-8 text-center border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2f604a]"
+                    />
+                    <button
+                      class="quantity-btn w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-[#2f604a] hover:text-white"
+                      onclick="updateQuantity(this, 1)"
+                    >
+                      <i class="fas fa-plus text-xs"></i>
+                    </button>
+                  </div>
+
+                  <!-- Total Price -->
+                  <div class="text-right">
+                    <div class="text-lg font-bold text-[#2f604a]">120.000 đ</div>
+                    <div class="text-sm text-gray-500">120.000 đ × 1</div>
+                  </div>
+
+                  <!-- Remove Button -->
+                  <button
+                    class="remove-btn w-8 h-8 rounded-full border border-red-300 text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white"
+                    onclick="removeItem(this)"
+                  >
+                    <i class="fas fa-trash text-xs"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cart Actions -->
+            <div class="bg-[#f8f9fa] px-6 py-4 border-t border-gray-200">
+              <div class="flex items-center justify-between">
+                <button onclick="continueShopping()" class="text-[#2f604a] hover:text-[#1e3d2e] font-medium flex items-center space-x-2">
+                  <i class="fas fa-arrow-left"></i>
+                  <span>Tiếp tục mua sắm</span>
+                </button>
+                <button onclick="clearAllItems()" class="text-red-600 hover:text-red-700 font-medium flex items-center space-x-2">
+                  <i class="fas fa-trash"></i>
+                  <span>Xóa tất cả</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sticky top-8">
+            <h3 class="text-xl font-bold text-[#2f604a] mb-6">Tóm tắt đơn hàng</h3>
+
+            <!-- Summary Details -->
+            <div class="space-y-4 mb-6">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Tạm tính</span>
+                <span class="font-semibold" id="subtotal">355.000 đ</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Phí vận chuyển</span>
+                <span class="font-semibold text-green-600">Miễn phí</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-gray-600">Giảm giá</span>
+                <span class="font-semibold text-green-600">-39.000 đ</span>
+              </div>
+              <hr class="border-gray-200" />
+              <div class="flex justify-between items-center text-lg">
+                <span class="font-bold text-[#2f604a]">Tổng cộng</span>
+                <span class="font-bold text-[#cb5439] text-xl" id="total">316.000 đ</span>
+              </div>
+            </div>
+
+            <!-- Discount Code -->
+            <div class="mb-6">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Mã giảm giá</label>
+              <div class="flex space-x-2">
+                <input
+                  type="text"
+                  placeholder="Nhập mã giảm giá"
+                  class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f604a]"
+                />
+                <button onclick="applyDiscount()" class="px-4 py-2 bg-[#2f604a] text-white rounded-lg hover:bg-[#1e3d2e] transition-colors">
+                  Áp dụng
+                </button>
+              </div>
+            </div>
+
+            <!-- Checkout Button -->
+            <button onclick="checkout()" class="checkout-btn w-full py-4 text-white font-bold text-lg rounded-xl mb-4">
+              <i class="fas fa-shopping-cart mr-2"></i>
+              Thanh toán ngay
+            </button>
+
+            <!-- Security Info -->
+            <div class="text-center text-sm text-gray-500">
+              <i class="fas fa-shield-alt mr-1"></i>
+              Thanh toán an toàn & bảo mật
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- JavaScript for cart functionality -->
+<script src="/js/cart.js"></script>

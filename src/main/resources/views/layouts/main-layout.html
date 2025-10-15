@@ -7,6 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <style>
       .gradient-bg {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -26,16 +29,16 @@
       .modal-visible {
         display: flex !important;
       }
-       .modal-content-hidden {
-         transform: scale(0.95);
-         opacity: 0;
-         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-       }
-       .modal-content-visible {
-         transform: scale(1);
-         opacity: 1;
-         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-       }
+      .modal-content-hidden {
+        transform: scale(0.95);
+        opacity: 0;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .modal-content-visible {
+        transform: scale(1);
+        opacity: 1;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
     </style>
   </head>
   <body class="bg-gray-50">
@@ -43,327 +46,11 @@
     <header th:replace="~{layouts/header :: header}"></header>
 
     <!-- Main Content -->
-    <main class="min-h-screen">
+    <main>
       <div th:replace="${content}"></div>
     </main>
 
     <!-- Footer -->
     <footer th:replace="~{layouts/footer :: footer}"></footer>
-
-    <!-- User Modal -->
-    <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
-      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
-        <!-- Modal Header -->
-        <div class="flex justify-between items-center p-6 border-b border-gray-200">
-          <h3 class="text-2xl font-bold text-[#2f604a]">Đăng Nhập</h3>
-          <button onclick="closeUserModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-            <i class="fas fa-times text-xl"></i>
-          </button>
-        </div>
-
-        <!-- Modal Body -->
-        <div class="p-6">
-          <!-- Login Form -->
-          <form id="loginForm" class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-              <input
-                type="email"
-                required
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f604a] focus:border-transparent"
-                placeholder="Nhập email của bạn"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Mật khẩu</label>
-              <input
-                type="password"
-                required
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f604a] focus:border-transparent"
-                placeholder="Nhập mật khẩu"
-              />
-            </div>
-            <div class="flex items-center justify-between">
-              <label class="flex items-center">
-                <input type="checkbox" class="rounded border-gray-300 text-[#2f604a] focus:ring-[#2f604a]" />
-                <span class="ml-2 text-sm text-gray-600">Ghi nhớ đăng nhập</span>
-              </label>
-              <a href="#" class="text-sm text-[#2f604a] hover:underline">Quên mật khẩu?</a>
-            </div>
-            <button type="submit" class="w-full bg-[#2f604a] text-white py-3 rounded-lg font-semibold hover:bg-[#1e3d2e] transition-colors">
-              Đăng Nhập
-            </button>
-          </form>
-
-          <!-- Divider -->
-          <div class="flex items-center my-6">
-            <div class="flex-1 border-t border-gray-300"></div>
-            <span class="px-4 text-gray-500 text-sm">hoặc</span>
-            <div class="flex-1 border-t border-gray-300"></div>
-          </div>
-
-          <!-- Social Login -->
-          <div class="space-y-3">
-            <button class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              <i class="fab fa-google text-red-500 mr-3"></i>
-              <span>Đăng nhập với Google</span>
-            </button>
-            <button class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              <i class="fab fa-facebook text-blue-600 mr-3"></i>
-              <span>Đăng nhập với Facebook</span>
-            </button>
-          </div>
-
-          <!-- Sign Up Link -->
-          <div class="text-center mt-6">
-            <p class="text-gray-600">
-              Chưa có tài khoản?
-              <button onclick="switchToSignup()" class="text-[#2f604a] hover:underline font-semibold">Đăng ký ngay</button>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Signup Modal -->
-    <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
-      <div
-        class="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-300 scale-95 opacity-0"
-        id="signupModalContent"
-      >
-        <!-- Modal Header -->
-        <div class="flex justify-between items-center p-6 border-b border-gray-200">
-          <h3 class="text-2xl font-bold text-[#2f604a]">Đăng Ký</h3>
-          <button onclick="closeSignupModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
-            <i class="fas fa-times text-xl"></i>
-          </button>
-        </div>
-
-        <!-- Modal Body -->
-        <div class="p-6">
-          <!-- Signup Form -->
-          <form id="signupForm" class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
-              <input
-                type="text"
-                required
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f604a] focus:border-transparent"
-                placeholder="Nhập họ và tên"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-              <input
-                type="email"
-                required
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f604a] focus:border-transparent"
-                placeholder="Nhập email của bạn"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Mật khẩu</label>
-              <input
-                type="password"
-                required
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f604a] focus:border-transparent"
-                placeholder="Nhập mật khẩu"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Xác nhận mật khẩu</label>
-              <input
-                type="password"
-                required
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f604a] focus:border-transparent"
-                placeholder="Nhập lại mật khẩu"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Số điện thoại</label>
-              <input
-                type="tel"
-                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2f604a] focus:border-transparent"
-                placeholder="Nhập số điện thoại"
-              />
-            </div>
-            <div class="flex items-center">
-              <input type="checkbox" required class="rounded border-gray-300 text-[#2f604a] focus:ring-[#2f604a]" />
-              <span class="ml-2 text-sm text-gray-600">
-                Tôi đồng ý với
-                <a href="#" class="text-[#2f604a] hover:underline">Điều khoản sử dụng</a>
-              </span>
-            </div>
-            <button type="submit" class="w-full bg-[#2f604a] text-white py-3 rounded-lg font-semibold hover:bg-[#1e3d2e] transition-colors">
-              Đăng Ký
-            </button>
-          </form>
-
-          <!-- Login Link -->
-          <div class="text-center mt-6">
-            <p class="text-gray-600">
-              Đã có tài khoản?
-              <button onclick="switchToLogin()" class="text-[#2f604a] hover:underline font-semibold">Đăng nhập</button>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Script -->
-    <script>
-      $(document).ready(function () {
-        console.log("jQuery loaded, setting up modal events...");
-
-        // Debug: Check if elements exist
-        console.log("User icon exists:", $("#userIcon").length);
-        console.log("User modal exists:", $("#userModal").length);
-        console.log("Signup modal exists:", $("#signupModal").length);
-        console.log("Login form exists:", $("#loginForm").length);
-        console.log("Signup form exists:", $("#signupForm").length);
-
-        // User icon click event
-        if ($("#userIcon").length > 0) {
-          $("#userIcon").click(function (e) {
-            e.preventDefault();
-            console.log("User icon clicked!");
-            openUserModal();
-          });
-          console.log("User icon event bound");
-        } else {
-          console.log("User icon NOT found!");
-        }
-
-        // Close modal when clicking outside
-        if ($("#userModal").length > 0) {
-          $("#userModal").click(function (e) {
-            if (e.target === this) {
-              closeUserModal();
-            }
-          });
-          console.log("User modal event bound");
-        }
-
-        if ($("#signupModal").length > 0) {
-          $("#signupModal").click(function (e) {
-            if (e.target === this) {
-              closeSignupModal();
-            }
-          });
-          console.log("Signup modal event bound");
-        }
-
-        // Form submissions
-        if ($("#loginForm").length > 0) {
-          $("#loginForm").submit(function (e) {
-            e.preventDefault();
-            alert("Đăng nhập thành công!");
-            closeUserModal();
-          });
-          console.log("Login form event bound");
-        }
-
-        if ($("#signupForm").length > 0) {
-          $("#signupForm").submit(function (e) {
-            e.preventDefault();
-            alert("Đăng ký thành công!");
-            closeSignupModal();
-          });
-          console.log("Signup form event bound");
-        }
-
-        console.log("Modal setup completed!");
-      });
-
-      // Modal Functions
-      function openUserModal() {
-        console.log("Opening user modal...");
-        const modal = $("#userModal");
-        const content = $("#modalContent");
-
-        if (modal.length === 0) {
-          console.log("Modal not found!");
-          return;
-        }
-
-        console.log("Modal found, showing modal...");
-        modal.removeClass("hidden modal-hidden").addClass("modal-visible").show();
-
-        setTimeout(() => {
-          console.log("Adding animation classes...");
-          content.removeClass("scale-95 opacity-0 modal-content-hidden").addClass("scale-100 opacity-100 modal-content-visible");
-        }, 10);
-
-        console.log("User modal opened");
-      }
-
-      function closeUserModal() {
-        console.log("Closing user modal...");
-        const modal = $("#userModal");
-        const content = $("#modalContent");
-        content.removeClass("scale-100 opacity-100 modal-content-visible").addClass("scale-95 opacity-0 modal-content-hidden");
-        setTimeout(() => {
-          modal.removeClass("modal-visible").addClass("hidden modal-hidden");
-          console.log("User modal fully closed");
-        }, 150);
-      }
-
-      function openSignupModal() {
-        console.log("Opening signup modal...");
-        const modal = $("#signupModal");
-        const content = $("#signupModalContent");
-        modal.removeClass("hidden modal-hidden").addClass("modal-visible").show();
-        setTimeout(() => {
-          content.removeClass("scale-95 opacity-0 modal-content-hidden").addClass("scale-100 opacity-100 modal-content-visible");
-        }, 10);
-      }
-
-      function closeSignupModal() {
-        console.log("Closing signup modal...");
-        const modal = $("#signupModal");
-        const content = $("#signupModalContent");
-        content.removeClass("scale-100 opacity-100 modal-content-visible").addClass("scale-95 opacity-0 modal-content-hidden");
-        setTimeout(() => {
-          modal.removeClass("modal-visible").addClass("hidden modal-hidden");
-          console.log("Signup modal fully closed");
-        }, 150);
-      }
-
-      function switchToSignup() {
-        console.log("Switching to signup...");
-        // Hide user modal content with animation
-        const userContent = $("#modalContent");
-        userContent.removeClass("scale-100 opacity-100 modal-content-visible").addClass("scale-95 opacity-0 modal-content-hidden");
-
-        // After animation, hide user modal and show signup modal
-        setTimeout(() => {
-          $("#userModal").removeClass("modal-visible").addClass("hidden modal-hidden");
-          $("#signupModal").removeClass("hidden modal-hidden").addClass("modal-visible").show();
-
-          // Animate signup content in
-          setTimeout(() => {
-            $("#signupModalContent").removeClass("scale-95 opacity-0 modal-content-hidden").addClass("scale-100 opacity-100 modal-content-visible");
-          }, 10);
-         }, 100);
-       }
-
-       function switchToLogin() {
-         console.log("Switching to login...");
-         // Hide signup modal content with animation
-         const signupContent = $("#signupModalContent");
-         signupContent.removeClass("scale-100 opacity-100 modal-content-visible").addClass("scale-95 opacity-0 modal-content-hidden");
-
-         // After animation, hide signup modal and show user modal
-         setTimeout(() => {
-           $("#signupModal").removeClass("modal-visible").addClass("hidden modal-hidden");
-           $("#userModal").removeClass("hidden modal-hidden").addClass("modal-visible").show();
-
-           // Animate user content in
-           setTimeout(() => {
-             $("#modalContent").removeClass("scale-95 opacity-0 modal-content-hidden").addClass("scale-100 opacity-100 modal-content-visible");
-           }, 10);
-         }, 100);
-      }
-    </script>
   </body>
 </html>

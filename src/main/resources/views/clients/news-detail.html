@@ -1,196 +1,180 @@
-<!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<body>
-  <div th:replace="~{layouts/main-layout :: layout('Chi tiết bài viết - THE MONA', ~{::content})}">
-    <div th:fragment="content">
-      <main class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <!-- Article -->
-          <article class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-            <img id="cover" src="https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?q=80&w=1500&auto=format&fit=crop" alt="cover" class="w-full h-72 object-cover" />
-            <div class="p-6">
-              <div class="text-xs text-gray-500" id="meta">05/10/2025 • Lối sống</div>
-              <h1 id="title" class="mt-2 text-2xl font-bold text-[#1f2d3d]">Gợi ý bữa sáng healthy nhanh gọn cho dân văn phòng</h1>
-              <div class="prose max-w-none mt-4 text-gray-700 leading-relaxed" id="content">
-                <p>Bữa sáng đóng vai trò quan trọng giúp khởi động ngày mới hiệu quả. Bài viết gợi ý các lựa chọn lành mạnh, dễ chuẩn bị chỉ trong 10 phút.</p>
-                <h3 class="font-semibold mt-4">1. Sinh tố trái cây hữu cơ</h3>
-                <p>Kết hợp chuối, táo, cam và sữa hạnh nhân. Thêm yến mạch để tăng chất xơ.</p>
-                <h3 class="font-semibold mt-4">2. Bánh mì ngũ cốc + bơ đậu phộng</h3>
-                <p>Giàu protein và no lâu. Có thể dùng kèm dưa leo hoặc cà chua.</p>
-                <h3 class="font-semibold mt-4">3. Sữa chua Hy Lạp + granola</h3>
-                <p>Thêm mật ong và các loại hạt để tăng hương vị và dinh dưỡng.</p>
-              </div>
+<div th:replace="~{layouts/main-layout :: layout('Chi tiết bài viết - THE MONA', ~{::content})}">
+  <div th:fragment="content">
+    <main class="container mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Article -->
+        <article class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <img
+            id="cover"
+            src="https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?q=80&w=1500&auto=format&fit=crop"
+            alt="cover"
+            class="w-full h-72 object-cover"
+          />
+          <div class="p-6">
+            <div class="text-xs text-gray-500" id="meta">05/10/2025 • Lối sống</div>
+            <h1 id="title" class="mt-2 text-2xl font-bold text-[#1f2d3d]">Gợi ý bữa sáng healthy nhanh gọn cho dân văn phòng</h1>
+            <div class="prose max-w-none mt-4 text-gray-700 leading-relaxed" id="content">
+              <p>
+                Bữa sáng đóng vai trò quan trọng giúp khởi động ngày mới hiệu quả. Bài viết gợi ý các lựa chọn lành mạnh, dễ chuẩn bị chỉ trong 10
+                phút.
+              </p>
+              <h3 class="font-semibold mt-4">1. Sinh tố trái cây hữu cơ</h3>
+              <p>Kết hợp chuối, táo, cam và sữa hạnh nhân. Thêm yến mạch để tăng chất xơ.</p>
+              <h3 class="font-semibold mt-4">2. Bánh mì ngũ cốc + bơ đậu phộng</h3>
+              <p>Giàu protein và no lâu. Có thể dùng kèm dưa leo hoặc cà chua.</p>
+              <h3 class="font-semibold mt-4">3. Sữa chua Hy Lạp + granola</h3>
+              <p>Thêm mật ong và các loại hạt để tăng hương vị và dinh dưỡng.</p>
+            </div>
 
-              <!-- Tags + Share -->
-              <div class="mt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div class="flex items-center gap-2 text-sm">
-                  <span class="text-gray-600 mr-1">Từ khóa:</span>
-                  <span class="px-3 py-1 rounded-full bg-gray-100">Fresh</span>
-                  <span class="px-3 py-1 rounded-full bg-gray-100">Healthy</span>
-                </div>
-                <div class="flex items-center gap-3 text-gray-600">
-                  <span class="text-sm">Chia sẻ:</span>
-                  <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-twitter"></i></a>
-                  <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-linkedin-in"></i></a>
-                  <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-tumblr"></i></a>
-                  <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-pinterest"></i></a>
-                </div>
+            <!-- Tags + Share -->
+            <div class="mt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div class="flex items-center gap-2 text-sm">
+                <span class="text-gray-600 mr-1">Từ khóa:</span>
+                <span class="px-3 py-1 rounded-full bg-gray-100">Fresh</span>
+                <span class="px-3 py-1 rounded-full bg-gray-100">Healthy</span>
               </div>
-
-              <!-- Prev / Next -->
-              <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Prev -->
-                <a href="/news/detail?id=2" class="flex items-center gap-4 p-4 rounded-2xl border border-gray-200 hover:border-[#cb5439] transition-colors">
-                  <img src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?q=80&w=400&auto=format&fit=crop" alt="prev" class="w-28 h-20 object-cover rounded" />
-                  <div>
-                    <div class="text-xs text-gray-500 mb-1"><i class="fas fa-chevron-left mr-1"></i>Trước</div>
-                    <div class="font-semibold text-[#1f2d3d]">Eating Various Fruits Can Improve Your Health</div>
-                  </div>
-                </a>
-                <!-- Next -->
-                <a href="/news/detail?id=3" class="flex items-center gap-4 p-4 rounded-2xl border border-gray-200 hover:border-[#cb5439] transition-colors justify-end text-right">
-                  <div>
-                    <div class="text-xs text-gray-500 mb-1">Tiếp <i class="fas fa-chevron-right ml-1"></i></div>
-                    <div class="font-semibold text-[#1f2d3d]">Perennial vegetables and future food crops</div>
-                  </div>
-                  <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=400&auto=format&fit=crop" alt="next" class="w-28 h-20 object-cover rounded" />
-                </a>
-              </div>
-
-              <!-- Related posts (cards) -->
-              <div class="mt-10">
-                <h3 class="text-xl font-bold text-[#2f604a] mb-4">Bài viết liên quan</h3>
-                <div id="related-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-              </div>
-
-              <!-- Comments form -->
-              <div class="mt-10 pt-6 border-t border-gray-200">
-                <h2 class="text-2xl font-bold text-[#2f604a] mb-1">Để lại bình luận</h2>
-                <p class="text-sm text-gray-500 mb-5">Your email address will not be published.</p>
-                <form id="commentForm" class="space-y-4">
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input id="c-name" type="text" placeholder="Tên*" class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none" required />
-                    <input id="c-email" type="email" placeholder="Email*" class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none" required />
-                    <input id="c-website" type="url" placeholder="Website" class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none" />
-                  </div>
-                  <label class="flex items-center gap-2 text-sm">
-                    <input id="c-remember" type="checkbox" class="rounded border-gray-300" />
-                    Lưu tên của tôi, email, và trang web trong trình duyệt này cho lần bình luận kế tiếp của tôi.
-                  </label>
-                  <textarea id="c-content" rows="6" placeholder="Bình luận của bạn" class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none" required></textarea>
-                  <button type="submit" class="px-6 py-3 rounded-full bg-[#cb5439] text-white font-semibold hover:bg-[#a0452e]">ĐĂNG BÌNH LUẬN</button>
-                </form>
-                <div id="commentSuccess" class="hidden mt-3 text-green-600 text-sm">Bình luận của bạn đã được ghi nhận (demo).</div>
+              <div class="flex items-center gap-3 text-gray-600">
+                <span class="text-sm">Chia sẻ:</span>
+                <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-tumblr"></i></a>
+                <a href="#" class="hover:text-[#cb5439]"><i class="fab fa-pinterest"></i></a>
               </div>
             </div>
-          </article>
 
-          <!-- Sidebar -->
-          <aside class="lg:col-span-4 space-y-6">
-            <!-- Search -->
-            <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-              <h3 class="text-[#2f604a] font-bold text-lg mb-4 relative">TÌM KIẾM
-                <span class="absolute left-0 -bottom-1 w-14 h-0.5 bg-[#cb5439]"></span>
-              </h3>
-              <div class="flex gap-2">
-                <input id="search-input" type="text" placeholder="Tìm kiếm" class="flex-1 rounded-full border border-gray-300 px-4 py-2 focus:outline-none" />
-                <button id="search-btn" class="rounded-md px-4 bg-[#1f553f] text-white"><i class="fas fa-search"></i></button>
-              </div>
-            </section>
+            <!-- Prev / Next -->
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Prev -->
+              <a
+                href="/news/detail?id=2"
+                class="flex items-center gap-4 p-4 rounded-2xl border border-gray-200 hover:border-[#cb5439] transition-colors"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?q=80&w=400&auto=format&fit=crop"
+                  alt="prev"
+                  class="w-28 h-20 object-cover rounded"
+                />
+                <div>
+                  <div class="text-xs text-gray-500 mb-1"><i class="fas fa-chevron-left mr-1"></i>Trước</div>
+                  <div class="font-semibold text-[#1f2d3d]">Eating Various Fruits Can Improve Your Health</div>
+                </div>
+              </a>
+              <!-- Next -->
+              <a
+                href="/news/detail?id=3"
+                class="flex items-center gap-4 p-4 rounded-2xl border border-gray-200 hover:border-[#cb5439] transition-colors justify-end text-right"
+              >
+                <div>
+                  <div class="text-xs text-gray-500 mb-1">Tiếp <i class="fas fa-chevron-right ml-1"></i></div>
+                  <div class="font-semibold text-[#1f2d3d]">Perennial vegetables and future food crops</div>
+                </div>
+                <img
+                  src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=400&auto=format&fit=crop"
+                  alt="next"
+                  class="w-28 h-20 object-cover rounded"
+                />
+              </a>
+            </div>
 
-            <!-- Categories -->
-            <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-              <h3 class="text-[#2f604a] font-bold text-lg mb-4 relative">CHUYÊN MỤC
-                <span class="absolute left-0 -bottom-1 w-14 h-0.5 bg-[#cb5439]"></span>
-              </h3>
-              <ul id="cat-list" class="divide-y divide-gray-200"></ul>
-            </section>
+            <!-- Related posts (cards) -->
+            <div class="mt-10">
+              <h3 class="text-xl font-bold text-[#2f604a] mb-4">Bài viết liên quan</h3>
+              <div id="related-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
 
-            <!-- Latest posts -->
-            <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-              <h3 class="text-[#2f604a] font-bold text-lg mb-4 relative">BÀI VIẾT MỚI NHẤT
-                <span class="absolute left-0 -bottom-1 w-14 h-0.5 bg-[#cb5439]"></span>
-              </h3>
-              <div id="latest" class="space-y-4"></div>
-            </section>
+            <!-- Comments form -->
+            <div class="mt-10 pt-6 border-t border-gray-200">
+              <h2 class="text-2xl font-bold text-[#2f604a] mb-1">Để lại bình luận</h2>
+              <p class="text-sm text-gray-500 mb-5">Your email address will not be published.</p>
+              <form id="commentForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <input
+                    id="c-name"
+                    type="text"
+                    placeholder="Tên*"
+                    class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none"
+                    required
+                  />
+                  <input
+                    id="c-email"
+                    type="email"
+                    placeholder="Email*"
+                    class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none"
+                    required
+                  />
+                  <input
+                    id="c-website"
+                    type="url"
+                    placeholder="Website"
+                    class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none"
+                  />
+                </div>
+                <label class="flex items-center gap-2 text-sm">
+                  <input id="c-remember" type="checkbox" class="rounded border-gray-300" />
+                  Lưu tên của tôi, email, và trang web trong trình duyệt này cho lần bình luận kế tiếp của tôi.
+                </label>
+                <textarea
+                  id="c-content"
+                  rows="6"
+                  placeholder="Bình luận của bạn"
+                  class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none"
+                  required
+                ></textarea>
+                <button type="submit" class="px-6 py-3 rounded-full bg-[#cb5439] text-white font-semibold hover:bg-[#a0452e]">ĐĂNG BÌNH LUẬN</button>
+              </form>
+              <div id="commentSuccess" class="hidden mt-3 text-green-600 text-sm">Bình luận của bạn đã được ghi nhận (demo).</div>
+            </div>
+          </div>
+        </article>
 
-            <!-- Related -->
-            <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-              <h3 class="text-[#2f604a] font-bold text-lg mb-4">Bài viết liên quan</h3>
-              <ul id="related" class="space-y-3"></ul>
-            </section>
-          </aside>
-        </div>
-      </main>
-    </div>
+        <!-- Sidebar -->
+        <aside class="lg:col-span-4 space-y-6">
+          <!-- Search -->
+          <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+            <h3 class="text-[#2f604a] font-bold text-lg mb-4 relative">
+              TÌM KIẾM
+              <span class="absolute left-0 -bottom-1 w-14 h-0.5 bg-[#cb5439]"></span>
+            </h3>
+            <div class="flex gap-2">
+              <input
+                id="search-input"
+                type="text"
+                placeholder="Tìm kiếm"
+                class="flex-1 rounded-full border border-gray-300 px-4 py-2 focus:outline-none"
+              />
+              <button id="search-btn" class="rounded-md px-4 bg-[#1f553f] text-white"><i class="fas fa-search"></i></button>
+            </div>
+          </section>
+
+          <!-- Categories -->
+          <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+            <h3 class="text-[#2f604a] font-bold text-lg mb-4 relative">
+              CHUYÊN MỤC
+              <span class="absolute left-0 -bottom-1 w-14 h-0.5 bg-[#cb5439]"></span>
+            </h3>
+            <ul id="cat-list" class="divide-y divide-gray-200"></ul>
+          </section>
+
+          <!-- Latest posts -->
+          <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+            <h3 class="text-[#2f604a] font-bold text-lg mb-4 relative">
+              BÀI VIẾT MỚI NHẤT
+              <span class="absolute left-0 -bottom-1 w-14 h-0.5 bg-[#cb5439]"></span>
+            </h3>
+            <div id="latest" class="space-y-4"></div>
+          </section>
+
+          <!-- Related -->
+          <section class="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
+            <h3 class="text-[#2f604a] font-bold text-lg mb-4">Bài viết liên quan</h3>
+            <ul id="related" class="space-y-3"></ul>
+          </section>
+        </aside>
+      </div>
+    </main>
   </div>
-</body>
-</html>
+</div>
 
-<script>
-  // Mock detail from query (?id=) or fallback
-  const params = new URLSearchParams(location.search);
-  const id = params.get('id') || '1';
-  const items = [
-    { id:'1', date:'05/10/2025', cat:'Lối sống', title:'Gợi ý bữa sáng healthy nhanh gọn cho dân văn phòng', img:'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?q=80&w=1500&auto=format&fit=crop' },
-    { id:'2', date:'12/10/2025', cat:'Dinh dưỡng', title:'Bí quyết chọn rau củ tươi ngon đúng mùa', img:'https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1500&auto=format&fit=crop' },
-    { id:'3', date:'09/10/2025', cat:'Công thức', title:'3 công thức nước ép detox giúp da sáng khoẻ', img:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1500&auto=format&fit=crop' }
-  ];
-  const current = items.find(i=>i.id===id) || items[0];
-  document.getElementById('cover').src = current.img;
-  document.getElementById('meta').textContent = `${current.date} • ${current.cat}`;
-  document.getElementById('title').textContent = current.title;
-
-  // related
-  const related = items.filter(i=>i.id!==current.id).slice(0,5);
-  const ul = document.getElementById('related');
-  if (ul) ul.innerHTML = related.map(r=>`<li class="flex items-center gap-3">
-      <img src="${r.img}" class="w-16 h-12 object-cover rounded" alt="${r.title}">
-      <div>
-        <div class="text-xs text-gray-500">${r.date} • ${r.cat}</div>
-        <a href="/news/detail?id=${r.id}" class="text-sm font-semibold text-[#1f2d3d] hover:text-[#cb5439]">${r.title}</a>
-      </div>
-    </li>`).join('');
-
-  // categories mock
-  const cats = ['Dairy Farm','Healthy Foods','Lifestyle'];
-  const catEl = document.getElementById('cat-list');
-  if (catEl) catEl.innerHTML = cats.map(c=>`<li class="py-3 flex items-center"><span class="w-1.5 h-1.5 bg-[#2f604a] rounded-full mr-3"></span><a href="#" class="hover:text-[#cb5439]">${c}</a></li>`).join('');
-
-  // latest posts (reuse items)
-  const latestEl = document.getElementById('latest');
-  if (latestEl) latestEl.innerHTML = items.slice(0,3).map(p=>`
-    <a href="/news/detail?id=${p.id}" class="flex items-center gap-3">
-      <img src="${p.img}" class="w-16 h-16 object-cover rounded" alt="${p.title}">
-      <div>
-        <div class="text-xs text-gray-500">${p.date}</div>
-        <div class="text-sm font-semibold text-[#1f2d3d] line-clamp-2">${p.title}</div>
-      </div>
-    </a>
-  `).join('');
-
-  // demo submit
-  const form = document.getElementById('commentForm');
-  if (form) form.addEventListener('submit', function(e){
-    e.preventDefault();
-    const msg = document.getElementById('commentSuccess');
-    if (msg) { msg.classList.remove('hidden'); setTimeout(()=>msg.classList.add('hidden'), 2500); }
-    form.reset();
-  });
-
-  // related cards render (reuse 'related')
-  const relCards = document.getElementById('related-cards');
-  if (relCards) relCards.innerHTML = related.map(r=>`
-    <article class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-      <a href="/news/detail?id=${r.id}" class="block aspect-[4/3] overflow-hidden">
-        <img class="w-full h-full object-cover" src="${r.img}" alt="${r.title}" />
-      </a>
-      <div class="p-4">
-        <div class="text-xs text-gray-500">${r.date} • ${r.cat}</div>
-        <h4 class="mt-1 font-semibold text-[#1f2d3d]">${r.title}</h4>
-      </div>
-    </article>
-  `).join('');
-</script>
-
+<!-- JavaScript for news detail page -->
+<script src="/js/news-detail.js"></script>
