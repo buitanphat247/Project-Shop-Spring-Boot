@@ -5,8 +5,6 @@ import com.example.spring_boot.dto.ApiResponse;
 import com.example.spring_boot.dto.PageResponse;
 import com.example.spring_boot.services.products.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,239 +18,109 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/** Module API cho Category (quản lý danh mục sản phẩm) */
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
 @Slf4j
 @CrossOrigin(origins = "*")
-@Tag(name = "Category Management", description = "APIs for managing product categories")
+@Tag(name = "Categories", description = "APIs quản lý danh mục sản phẩm (trả về ApiResponse/PageResponse)")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
     /**
-     * Create new category
+     * Tạo category mới
+     * Test API:
+     * - POST /api/categories
+     * - Body: {"name":"Electronics","description":"Electronic devices"}
      */
     @PostMapping
-    @Operation(summary = "Create new category", description = "Create a new product category")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Category created successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request - validation failed")
-    })
-    public ResponseEntity<ApiResponse<Category>> createCategory(@RequestBody Map<String, Object> request) {
-        try {
-            String name = (String) request.get("name");
-            String description = (String) request.get("description");
-
-            log.info("Creating category: {}", name);
-            Category createdCategory = categoryService.createCategory(name, description);
-
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponse.success(createdCategory, "Category created successfully"));
-        } catch (Exception e) {
-            log.error("Error creating category: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.fail(e.getMessage()));
-        }
+    @Operation(summary = "Tạo category mới")
+    public ResponseEntity<ApiResponse<Category>> create(@RequestBody Map<String, Object> request) {
+        String name = (String) request.get("name");
+        String description = (String) request.get("description");
+        Category created = categoryService.createCategory(name, description);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(created, "Category created successfully"));
     }
 
     /**
-     * Update category
+     * Cập nhật category
+     * Test API:
+     * - PUT /api/categories/{id}
+     * - Body (optional): {"name":"Updated Electronics","description":"Updated description"}
      */
     @PutMapping("/{id}")
-    @Operation(summary = "Update category", description = "Update an existing product category")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Category updated successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request - validation failed"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Category not found")
-    })
-    public ResponseEntity<ApiResponse<Category>> updateCategory(
-            @Parameter(description = "Category ID") @PathVariable String id,
-            @RequestBody Map<String, Object> request) {
-        try {
-            String name = (String) request.get("name");
-            String description = (String) request.get("description");
-
-            log.info("Updating category with ID: {}", id);
-            Category updatedCategory = categoryService.updateCategory(id, name, description);
-
-            return ResponseEntity.ok(ApiResponse.success(updatedCategory, "Category updated successfully"));
-        } catch (Exception e) {
-            log.error("Error updating category: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.fail(e.getMessage()));
-        }
+    @Operation(summary = "Cập nhật category")
+    public ApiResponse<Category> update(@PathVariable String id, @RequestBody Map<String, Object> request) {
+        String name = (String) request.get("name");
+        String description = (String) request.get("description");
+        return ApiResponse.success(categoryService.updateCategory(id, name, description), "Category updated successfully");
     }
 
-    /**
-     * Soft delete category
-     */
+    /** DELETE /api/categories/{id} */
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete category", description = "Soft delete a product category")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Category deleted successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request - category not found or already deleted")
-    })
-    public ResponseEntity<ApiResponse<Void>> deleteCategory(
-            @Parameter(description = "Category ID") @PathVariable String id) {
-        try {
-            log.info("Deleting category with ID: {}", id);
-            categoryService.deleteCategory(id);
-
-            return ResponseEntity.ok(ApiResponse.success(null, "Category deleted successfully"));
-        } catch (Exception e) {
-            log.error("Error deleting category: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.fail(e.getMessage()));
-        }
+    @Operation(summary = "Xóa category (soft)")
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.ok(ApiResponse.success(null, "Category deleted successfully"));
     }
 
     /**
-     * Restore deleted category
+     * Khôi phục category đã xóa
+     * Test API:
+     * - POST /api/categories/{id}/restore
      */
     @PostMapping("/{id}/restore")
-    @Operation(summary = "Restore category", description = "Restore a soft-deleted product category")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Category restored successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Bad request - category not found or not deleted")
-    })
-    public ResponseEntity<ApiResponse<Category>> restoreCategory(
-            @Parameter(description = "Category ID") @PathVariable String id) {
-        try {
-            log.info("Restoring category with ID: {}", id);
-            Category restoredCategory = categoryService.restoreCategory(id);
-
-            return ResponseEntity.ok(ApiResponse.success(restoredCategory, "Category restored successfully"));
-        } catch (Exception e) {
-            log.error("Error restoring category: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.fail(e.getMessage()));
-        }
+    @Operation(summary = "Khôi phục category")
+    public ApiResponse<Category> restore(@PathVariable String id) {
+        return ApiResponse.success(categoryService.restoreCategory(id), "Category restored successfully");
     }
 
-    /**
-     * Get category by ID
-     */
+    /** GET /api/categories/{id} */
     @GetMapping("/{id}")
-    @Operation(summary = "Get category by ID", description = "Retrieve a specific product category by its ID")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Category retrieved successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Category not found")
-    })
-    public ResponseEntity<ApiResponse<Category>> getCategoryById(
-            @Parameter(description = "Category ID") @PathVariable String id) {
-        try {
-            log.info("Getting category by ID: {}", id);
-            Category category = categoryService.getCategoryById(id);
-
-            return ResponseEntity.ok(ApiResponse.ok(category));
-        } catch (Exception e) {
-            log.error("Error getting category: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponse.fail(e.getMessage()));
-        }
+    @Operation(summary = "Chi tiết category")
+    public ApiResponse<Category> get(@PathVariable String id) {
+        return ApiResponse.success(categoryService.getCategoryById(id), "Category retrieved successfully");
     }
 
-    /**
-     * Get all active categories
-     */
+    /** Danh sách categories; GET /api/categories?name=... */
     @GetMapping
-    @Operation(summary = "Get all active categories", description = "Retrieve all active product categories")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Categories retrieved successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<ApiResponse<List<Category>>> getAllActiveCategories() {
-        try {
-            log.info("Getting all active categories");
-            List<Category> categories = categoryService.getAllActiveCategories();
-
-            return ResponseEntity.ok(ApiResponse.ok(categories));
-        } catch (Exception e) {
-            log.error("Error getting categories: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.fail(e.getMessage()));
-        }
+    @Operation(summary = "Danh sách categories (PageResponse)")
+    public ApiResponse<PageResponse<Category>> list(@RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "1000") int size) {
+        var items = name != null ? categoryService.searchCategoriesByName(name) : categoryService.getAllActiveCategories();
+        return ApiResponse.success(new PageResponse<>(items, items.size(), page, size), "Categories retrieved successfully");
     }
 
-    /**
-     * Search categories by name
-     */
+    /** Tìm kiếm categories theo tên; GET /api/categories/search?name=... */
     @GetMapping("/search")
-    @Operation(summary = "Search categories by name", description = "Search product categories by name (case-insensitive)")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Categories found successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<ApiResponse<List<Category>>> searchCategoriesByName(
-            @Parameter(description = "Category name to search") @RequestParam String name) {
-        try {
-            log.info("Searching categories by name: {}", name);
-            List<Category> categories = categoryService.searchCategoriesByName(name);
-
-            return ResponseEntity.ok(ApiResponse.ok(categories));
-        } catch (Exception e) {
-            log.error("Error searching categories: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.fail(e.getMessage()));
-        }
+    @Operation(summary = "Tìm kiếm categories theo tên")
+    public ApiResponse<List<Category>> search(@RequestParam String name) {
+        return ApiResponse.success(categoryService.searchCategoriesByName(name), "Categories search completed successfully");
     }
 
-    /**
-     * Get categories with pagination
-     */
+    /** Phân trang categories; GET /api/categories/paged?page=0&size=10&sortBy=name&sortDir=asc */
     @GetMapping("/paged")
-    @Operation(summary = "Get categories with pagination", description = "Retrieve product categories with pagination and sorting")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Categories retrieved successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<ApiResponse<PageResponse<Category>>> getCategoriesWithPagination(
-            @Parameter(description = "Page number (0-based)") @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "Page size") @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "Sort by field") @RequestParam(defaultValue = "name") String sortBy,
-            @Parameter(description = "Sort direction (asc/desc)") @RequestParam(defaultValue = "asc") String sortDir) {
-        try {
-            log.info("Getting categories with pagination: page={}, size={}", page, size);
-
-            Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-
-            Pageable pageable = PageRequest.of(page, size, sort);
-            var categories = categoryService.getCategoriesWithPagination(pageable);
-
-            PageResponse<Category> pageResponse = new PageResponse<>(
-                    categories.getContent(),
-                    categories.getTotalElements(),
-                    categories.getNumber(),
-                    categories.getSize());
-
-            return ResponseEntity.ok(ApiResponse.ok(pageResponse));
-        } catch (Exception e) {
-            log.error("Error getting paginated categories: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.fail(e.getMessage()));
-        }
+    @Operation(summary = "Phân trang categories")
+    public ApiResponse<PageResponse<Category>> paged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        var res = categoryService.getCategoriesWithPagination(pageable);
+        PageResponse<Category> pr = new PageResponse<>(res.getContent(), res.getTotalElements(), res.getNumber(), res.getSize());
+        return ApiResponse.success(pr, "Categories pagination completed successfully");
     }
 
-    /**
-     * Count active categories
-     */
+    /** Đếm số categories; GET /api/categories/count */
     @GetMapping("/count")
-    @Operation(summary = "Count active categories", description = "Get the total count of active product categories")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Count retrieved successfully"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<ApiResponse<Long>> countActiveCategories() {
-        try {
-            log.info("Counting active categories");
-            long count = categoryService.countActiveCategories();
-
-            return ResponseEntity.ok(ApiResponse.ok(count));
-        } catch (Exception e) {
-            log.error("Error counting categories: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.fail(e.getMessage()));
-        }
+    @Operation(summary = "Đếm số categories")
+    public ApiResponse<Long> count() {
+        return ApiResponse.success(categoryService.countActiveCategories(), "Categories count retrieved successfully");
     }
 }

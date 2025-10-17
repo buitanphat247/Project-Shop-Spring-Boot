@@ -11,65 +11,89 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/** Module API cho Product (embed category) */
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "Products", description = "Product management APIs")
+@Tag(name = "Products", description = "APIs quản lý sản phẩm (trả về ApiResponse/PageResponse)")
 public class ProductController {
 
     private final ProductService productService;
 
+    /**
+     * Tạo product mới (embed category)
+     * Test API:
+     * - POST /api/products
+     * - Body: {"name":"iPhone
+     * 15","price":999.99,"stock":50,"categoryId":"CATEGORY_ID"}
+     */
     @PostMapping
-    @Operation(summary = "Create product")
+    @Operation(summary = "Tạo product mới")
     public ResponseEntity<ApiResponse<Product>> create(@RequestBody Product product) {
         Product created = productService.create(product);
-        return ResponseEntity.ok(ApiResponse.success(created, "Product created successfully"));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(created, "Product created successfully"));
     }
 
+    /**
+     * Cập nhật product
+     * Test API:
+     * - PUT /api/products/{id}
+     * - Body (optional): {"name":"iPhone 15 Pro","price":1099.99,"stock":30}
+     */
     @PutMapping("/{id}")
-    @Operation(summary = "Update product")
-    public ResponseEntity<ApiResponse<Product>> update(
-            @PathVariable String id,
-            @RequestBody Product product) {
-        Product updated = productService.update(id, product);
-        return ResponseEntity.ok(ApiResponse.success(updated, "Product updated successfully"));
+    @Operation(summary = "Cập nhật product")
+    public ApiResponse<Product> update(@PathVariable String id, @RequestBody Product product) {
+        return ApiResponse.success(productService.update(id, product), "Product updated successfully");
     }
 
+    /** DELETE /api/products/{id} */
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete product (soft)")
+    @Operation(summary = "Xóa product (soft)")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         productService.softDelete(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Product deleted successfully"));
     }
 
+    /** GET /api/products/{id} */
     @GetMapping("/{id}")
-    @Operation(summary = "Get product by ID")
-    public ResponseEntity<ApiResponse<Product>> getById(@PathVariable String id) {
-        Product p = productService.getById(id);
-        return ResponseEntity.ok(ApiResponse.ok(p));
+    @Operation(summary = "Chi tiết product")
+    public ApiResponse<Product> get(@PathVariable String id) {
+        return ApiResponse.success(productService.getById(id), "Product retrieved successfully");
     }
 
+    /** Danh sách products; GET /api/products?name=... */
     @GetMapping
-    @Operation(summary = "Get all products")
-    public ResponseEntity<ApiResponse<List<Product>>> getAll() {
-        return ResponseEntity.ok(ApiResponse.ok(productService.getAllActive()));
+    @Operation(summary = "Danh sách products (PageResponse)")
+    public ApiResponse<PageResponse<Product>> list(@RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "1000") int size) {
+        var items = name != null ? productService.searchByName(name) : productService.getAllActive();
+        return ApiResponse.success(new PageResponse<>(items, items.size(), page, size),
+                "Products retrieved successfully");
     }
 
+    /** Tìm kiếm products theo tên; GET /api/products/search?name=... */
     @GetMapping("/search")
-    @Operation(summary = "Search products by name")
-    public ResponseEntity<ApiResponse<List<Product>>> search(@RequestParam String name) {
-        return ResponseEntity.ok(ApiResponse.ok(productService.searchByName(name)));
+    @Operation(summary = "Tìm kiếm products theo tên")
+    public ApiResponse<List<Product>> search(@RequestParam String name) {
+        return ApiResponse.success(productService.searchByName(name), "Products search completed successfully");
     }
 
+    /**
+     * Phân trang products; GET
+     * /api/products/paged?page=0&size=10&sortBy=name&sortDir=asc
+     */
     @GetMapping("/paged")
-    @Operation(summary = "Get products with pagination")
-    public ResponseEntity<ApiResponse<PageResponse<Product>>> paged(
+    @Operation(summary = "Phân trang products")
+    public ApiResponse<PageResponse<Product>> paged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "name") String sortBy,
@@ -79,6 +103,6 @@ public class ProductController {
         var res = productService.getPaged(pageable);
         PageResponse<Product> pr = new PageResponse<>(res.getContent(), res.getTotalElements(), res.getNumber(),
                 res.getSize());
-        return ResponseEntity.ok(ApiResponse.ok(pr));
+        return ApiResponse.success(pr, "Products pagination completed successfully");
     }
 }

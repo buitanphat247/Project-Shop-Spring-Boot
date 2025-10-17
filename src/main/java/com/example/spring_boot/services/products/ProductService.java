@@ -2,6 +2,7 @@ package com.example.spring_boot.services.products; // Package service quản lý
 
 import com.example.spring_boot.domains.products.Product; // Entity sản phẩm
 import com.example.spring_boot.repository.products.ProductRepository; // Repository Mongo cho sản phẩm
+import com.example.spring_boot.repository.products.CategoryRepository; // Repository danh mục
 
 import lombok.RequiredArgsConstructor; // Inject constructor cho field final
 import lombok.extern.slf4j.Slf4j; // Hỗ trợ logging
@@ -21,13 +22,30 @@ import java.util.List; // Danh sách kết quả
 public class ProductService {
 
     private final ProductRepository productRepository; // DAO sản phẩm
+    private final CategoryRepository categoryRepository; // DAO danh mục
 
     /** Tạo product mới: reset id, set createdAt, lưu DB. */
     public Product create(Product product) {
         try {
+            // Validate categoryId tồn tại
+            if (product.getCategoryId() == null) {
+                throw new RuntimeException("Category ID is required");
+            }
+            if (!categoryRepository.existsById(product.getCategoryId().toHexString())) {
+                throw new RuntimeException("Category not found");
+            }
+
             product.setId(null); // Reset id để luôn tạo mới
             product.setCreatedAt(Instant.now()); // Gán thời điểm tạo
-            return productRepository.save(product); // Lưu và trả về entity đã lưu
+            Product savedProduct = productRepository.save(product); // Lưu và nhận entity đã lưu
+
+            // Populate category nếu DocumentReference không tự động load
+            if (savedProduct.getCategory() == null && savedProduct.getCategoryId() != null) {
+                categoryRepository.findById(savedProduct.getCategoryId().toHexString())
+                        .ifPresent(savedProduct::setCategory);
+            }
+
+            return savedProduct; // Trả về entity đã lưu
         } catch (Exception e) {
             log.error("Create product failed, name={}", product != null ? product.getName() : null, e); // Log ngữ cảnh
             throw new RuntimeException("Failed to create product: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
@@ -41,13 +59,30 @@ public class ProductService {
                     .orElseThrow(() -> new RuntimeException("Product not found with ID: " + id)); // Không thấy -> 404
             if (existing.getDeletedAt() != null)
                 throw new RuntimeException("Product has been deleted"); // Đã xóa mềm -> chặn cập nhật
+
+            // Validate categoryId nếu có thay đổi
+            if (updated.getCategoryId() != null && !updated.getCategoryId().equals(existing.getCategoryId())) {
+                if (!categoryRepository.existsById(updated.getCategoryId().toHexString())) {
+                    throw new RuntimeException("Category not found");
+                }
+                existing.setCategoryId(updated.getCategoryId()); // Cập nhật danh mục
+            }
+
             existing.setName(updated.getName()); // Cập nhật tên
             existing.setDescription(updated.getDescription()); // Cập nhật mô tả
             existing.setPrice(updated.getPrice()); // Cập nhật giá
             existing.setStock(updated.getStock()); // Cập nhật tồn
-            existing.setCategoryId(updated.getCategoryId()); // Cập nhật danh mục
             existing.setUpdatedAt(Instant.now()); // Gán thời điểm cập nhật
-            return productRepository.save(existing); // Lưu thay đổi
+
+            Product savedProduct = productRepository.save(existing); // Lưu thay đổi
+
+            // Populate category nếu DocumentReference không tự động load
+            if (savedProduct.getCategory() == null && savedProduct.getCategoryId() != null) {
+                categoryRepository.findById(savedProduct.getCategoryId().toHexString())
+                        .ifPresent(savedProduct::setCategory);
+            }
+
+            return savedProduct; // Trả về kết quả
         } catch (Exception e) {
             log.error("Update product failed, id={}", id, e); // Log ngữ cảnh
             throw new RuntimeException("Failed to update product: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
@@ -77,6 +112,13 @@ public class ProductService {
                     .orElseThrow(() -> new RuntimeException("Product not found with ID: " + id)); // Không thấy -> 404
             if (p.getDeletedAt() != null)
                 throw new RuntimeException("Product has been deleted"); // Đã xóa mềm -> không trả về
+
+            // Populate category nếu DocumentReference không tự động load
+            if (p.getCategory() == null && p.getCategoryId() != null) {
+                categoryRepository.findById(p.getCategoryId().toHexString())
+                        .ifPresent(p::setCategory);
+            }
+
             return p; // Trả về entity
         } catch (Exception e) {
             log.error("Get product by id failed, id={}", id, e); // Log lỗi
@@ -88,7 +130,17 @@ public class ProductService {
     /** Lấy toàn bộ sản phẩm đang hoạt động. */
     public List<Product> getAllActive() {
         try {
-            return productRepository.findAllActive(); // Query custom trả về các bản ghi chưa xóa mềm
+            List<Product> products = productRepository.findAllActive(); // Query custom trả về các bản ghi chưa xóa mềm
+
+            // Populate category cho từng product
+            products.forEach(product -> {
+                if (product.getCategory() == null && product.getCategoryId() != null) {
+                    categoryRepository.findById(product.getCategoryId().toHexString())
+                            .ifPresent(product::setCategory);
+                }
+            });
+
+            return products; // Trả về danh sách đã populate
         } catch (Exception e) {
             log.error("Get all active products failed", e); // Log lỗi
             throw new RuntimeException("Failed to list products: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
@@ -99,7 +151,18 @@ public class ProductService {
     /** Tìm kiếm theo tên (ignore-case). */
     public List<Product> searchByName(String name) {
         try {
-            return productRepository.findByNameContainingIgnoreCase(name); // Truy vấn like ignore-case
+            List<Product> products = productRepository.findByNameContainingIgnoreCase(name); // Truy vấn like
+                                                                                             // ignore-case
+
+            // Populate category cho từng product
+            products.forEach(product -> {
+                if (product.getCategory() == null && product.getCategoryId() != null) {
+                    categoryRepository.findById(product.getCategoryId().toHexString())
+                            .ifPresent(product::setCategory);
+                }
+            });
+
+            return products; // Trả về danh sách đã populate
         } catch (Exception e) {
             log.error("Search products failed, name={}", name, e); // Log lỗi
             throw new RuntimeException("Failed to search products: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
@@ -111,6 +174,15 @@ public class ProductService {
     public Page<Product> getPaged(Pageable pageable) {
         try {
             List<Product> all = productRepository.findAllActive(); // Toàn bộ danh sách active
+
+            // Populate category cho từng product
+            all.forEach(product -> {
+                if (product.getCategory() == null && product.getCategoryId() != null) {
+                    categoryRepository.findById(product.getCategoryId().toHexString())
+                            .ifPresent(product::setCategory);
+                }
+            });
+
             int start = (int) pageable.getOffset(); // Vị trí bắt đầu
             if (start < 0)
                 start = 0; // Ràng buộc dưới

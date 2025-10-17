@@ -11,31 +11,40 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/** Module API cho ProductImage (quản lý hình ảnh sản phẩm) */
 @RestController
 @RequestMapping("/api/product-images")
 @RequiredArgsConstructor
-@Tag(name = "Product Images", description = "APIs for managing product images")
+@Tag(name = "Product Images", description = "APIs quản lý hình ảnh sản phẩm (trả về ApiResponse)")
 public class ProductImageController {
 
     private final ProductImageService productImageService;
 
+    /**
+     * Tạo hình ảnh sản phẩm
+     * Test API:
+     * - POST /api/product-images
+     * - Body: {"productId":"PRODUCT_ID","imageUrl":"URL","altText":"Description"}
+     */
     @PostMapping
-    @Operation(summary = "Create product image")
+    @Operation(summary = "Tạo hình ảnh sản phẩm")
     public ResponseEntity<ApiResponse<ProductImage>> create(@RequestBody ProductImage img) {
         ProductImage created = productImageService.create(img);
         return ResponseEntity.ok(ApiResponse.success(created, "Product image created successfully"));
     }
 
+    /** DELETE /api/product-images/{id} */
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete product image (soft)")
+    @Operation(summary = "Xóa hình ảnh sản phẩm (soft)")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String id) {
         productImageService.softDelete(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Product image deleted successfully"));
     }
 
+    /** GET /api/product-images/by-product/{productId} */
     @GetMapping("/by-product/{productId}")
-    @Operation(summary = "Get images by product ID")
-    public ResponseEntity<ApiResponse<List<ProductImage>>> getByProduct(@PathVariable String productId) {
-        return ResponseEntity.ok(ApiResponse.ok(productImageService.getByProductId(productId)));
+    @Operation(summary = "Lấy hình ảnh theo product ID")
+    public ApiResponse<List<ProductImage>> getByProduct(@PathVariable String productId) {
+        return ApiResponse.success(productImageService.getByProductId(productId), "Product images retrieved successfully");
     }
 }

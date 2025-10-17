@@ -1,0 +1,82 @@
+{
+  "createProduct": {
+    "name": "iPhone 15 Pro",
+    "description": "Latest iPhone with advanced camera system and A17 Pro chip",
+    "price": 999.99,
+    "stock": 50,
+    "categoryId": "507f1f77bcf86cd799439011"
+  },
+  "updateProduct": {
+    "name": "iPhone 15 Pro Max",
+    "description": "Updated description for iPhone 15 Pro Max",
+    "price": 1099.99,
+    "stock": 30,
+    "categoryId": "507f1f77bcf86cd799439012"
+  },
+  "apiEndpoints": {
+    "create": "POST /api/products",
+    "getById": "GET /api/products/{id}",
+    "update": "PUT /api/products/{id}",
+    "delete": "DELETE /api/products/{id}",
+    "list": "GET /api/products?name=iPhone&page=0&size=10",
+    "search": "GET /api/products/search?name=iPhone",
+    "paged": "GET /api/products/paged?page=0&size=10&sortBy=name&sortDir=asc"
+  },
+  "apiResponseFormat": {
+    "success": true,
+    "message": "Operation completed successfully",
+    "data": {
+      "id": "507f1f77bcf86cd799439013",
+      "name": "iPhone 15 Pro",
+      "description": "Latest iPhone with advanced camera system and A17 Pro chip",
+      "price": 999.99,
+      "stock": 50,
+      "categoryId": "507f1f77bcf86cd799439011",
+      "category": {
+        "id": "507f1f77bcf86cd799439011",
+        "name": "Smartphones",
+        "description": "Mobile phones and accessories"
+      },
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": null,
+      "deletedAt": null
+    }
+  },
+  "pageResponseFormat": {
+    "success": true,
+    "message": "Products retrieved successfully",
+    "data": {
+      "content": [
+        {
+          "id": "507f1f77bcf86cd799439013",
+          "name": "iPhone 15 Pro",
+          "price": 999.99,
+          "stock": 50,
+          "category": {
+            "id": "507f1f77bcf86cd799439011",
+            "name": "Smartphones"
+          }
+        }
+      ],
+      "totalElements": 1,
+      "pageNumber": 0,
+      "pageSize": 10
+    }
+  },
+  "validationRules": {
+    "create": {
+      "name": "Required, non-empty string",
+      "price": "Required, non-negative number",
+      "stock": "Required, non-negative integer",
+      "categoryId": "Required, valid ObjectId",
+      "description": "Optional string"
+    },
+    "update": {
+      "name": "Optional, non-empty string if provided",
+      "price": "Optional, non-negative number if provided",
+      "stock": "Optional, non-negative integer if provided",
+      "categoryId": "Optional, valid ObjectId if provided",
+      "description": "Optional string"
+    }
+  }
+}
