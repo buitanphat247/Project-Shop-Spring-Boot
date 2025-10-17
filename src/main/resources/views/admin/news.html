@@ -1,8 +1,78 @@
-<div th:replace="~{layouts/authLayout :: layout('Tin tức', ~{::content})}">
-  <div th:fragment="content">
-    <h1 class="text-2xl font-bold mb-4">Danh sách tin tức</h1>
-    <p class="text-gray-600">Trang placeholder.</p>
-  </div>
-</div>
-
-
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/authLayout :: layout('Tin tức', ~{::content})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Tin tức - Admin</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold text-gray-800">Tin tức</h1>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Thêm tin tức
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <input type="text" placeholder="Tìm kiếm tin tức..." 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-filter mr-2"></i>Lọc
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gray-200"></div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">iPhone 15 Pro Max ra mắt</h3>
+                        <p class="text-gray-600 text-sm mb-3">Apple vừa ra mắt iPhone 15 Pro Max với nhiều tính năng mới...</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-500">15/01/2024</span>
+                            <div class="flex space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900 text-sm">Sửa</button>
+                                <button class="text-red-600 hover:text-red-900 text-sm">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gray-200"></div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Samsung Galaxy S24 Series</h3>
+                        <p class="text-gray-600 text-sm mb-3">Samsung ra mắt dòng Galaxy S24 với AI tích hợp...</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-500">14/01/2024</span>
+                            <div class="flex space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900 text-sm">Sửa</button>
+                                <button class="text-red-600 hover:text-red-900 text-sm">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gray-200"></div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">MacBook Pro M3 mới</h3>
+                        <p class="text-gray-600 text-sm mb-3">Apple cập nhật MacBook Pro với chip M3 mạnh mẽ...</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-500">13/01/2024</span>
+                            <div class="flex space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900 text-sm">Sửa</button>
+                                <button class="text-red-600 hover:text-red-900 text-sm">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

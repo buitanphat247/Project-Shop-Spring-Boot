@@ -1,8 +1,154 @@
-<div th:replace="~{layouts/authLayout :: layout('Thống kê', ~{::content})}">
-  <div th:fragment="content">
-    <h1 class="text-2xl font-bold mb-4">Thống kê</h1>
-    <p class="text-gray-600">Trang placeholder.</p>
-  </div>
-</div>
-
-
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/authLayout :: layout('Phân tích', ~{::content})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Phân tích - Admin</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold text-gray-800">Phân tích & Báo cáo</h1>
+                <p class="text-gray-600 mt-2">Theo dõi hiệu suất kinh doanh và xu hướng</p>
+            </div>
+            
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-blue-500 rounded-full">
+                            <i class="fas fa-chart-line text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Doanh thu tháng</p>
+                            <p class="text-2xl font-bold text-gray-900">125.5M VNĐ</p>
+                            <p class="text-sm text-green-600">+12.5% so với tháng trước</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-green-500 rounded-full">
+                            <i class="fas fa-shopping-cart text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Đơn hàng</p>
+                            <p class="text-2xl font-bold text-gray-900">1,234</p>
+                            <p class="text-sm text-green-600">+8.2% so với tháng trước</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 p-6 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-yellow-500 rounded-full">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Khách hàng mới</p>
+                            <p class="text-2xl font-bold text-gray-900">89</p>
+                            <p class="text-sm text-green-600">+15.3% so với tháng trước</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-purple-50 p-6 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-purple-500 rounded-full">
+                            <i class="fas fa-eye text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Lượt xem</p>
+                            <p class="text-2xl font-bold text-gray-900">45.6K</p>
+                            <p class="text-sm text-green-600">+22.1% so với tháng trước</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white border border-gray-200 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Doanh thu theo tháng</h3>
+                    <div class="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <p class="text-gray-500">Biểu đồ doanh thu sẽ được hiển thị ở đây</p>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Sản phẩm bán chạy</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-bold">1</span>
+                                </div>
+                                <span class="ml-3 text-sm font-medium text-gray-900">iPhone 15 Pro</span>
+                            </div>
+                            <span class="text-sm text-gray-600">156 bán</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-bold">2</span>
+                                </div>
+                                <span class="ml-3 text-sm font-medium text-gray-900">Samsung Galaxy S24</span>
+                            </div>
+                            <span class="text-sm text-gray-600">134 bán</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-bold">3</span>
+                                </div>
+                                <span class="ml-3 text-sm font-medium text-gray-900">MacBook Pro M3</span>
+                            </div>
+                            <span class="text-sm text-gray-600">89 bán</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="bg-white border border-gray-200 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Hoạt động gần đây</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-shopping-cart text-green-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">Đơn hàng mới #DH001</p>
+                            <p class="text-sm text-gray-600">Nguyễn Văn A đã đặt hàng iPhone 15 Pro</p>
+                        </div>
+                        <span class="text-sm text-gray-500">2 phút trước</span>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-plus text-blue-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">Khách hàng mới</p>
+                            <p class="text-sm text-gray-600">Trần Thị B đã đăng ký tài khoản</p>
+                        </div>
+                        <span class="text-sm text-gray-500">15 phút trước</span>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-box text-yellow-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-900">Sản phẩm mới</p>
+                            <p class="text-sm text-gray-600">MacBook Pro M3 đã được thêm vào kho</p>
+                        </div>
+                        <span class="text-sm text-gray-500">1 giờ trước</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,8 +1,98 @@
-<div th:replace="~{layouts/authLayout :: layout('Đơn hàng - Chờ xử lý', ~{::content})}">
-  <div th:fragment="content">
-    <h1 class="text-2xl font-bold mb-4">Đơn hàng chờ xử lý</h1>
-    <p class="text-gray-600">Trang placeholder.</p>
-  </div>
-</div>
-
-
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/authLayout :: layout('Đơn hàng chờ xử lý', ~{::content})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Đơn hàng chờ xử lý - Admin</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Đơn hàng chờ xử lý</h1>
+                    <p class="text-gray-600 mt-2">Các đơn hàng đang chờ xử lý và xác nhận</p>
+                </div>
+                <div class="flex space-x-4">
+                    <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-check-double mr-2"></i>Xử lý tất cả
+                    </button>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-download mr-2"></i>Xuất báo cáo
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">#DH001</h3>
+                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            Chờ xử lý
+                        </span>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-sm text-gray-600"><strong>Khách hàng:</strong> Nguyễn Văn A</p>
+                        <p class="text-sm text-gray-600"><strong>Sản phẩm:</strong> iPhone 15 Pro</p>
+                        <p class="text-sm text-gray-600"><strong>Tổng tiền:</strong> 29,990,000 VNĐ</p>
+                        <p class="text-sm text-gray-600"><strong>Ngày đặt:</strong> 15/01/2024</p>
+                    </div>
+                    <div class="flex space-x-2 mt-4">
+                        <button class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors text-sm">
+                            Xác nhận
+                        </button>
+                        <button class="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors text-sm">
+                            Từ chối
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">#DH002</h3>
+                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            Chờ xử lý
+                        </span>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-sm text-gray-600"><strong>Khách hàng:</strong> Trần Thị B</p>
+                        <p class="text-sm text-gray-600"><strong>Sản phẩm:</strong> Samsung Galaxy S24</p>
+                        <p class="text-sm text-gray-600"><strong>Tổng tiền:</strong> 24,990,000 VNĐ</p>
+                        <p class="text-sm text-gray-600"><strong>Ngày đặt:</strong> 14/01/2024</p>
+                    </div>
+                    <div class="flex space-x-2 mt-4">
+                        <button class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors text-sm">
+                            Xác nhận
+                        </button>
+                        <button class="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors text-sm">
+                            Từ chối
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">#DH003</h3>
+                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            Chờ xử lý
+                        </span>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-sm text-gray-600"><strong>Khách hàng:</strong> Lê Văn C</p>
+                        <p class="text-sm text-gray-600"><strong>Sản phẩm:</strong> MacBook Pro M3</p>
+                        <p class="text-sm text-gray-600"><strong>Tổng tiền:</strong> 45,990,000 VNĐ</p>
+                        <p class="text-sm text-gray-600"><strong>Ngày đặt:</strong> 13/01/2024</p>
+                    </div>
+                    <div class="flex space-x-2 mt-4">
+                        <button class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors text-sm">
+                            Xác nhận
+                        </button>
+                        <button class="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors text-sm">
+                            Từ chối
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

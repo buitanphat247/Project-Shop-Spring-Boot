@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/authLayout :: layout('Danh mục', ~{::content})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh mục - Admin</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold text-gray-800">Danh mục sản phẩm</h1>
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Thêm danh mục
+                </button>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <input type="text" placeholder="Tìm kiếm danh mục..." 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-filter mr-2"></i>Lọc
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-mobile-alt text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Điện thoại</h3>
+                                <p class="text-sm text-gray-600">156 sản phẩm</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900 text-sm">Sửa</button>
+                            <button class="text-red-600 hover:text-red-900 text-sm">Xóa</button>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600">Danh mục điện thoại di động và phụ kiện</p>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-laptop text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Laptop</h3>
+                                <p class="text-sm text-gray-600">89 sản phẩm</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900 text-sm">Sửa</button>
+                            <button class="text-red-600 hover:text-red-900 text-sm">Xóa</button>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600">Máy tính xách tay và phụ kiện</p>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-headphones text-white text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Phụ kiện</h3>
+                                <p class="text-sm text-gray-600">234 sản phẩm</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="text-blue-600 hover:text-blue-900 text-sm">Sửa</button>
+                            <button class="text-red-600 hover:text-red-900 text-sm">Xóa</button>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600">Phụ kiện điện tử và công nghệ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

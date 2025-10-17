@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/authLayout :: layout('Danh sách sản phẩm bán', ~{::content})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách sản phẩm bán - Admin</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold text-gray-800">Danh sách sản phẩm bán</h1>
+                <div class="flex space-x-4">
+                    <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-download mr-2"></i>Xuất Excel
+                    </button>
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Thêm sản phẩm
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filter Options -->
+            <div class="mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <input type="text" placeholder="Tìm kiếm sản phẩm..." 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option>Tất cả danh mục</option>
+                        <option>Điện thoại</option>
+                        <option>Laptop</option>
+                        <option>Phụ kiện</option>
+                    </select>
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option>Tất cả trạng thái</option>
+                        <option>Còn hàng</option>
+                        <option>Hết hàng</option>
+                        <option>Ngừng bán</option>
+                    </select>
+                    <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-filter mr-2"></i>Lọc
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Products Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gray-200"></div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">iPhone 15 Pro</h3>
+                        <p class="text-sm text-gray-600 mb-2">Mã: SP001</p>
+                        <p class="text-sm text-gray-600 mb-3">Danh mục: Điện thoại</p>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-lg font-bold text-gray-900">29,990,000 VNĐ</span>
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                Còn hàng
+                            </span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                                Sửa
+                            </button>
+                            <button class="flex-1 bg-red-600 text-white py-2 px-3 rounded-lg hover:bg-red-700 transition-colors text-sm">
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gray-200"></div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Samsung Galaxy S24</h3>
+                        <p class="text-sm text-gray-600 mb-2">Mã: SP002</p>
+                        <p class="text-sm text-gray-600 mb-3">Danh mục: Điện thoại</p>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-lg font-bold text-gray-900">24,990,000 VNĐ</span>
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                Còn hàng
+                            </span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                                Sửa
+                            </button>
+                            <button class="flex-1 bg-red-600 text-white py-2 px-3 rounded-lg hover:bg-red-700 transition-colors text-sm">
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gray-200"></div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">MacBook Pro M3</h3>
+                        <p class="text-sm text-gray-600 mb-2">Mã: SP003</p>
+                        <p class="text-sm text-gray-600 mb-3">Danh mục: Laptop</p>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-lg font-bold text-gray-900">45,990,000 VNĐ</span>
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                Sắp hết
+                            </span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                                Sửa
+                            </button>
+                            <button class="flex-1 bg-red-600 text-white py-2 px-3 rounded-lg hover:bg-red-700 transition-colors text-sm">
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gray-200"></div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">AirPods Pro</h3>
+                        <p class="text-sm text-gray-600 mb-2">Mã: SP004</p>
+                        <p class="text-sm text-gray-600 mb-3">Danh mục: Phụ kiện</p>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-lg font-bold text-gray-900">5,990,000 VNĐ</span>
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                Hết hàng
+                            </span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                                Sửa
+                            </button>
+                            <button class="flex-1 bg-red-600 text-white py-2 px-3 rounded-lg hover:bg-red-700 transition-colors text-sm">
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

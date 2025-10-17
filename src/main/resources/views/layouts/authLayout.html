@@ -13,12 +13,91 @@
     <style>
       .sidebar-transition { transition: all 0.3s ease; }
       .sidebar-collapsed { width: 4rem; }
-      .sidebar-expanded { width: 16rem; }
+      .sidebar-expanded { width: 20rem; }
       .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
       .submenu.open { max-height: 200px; }
+      /* Hide scrollbar for sidebar */
+      .sidebar-no-scroll {
+        overflow-y: auto;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+      }
+      .sidebar-no-scroll::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+      }
       /* Backdrop for mobile */
       #sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; z-index: 40; }
       #sidebar-backdrop.show { display: block; }
+      
+      /* Notification panel slide animation like YouTube */
+      #notification-panel {
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #notification-panel.show {
+        transform: translateX(0);
+      }
+      
+      /* Backdrop fade animation */
+      #notification-backdrop {
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
+        pointer-events: none;
+      }
+      #notification-backdrop.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      
+      /* Notification item styles */
+      .notification-item {
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f3f4f6;
+      }
+      .notification-item:hover {
+        background-color: #f8fafc;
+        transform: translateX(-2px);
+      }
+      .notification-item.unread {
+        background-color: #fef3c7;
+        border-left: 3px solid #f59e0b;
+      }
+      .notification-item.unread:hover {
+        background-color: #fde68a;
+      }
+      
+      /* Stagger animation for notification items */
+      .notification-item {
+        animation: slideInFromRight 0.4s ease-out forwards;
+        opacity: 0;
+        transform: translateX(10px);
+      }
+      .notification-item:nth-child(1) { animation-delay: 0.05s; }
+      .notification-item:nth-child(2) { animation-delay: 0.1s; }
+      .notification-item:nth-child(3) { animation-delay: 0.15s; }
+      .notification-item:nth-child(4) { animation-delay: 0.2s; }
+      .notification-item:nth-child(5) { animation-delay: 0.25s; }
+      
+      @keyframes slideInFromRight {
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      /* Loading animation */
+      .notification-loading {
+        animation: pulse 2s infinite;
+      }
+      
+      /* Smooth scroll for notification list */
+      #notification-list {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      #notification-list::-webkit-scrollbar {
+        display: none;
+      }
     </style>
   </head>
   <body class="bg-gray-100">
@@ -35,9 +114,56 @@
           <h1 class="text-xl lg:text-2xl font-bold text-gray-800" th:text="${title}">Dashboard</h1>
         </div>
         <div class="flex items-center gap-3">
-          <button class="p-2 rounded-lg hover:bg-gray-100">
-            <i class="fas fa-bell text-gray-600"></i>
-          </button>
+          <!-- Notification Button -->
+          <div class="relative">
+            <button id="notification-btn" class="p-2 rounded-lg hover:bg-gray-100 relative">
+              <i class="fas fa-bell text-gray-600"></i>
+              <!-- Notification badge -->
+              <span id="notification-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">3</span>
+            </button>
+            
+            <!-- Notification Panel - Slide from right like YouTube -->
+            <div id="notification-panel" class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-out z-50">
+              <!-- Panel Header -->
+              <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+                <h3 class="text-lg font-semibold text-gray-800">Thông báo</h3>
+                <button id="close-notification-panel" class="p-2 hover:bg-gray-200 rounded-full transition-colors">
+                  <i class="fas fa-times text-gray-600"></i>
+                </button>
+              </div>
+              
+              <!-- Panel Actions -->
+              <div class="p-4 border-b border-gray-200 bg-white">
+                <div class="flex items-center justify-between">
+                  <button id="mark-all-read" class="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-check-double mr-1"></i>Đánh dấu tất cả
+                  </button>
+                  <button id="refresh-notifications" class="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all">
+                    <i class="fas fa-sync-alt"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Notifications List -->
+              <div id="notification-list" class="flex-1 overflow-y-auto h-[calc(100vh-140px)]">
+                <!-- Loading state -->
+                <div id="notification-loading" class="p-6 text-center text-gray-500">
+                  <div class="animate-spin w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full mx-auto mb-4"></div>
+                  <p class="text-sm">Đang tải thông báo...</p>
+                </div>
+              </div>
+              
+              <!-- Panel Footer -->
+              <div class="p-4 border-t border-gray-200 bg-gray-50">
+                <a href="#" class="block w-full text-center py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium">
+                  <i class="fas fa-external-link-alt mr-2"></i>Xem tất cả
+                </a>
+              </div>
+            </div>
+            
+            <!-- Backdrop -->
+            <div id="notification-backdrop" class="fixed inset-0 bg-black bg-opacity-30 z-40 opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+          </div>
           <div class="flex items-center gap-2">
             <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
               <i class="fas fa-user text-white text-sm"></i>
@@ -50,12 +176,12 @@
       <!-- Body: sidebar + content in one container -->
       <div id="main-content" class="pt-16 min-h-screen flex bg-gray-50">
         <!-- Sidebar container (desktop visible by default) -->
-        <aside id="sidebar-container" class="w-64 lg:block sidebar-transition overflow-hidden">
+        <aside id="sidebar-container" class="w-80 lg:block sidebar-transition overflow-hidden">
           <div th:replace="~{layouts/sidebar :: sidebar}"></div>
         </aside>
 
         <!-- Page content -->
-        <main id="page-content" class="flex-1 px-4 lg:px-6 py-6">
+        <main id="page-content" class="flex-1 ">
           <div th:replace="${content}"></div>
         </main>
       </div>
@@ -71,7 +197,7 @@
           function setDesktopVisible(visible) {
             if (!sidebarContainer) return;
             const $sc = $('#sidebar-container');
-            const targetWidth = visible ? 256 : 0; // px
+            const targetWidth = visible ? 360 : 0; // px (tăng từ 320 lên 360)
             const duration = visible ? 180 : 140; // đóng nhanh hơn
             $sc.stop(true, false).animate({ width: targetWidth }, duration, 'swing');
           }
@@ -92,7 +218,7 @@
               setMobileVisible(false);
               setDesktopVisible(true); // để container có width mặc định, panel mobile trượt riêng
             } else {
-              $('#sidebar-container').css('width', '256px');
+              $('#sidebar-container').css('width', '360px');
               setDesktopVisible(true);
             }
           }
@@ -123,6 +249,249 @@
           if (backdrop) {
             backdrop.addEventListener('click', function () { setMobileVisible(false); });
           }
+
+          // Notification panel system
+          const notificationBtn = document.getElementById('notification-btn');
+          const notificationPanel = document.getElementById('notification-panel');
+          const notificationBackdrop = document.getElementById('notification-backdrop');
+          const notificationList = document.getElementById('notification-list');
+          const notificationLoading = document.getElementById('notification-loading');
+          const notificationBadge = document.getElementById('notification-badge');
+          const markAllReadBtn = document.getElementById('mark-all-read');
+          const closeNotificationPanel = document.getElementById('close-notification-panel');
+          const refreshNotifications = document.getElementById('refresh-notifications');
+          
+          let isNotificationOpen = false;
+          let notifications = [];
+
+          // Toggle notification panel
+          function toggleNotification() {
+            isNotificationOpen = !isNotificationOpen;
+            
+            if (isNotificationOpen) {
+              showNotificationPanel();
+              loadNotifications();
+            } else {
+              hideNotificationPanel();
+            }
+          }
+
+          // Show notification panel with slide animation
+          function showNotificationPanel() {
+            notificationPanel.classList.add('show');
+            notificationBackdrop.classList.add('show');
+            
+            // Add body scroll lock
+            document.body.style.overflow = 'hidden';
+          }
+
+          // Hide notification panel with slide animation
+          function hideNotificationPanel() {
+            notificationPanel.classList.remove('show');
+            notificationBackdrop.classList.remove('show');
+            
+            // Remove body scroll lock
+            document.body.style.overflow = '';
+            isNotificationOpen = false;
+          }
+
+          // Load notifications via AJAX
+          function loadNotifications() {
+            // Show loading state
+            notificationLoading.style.display = 'block';
+            notificationList.innerHTML = '';
+            notificationList.appendChild(notificationLoading);
+            
+            $.ajax({
+              url: '/api/notifications',
+              method: 'GET',
+              dataType: 'json',
+              success: function(data) {
+                notifications = data.notifications || [];
+                renderNotifications(notifications);
+                updateBadge(notifications.filter(n => !n.read).length);
+              },
+              error: function() {
+                renderErrorState();
+              }
+            });
+          }
+
+          // Render notifications with beautiful animations
+          function renderNotifications(notifications) {
+            // Hide loading state
+            notificationLoading.style.display = 'none';
+            
+            if (notifications.length === 0) {
+              notificationList.innerHTML = `
+                <div class="p-6 text-center text-gray-500">
+                  <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-bell-slash text-2xl text-gray-400"></i>
+                  </div>
+                  <h3 class="text-lg font-semibold text-gray-700 mb-2">Không có thông báo nào</h3>
+                  <p class="text-sm text-gray-500">Bạn đã cập nhật tất cả thông báo mới nhất</p>
+                </div>
+              `;
+              return;
+            }
+
+            const html = notifications.map((notification, index) => `
+              <div class="notification-item p-4 hover:bg-gray-50 cursor-pointer ${!notification.read ? 'unread' : ''}" data-id="${notification.id}" style="animation-delay: ${index * 0.05}s">
+                <div class="flex items-start space-x-3">
+                  <div class="flex-shrink-0">
+                    <div class="w-10 h-10 bg-${notification.type === 'success' ? 'green' : notification.type === 'warning' ? 'yellow' : notification.type === 'error' ? 'red' : 'blue'}-500 rounded-full flex items-center justify-center">
+                      <i class="fas fa-${notification.icon || 'bell'} text-white text-sm"></i>
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between">
+                      <div class="flex-1">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-1">${notification.title}</h4>
+                        <p class="text-xs text-gray-600 mb-2">${notification.message}</p>
+                        <div class="flex items-center space-x-2">
+                          <span class="text-xs text-gray-400">${formatTime(notification.createdAt)}</span>
+                          ${notification.type ? `<span class="px-2 py-0.5 text-xs font-medium bg-${notification.type === 'success' ? 'green' : notification.type === 'warning' ? 'yellow' : notification.type === 'error' ? 'red' : 'blue'}-100 text-${notification.type === 'success' ? 'green' : notification.type === 'warning' ? 'yellow' : notification.type === 'error' ? 'red' : 'blue'}-800 rounded-full">${notification.type}</span>` : ''}
+                        </div>
+                      </div>
+                      ${!notification.read ? '<div class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>' : ''}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `).join('');
+
+            notificationList.innerHTML = html;
+            
+            // Add click handlers for notification items
+            document.querySelectorAll('.notification-item').forEach((item) => {
+              item.addEventListener('click', function() {
+                const notificationId = this.dataset.id;
+                markAsRead(notificationId);
+                
+                // Add click animation
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                  this.style.transform = '';
+                }, 150);
+              });
+            });
+          }
+
+          // Render error state
+          function renderErrorState() {
+            notificationList.innerHTML = `
+              <div class="p-4 text-center text-gray-500">
+                <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                <p>Không thể tải thông báo</p>
+                <button onclick="loadNotifications()" class="mt-2 text-blue-600 hover:text-blue-800 text-sm">Thử lại</button>
+              </div>
+            `;
+          }
+
+          // Mark notification as read
+          function markAsRead(notificationId) {
+            $.ajax({
+              url: `/api/notifications/${notificationId}/read`,
+              method: 'PUT',
+              success: function() {
+                const item = document.querySelector(`[data-id="${notificationId}"]`);
+                if (item) {
+                  item.classList.remove('unread');
+                  item.querySelector('.w-2.h-2')?.remove();
+                }
+                updateBadge(notifications.filter(n => !n.read && n.id !== notificationId).length);
+              }
+            });
+          }
+
+          // Mark all as read
+          function markAllAsRead() {
+            $.ajax({
+              url: '/api/notifications/mark-all-read',
+              method: 'PUT',
+              success: function() {
+                document.querySelectorAll('.notification-item').forEach(item => {
+                  item.classList.remove('unread');
+                  item.querySelector('.w-2.h-2')?.remove();
+                });
+                updateBadge(0);
+              }
+            });
+          }
+
+          // Update notification badge
+          function updateBadge(count) {
+            if (count > 0) {
+              notificationBadge.textContent = count > 99 ? '99+' : count;
+              notificationBadge.classList.remove('hidden');
+            } else {
+              notificationBadge.classList.add('hidden');
+            }
+          }
+
+          // Format time
+          function formatTime(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return 'Vừa xong';
+            if (diff < 3600000) return `${Math.floor(diff / 60000)} phút trước`;
+            if (diff < 86400000) return `${Math.floor(diff / 3600000)} giờ trước`;
+            return date.toLocaleDateString('vi-VN');
+          }
+
+          // Event listeners
+          if (notificationBtn) {
+            notificationBtn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              toggleNotification();
+            });
+          }
+
+          if (closeNotificationPanel) {
+            closeNotificationPanel.addEventListener('click', function(e) {
+              e.stopPropagation();
+              hideNotificationPanel();
+            });
+          }
+
+          if (markAllReadBtn) {
+            markAllReadBtn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              markAllAsRead();
+            });
+          }
+
+          if (refreshNotifications) {
+            refreshNotifications.addEventListener('click', function(e) {
+              e.stopPropagation();
+              loadNotifications();
+              
+              // Add refresh animation
+              this.style.transform = 'rotate(360deg)';
+              setTimeout(() => {
+                this.style.transform = '';
+              }, 500);
+            });
+          }
+
+          // Close panel when clicking backdrop
+          if (notificationBackdrop) {
+            notificationBackdrop.addEventListener('click', function() {
+              hideNotificationPanel();
+            });
+          }
+
+          // Close panel with Escape key
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isNotificationOpen) {
+              hideNotificationPanel();
+            }
+          });
+
+          // Load notifications on page load
+          loadNotifications();
         });
       </script>
     </div>

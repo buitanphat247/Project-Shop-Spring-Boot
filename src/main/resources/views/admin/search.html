@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/authLayout :: layout('Tìm kiếm', ~{::content})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Tìm kiếm - Admin</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold text-gray-800">Tìm kiếm toàn hệ thống</h1>
+                <p class="text-gray-600 mt-2">Tìm kiếm thông tin trong toàn bộ hệ thống quản trị</p>
+            </div>
+            
+            <!-- Global Search -->
+            <div class="mb-8">
+                <div class="relative">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm, đơn hàng, khách hàng, tin tức..." 
+                           class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <button class="absolute inset-y-0 right-0 px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Search Categories -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-box text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Sản phẩm</h3>
+                            <p class="text-sm text-gray-600">567 sản phẩm</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-shopping-cart text-green-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Đơn hàng</h3>
+                            <p class="text-sm text-gray-600">1,234 đơn hàng</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-users text-yellow-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Khách hàng</h3>
+                            <p class="text-sm text-gray-600">89 khách hàng</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow cursor-pointer">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-newspaper text-purple-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Tin tức</h3>
+                            <p class="text-sm text-gray-600">45 bài viết</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Search Links -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Tìm kiếm nhanh</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <a href="/admin/search/products" class="flex items-center p-4 bg-white rounded-lg hover:shadow-md transition-shadow">
+                        <i class="fas fa-box text-blue-600 mr-3"></i>
+                        <span class="text-gray-900">Tìm kiếm sản phẩm</span>
+                    </a>
+                    
+                    <a href="/admin/search/orders" class="flex items-center p-4 bg-white rounded-lg hover:shadow-md transition-shadow">
+                        <i class="fas fa-shopping-cart text-green-600 mr-3"></i>
+                        <span class="text-gray-900">Tìm kiếm đơn hàng</span>
+                    </a>
+                    
+                    <a href="/admin/search/customers" class="flex items-center p-4 bg-white rounded-lg hover:shadow-md transition-shadow">
+                        <i class="fas fa-users text-yellow-600 mr-3"></i>
+                        <span class="text-gray-900">Tìm kiếm khách hàng</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

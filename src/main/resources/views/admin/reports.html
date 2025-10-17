@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/authLayout :: layout('Báo cáo', ~{::content})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Báo cáo - Admin</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="mb-6">
+                <h1 class="text-3xl font-bold text-gray-800">Báo cáo tổng quan</h1>
+                <p class="text-gray-600 mt-2">Xem và phân tích các báo cáo chi tiết về doanh thu, sản phẩm và khách hàng</p>
+            </div>
+            
+            <!-- Report Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-blue-50 p-6 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-blue-500 rounded-full">
+                            <i class="fas fa-chart-line text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Doanh thu tháng</p>
+                            <p class="text-2xl font-bold text-gray-900">2.5B VNĐ</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 p-6 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-green-500 rounded-full">
+                            <i class="fas fa-shopping-cart text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Đơn hàng</p>
+                            <p class="text-2xl font-bold text-gray-900">1,234</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 p-6 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-yellow-500 rounded-full">
+                            <i class="fas fa-box text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Sản phẩm bán</p>
+                            <p class="text-2xl font-bold text-gray-900">5,678</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-purple-50 p-6 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-purple-500 rounded-full">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Khách hàng mới</p>
+                            <p class="text-2xl font-bold text-gray-900">456</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Report Types -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Revenue Report -->
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-bar text-white text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Báo cáo doanh thu</h3>
+                            <p class="text-sm text-gray-600">Phân tích doanh thu theo thời gian</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Doanh thu hôm nay</span>
+                            <span class="text-sm font-semibold text-gray-900">85M VNĐ</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Doanh thu tuần</span>
+                            <span class="text-sm font-semibold text-gray-900">580M VNĐ</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Doanh thu tháng</span>
+                            <span class="text-sm font-semibold text-gray-900">2.5B VNĐ</span>
+                        </div>
+                    </div>
+                    <button class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        Xem chi tiết
+                    </button>
+                </div>
+                
+                <!-- Product Report -->
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-box text-white text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Báo cáo sản phẩm</h3>
+                            <p class="text-sm text-gray-600">Thống kê sản phẩm bán chạy</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Sản phẩm bán chạy</span>
+                            <span class="text-sm font-semibold text-gray-900">iPhone 15 Pro</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Số lượng bán</span>
+                            <span class="text-sm font-semibold text-gray-900">156</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Tổng doanh thu</span>
+                            <span class="text-sm font-semibold text-gray-900">1.2B VNĐ</span>
+                        </div>
+                    </div>
+                    <button class="w-full mt-4 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                        Xem chi tiết
+                    </button>
+                </div>
+                
+                <!-- Customer Report -->
+                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-users text-white text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Báo cáo khách hàng</h3>
+                            <p class="text-sm text-gray-600">Phân tích hành vi khách hàng</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Khách hàng mới</span>
+                            <span class="text-sm font-semibold text-gray-900">456</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Khách hàng VIP</span>
+                            <span class="text-sm font-semibold text-gray-900">89</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-sm text-gray-600">Tỷ lệ quay lại</span>
+                            <span class="text-sm font-semibold text-gray-900">78%</span>
+                        </div>
+                    </div>
+                    <button class="w-full mt-4 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                        Xem chi tiết
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Export Options -->
+            <div class="mt-8 bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Xuất báo cáo</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button class="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-file-excel text-green-600 mr-2"></i>
+                        Xuất Excel
+                    </button>
+                    <button class="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-file-pdf text-red-600 mr-2"></i>
+                        Xuất PDF
+                    </button>
+                    <button class="flex items-center justify-center px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-print text-blue-600 mr-2"></i>
+                        In báo cáo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
