@@ -3,15 +3,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Menu items data
     const menuItems = [
         { name: 'Khuyến mãi hấp dẫn', href: '/products/khuyen-mai', hasArrow: true },
-        { name: 'Rau', href: '/products/rau', hasArrow: false },
-        { name: 'Trái cây & hạt', href: '/products/trai-cay-hat', hasArrow: true },
-        { name: 'Thịt hữu cơ', href: '/products/thit-huu-co', hasArrow: false },
-        { name: 'Bơ & Trứng', href: '/products/bo-trung', hasArrow: false },
-        { name: 'Thực phẩm sạch', href: '/products/thuc-pham-sach', hasArrow: false },
-        { name: 'Sữa & kem', href: '/products/sua-kem', hasArrow: false },
-        { name: 'Nước ép hữu cơ', href: '/products/nuoc-ep-huu-co', hasArrow: false }
-    ];
-
+        { name: 'Áo nam', href: '/products/ao-nam', hasArrow: false },
+        { name: 'Áo nữ', href: '/products/ao-nu', hasArrow: true },
+        { name: 'Quần nam', href: '/products/quan-nam', hasArrow: false },
+        { name: 'Quần nữ', href: '/products/quan-nu', hasArrow: false },
+        { name: 'Đầm & Váy', href: '/products/dam-vay', hasArrow: false },
+        { name: 'Phụ kiện thời trang', href: '/products/phu-kien', hasArrow: false },
+        { name: 'Giày & Dép', href: '/products/giay-dep', hasArrow: false }
+      ];
+      
     // Navigation links data
     const navLinks = [
         { name: 'Trang chủ', href: '/' },

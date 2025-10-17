@@ -1,210 +1,203 @@
-// Products data array
+// Products data array (fashion)
 const products = [
   {
     id: 1,
-    name: "Nước Ép Cam Hữu Cơ",
-    price: "89.000 ₫",
-    originalPrice: "120.000 ₫",
-    discount: "-26%",
+    name: "Áo Thun Nam Cotton",
+    price: "189.000 ₫",
+    originalPrice: "259.000 ₫",
+    discount: "-27%",
     rating: 5,
-    image:
-      "https://cdn.tgdd.vn/Files/2021/02/05/1325829/thanh-loc-lan-da-cho-ngay-tet-them-xinh-voi-cac-loai-nuoc-ep-cam-202201171029377144.jpg",
+    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-black", "bg-gray-400", "bg-red-500"],
     outOfStock: false,
   },
   {
     id: 2,
-    name: "Rau Củ Tươi Hữu Cơ",
-    price: "45.000 ₫",
+    name: "Quần Jeans Nữ Lưng Cao",
+    price: "399.000 ₫",
     originalPrice: null,
     discount: null,
     rating: 4,
-    image: "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+    image: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-blue-800", "bg-gray-600"],
     outOfStock: false,
   },
   {
     id: 3,
-    name: "Nước Ép Táo Hữu Cơ",
-    price: "95.000 ₫",
-    originalPrice: "130.000 ₫",
-    discount: "-27%",
+    name: "Áo Sơ Mi Trắng Classic",
+    price: "329.000 ₫",
+    originalPrice: "420.000 ₫",
+    discount: "-22%",
     rating: 4,
-    image: "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
+    image: "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-white", "bg-black"],
     outOfStock: false,
   },
   {
     id: 4,
-    name: "Rau Xanh Hữu Cơ",
-    price: "35.000 ₫",
-    originalPrice: "50.000 ₫",
-    discount: "-30%",
-    rating: 3,
-    image:
-      "https://media.istockphoto.com/id/1208790371/vi/anh/n%E1%BB%81n-tr%C3%A1i-c%C3%A2y-v%C3%A0-rau-qu%E1%BA%A3-m%C3%A0u-c%E1%BA%A7u-v%E1%BB%93ng-t%C6%B0%C6%A1i-t%E1%BB%91t-cho-s%E1%BB%A9c-kh%E1%BB%8Fe.jpg?s=612x612&w=0&k=20&c=btxH1rlvCP6JlpfvUv2T_ijTNOCKV5qJ6lfDUTU6FGg=",
+    name: "Váy Công Sở Thanh Lịch",
+    price: "459.000 ₫",
+    originalPrice: "560.000 ₫",
+    discount: "-18%",
+    rating: 5,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5yFEEaLV5sTkXmHgAz2zbBIVfsWDRbtkW3w&s",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-pink-300", "bg-gray-200"],
     outOfStock: false,
   },
   {
     id: 5,
-    name: "Nước Ép Dứa Hữu Cơ",
-    price: "75.000 ₫",
+    name: "Giày Sneaker Trắng",
+    price: "599.000 ₫",
     originalPrice: null,
     discount: null,
     rating: 4,
-    image: "https://cdn.tgdd.vn/2021/01/content/3-800x500-15.jpg",
+    image: "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-white", "bg-black"],
     outOfStock: false,
   },
   {
     id: 6,
-    name: "Rau Củ Mix Hữu Cơ",
-    price: "65.000 ₫",
-    originalPrice: "85.000 ₫",
-    discount: "-24%",
+    name: "Áo Khoác Denim",
+    price: "489.000 ₫",
+    originalPrice: "649.000 ₫",
+    discount: "-25%",
     rating: 5,
-    image:
-      "https://media.istockphoto.com/id/1457433817/vi/anh/nh%C3%B3m-th%E1%BB%B1c-ph%E1%BA%A9m-l%C3%A0nh-m%E1%BA%A1nh-cho-ch%E1%BA%BF-%C4%91%E1%BB%99-%C4%83n-u%E1%BB%91ng-linh-ho%E1%BA%A1t.jpg?s=612x612&w=0&k=20&c=zU_6MNK-Nt9uddS9IrycJ7lgJvTNv44t_jz5QEm-rSI=",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7yDva6T0UfL4OacdxCrZqErvd8FIxZNbf0A&s",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-blue-700", "bg-gray-700"],
     outOfStock: false,
   },
   {
     id: 7,
-    name: "Nước Ép Cà Rốt Hữu Cơ",
-    price: "55.000 ₫",
+    name: "Quần Short Kaki",
+    price: "259.000 ₫",
     originalPrice: null,
     discount: null,
-    rating: 3,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlHnBOeRf9vLXXH2DVEGXF-hTXL6Urv8E79w&s",
+    rating: 4,
+    image: "https://pos.nvncdn.com/4e732c-26/art/artCT/20210510_LQurOt2vEZXrgsRaG9WqNnyQ.jpg",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-yellow-600", "bg-gray-500"],
     outOfStock: false,
   },
   {
     id: 8,
-    name: "Rau Củ Tươi Premium",
-    price: "85.000 ₫",
-    originalPrice: "110.000 ₫",
-    discount: "-23%",
+    name: "Set Phụ Kiện Thời Trang",
+    price: "199.000 ₫",
+    originalPrice: "249.000 ₫",
+    discount: "-20%",
     rating: 4,
-    image: "https://phuchajsc.com.vn/wp-content/uploads/2025/06/protein-16367356906871074430861.jpg",
+    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-4.jpg",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-black", "bg-gray-300"],
     outOfStock: false,
   },
 ];
 
-// New Products data array
+// New Products data array (fashion)
 const newProducts = [
   {
     id: 1,
-    name: "Nước Ép Dưa Hấu Hữu Cơ",
-    price: "65.000 ₫",
+    name: "Đầm Hoa Mùa Thu",
+    price: "529.000 ₫",
     originalPrice: null,
     discount: "MỚI",
     rating: 0,
-    image:
-      "https://cdn.tgdd.vn/Files/2021/02/05/1325829/thanh-loc-lan-da-cho-ngay-tet-them-xinh-voi-cac-loai-nuoc-ep-cam-202201171029377144.jpg",
+    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-pink-300", "bg-yellow-200"],
     outOfStock: false,
   },
   {
     id: 2,
-    name: "Rau Mầm Hữu Cơ",
-    price: "35.000 ₫",
+    name: "Áo Polo Nam",
+    price: "299.000 ₫",
     originalPrice: null,
     discount: "MỚI",
     rating: 0,
-    image: "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+    image: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-blue-700", "bg-gray-400"],
     outOfStock: false,
   },
   {
     id: 3,
-    name: "Nước Ép Lựu Hữu Cơ",
-    price: "125.000 ₫",
+    name: "Chân Váy Chữ A",
+    price: "349.000 ₫",
     originalPrice: null,
     discount: "MỚI",
     rating: 0,
-    image: "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
+    image: "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-black", "bg-gray-200"],
     outOfStock: false,
   },
   {
     id: 4,
-    name: "Rau Củ Mix Premium",
-    price: "95.000 ₫",
+    name: "Áo Hoodie Unisex",
+    price: "459.000 ₫",
     originalPrice: null,
     discount: "MỚI",
     rating: 0,
-    image:
-      "https://media.istockphoto.com/id/1208790371/vi/anh/n%E1%BB%81n-tr%C3%A1i-c%C3%A2y-v%C3%A0-rau-qu%E1%BA%A3-m%C3%A0u-c%E1%BA%A7u-v%E1%BB%93ng-t%C6%B0%C6%A1i-t%E1%BB%91t-cho-s%E1%BB%A9c-kh%E1%BB%8Fe.jpg?s=612x612&w=0&k=20&c=btxH1rlvCP6JlpfvUv2T_ijTNOCKV5qJ6lfDUTU6FGg=",
+    image: "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
     buttonType: "cart",
-    colorVariants: null,
+    colorVariants: ["bg-gray-700", "bg-black"],
     outOfStock: false,
   },
 ];
 
-// Best Selling Products data array
+// Best Selling Products data array (fashion)
 const bestSellingProducts = [
   {
     id: 1,
-    name: "Nước Ép Cam Hữu Cơ",
-    price: "89.000 ₫",
+    name: "Áo Thun Nam Cotton",
+    price: "189.000 ₫",
     rating: 5,
-    image:
-      "https://cdn.tgdd.vn/Files/2021/02/05/1325829/thanh-loc-lan-da-cho-ngay-tet-them-xinh-voi-cac-loai-nuoc-ep-cam-202201171029377144.jpg",
+    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
     available: 3,
     sold: 12,
     outOfStock: false,
   },
   {
     id: 2,
-    name: "Rau Củ Tươi Hữu Cơ",
-    price: "45.000 ₫",
+    name: "Quần Jeans Nữ Lưng Cao",
+    price: "399.000 ₫",
     rating: 4,
-    image: "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+    image: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
     available: 8,
     sold: 15,
     outOfStock: false,
   },
   {
     id: 3,
-    name: "Nước Ép Táo Hữu Cơ",
-    price: "95.000 ₫",
+    name: "Áo Sơ Mi Trắng Classic",
+    price: "329.000 ₫",
     rating: 4,
-    image: "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
+    image: "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
     available: 5,
     sold: 10,
     outOfStock: false,
   },
   {
     id: 4,
-    name: "Rau Xanh Hữu Cơ",
-    price: "35.000 ₫",
-    rating: 3,
-    image:
-      "https://media.istockphoto.com/id/1208790371/vi/anh/n%E1%BB%81n-tr%C3%A1i-c%C3%A2y-v%C3%A0-rau-qu%E1%BA%A3-m%C3%A0u-c%E1%BA%A7u-v%E1%BB%93ng-t%C6%B0%C6%A1i-t%E1%BB%91t-cho-s%E1%BB%A9c-kh%E1%BB%8Fe.jpg?s=612x612&w=0&k=20&c=btxH1rlvCP6JlpfvUv2T_ijTNOCKV5qJ6lfDUTU6FGg=",
+    name: "Váy Công Sở Thanh Lịch",
+    price: "459.000 ₫",
+    rating: 5,
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5yFEEaLV5sTkXmHgAz2zbBIVfsWDRbtkW3w&s",
     available: 6,
     sold: 9,
     outOfStock: false,
   },
   {
     id: 5,
-    name: "Nước Ép Dứa Hữu Cơ",
-    price: "75.000 ₫",
+    name: "Giày Sneaker Trắng",
+    price: "599.000 ₫",
     rating: 4,
-    image: "https://cdn.tgdd.vn/2021/01/content/3-800x500-15.jpg",
+    image: "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
     available: 4,
     sold: 11,
     outOfStock: false,
@@ -247,30 +240,27 @@ function renderProductCard(product) {
             <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" />
           </div>
         </a>
-        ${
-          product.discount
-            ? `
-          <div class="absolute top-3 left-3 ${
-            product.outOfStock ? "bg-gray-400" : "bg-[#cd5d4a]"
-          } text-white px-2 py-1 rounded text-sm font-bold">
+        ${product.discount
+      ? `
+          <div class="absolute top-3 left-3 ${product.outOfStock ? "bg-gray-400" : "bg-[#cd5d4a]"
+      } text-white px-2 py-1 rounded text-sm font-bold">
             ${product.discount}
           </div>
         `
-            : ""
-        }
+      : ""
+    }
         <!-- Wishlist Button (appears on hover) -->
         <button class="absolute top-3 right-3 bg-white text-gray-600 w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg">
           <i class="fas fa-heart text-sm"></i>
         </button>
-        ${
-          product.colorVariants
-            ? `
+        ${product.colorVariants
+      ? `
           <div class="absolute bottom-3 left-3 flex space-x-1">
             ${renderColorVariants(product.colorVariants)}
           </div>
         `
-            : ""
-        }
+      : ""
+    }
       </div>
       <div class="p-4">
         <h3 class="font-bold text-lg text-[#2f604a] mb-2">
@@ -282,29 +272,26 @@ function renderProductCard(product) {
           </div>
         </div>
         <div class="flex items-center justify-between mb-3">
-          ${
-            product.originalPrice
-              ? `
+          ${product.originalPrice
+      ? `
                     <div>
                 <span class="text-lg text-gray-500 line-through">${product.originalPrice}</span>
                 <span class="text-2xl font-bold ${priceColor} ml-2">${product.price}</span>
               </div>
             `
-              : `
+      : `
             <span class="text-2xl font-bold ${priceColor}">${product.price}</span>
           `
-          }
-          ${
-            product.buttonType
-              ? `
-            <button class="${
-              product.outOfStock ? "bg-gray-400" : "bg-[#2f604a]"
-            } text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#1e3d2e] transition-colors">
+    }
+          ${product.buttonType
+      ? `
+            <button class="${product.outOfStock ? "bg-gray-400" : "bg-[#2f604a]"
+      } text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#1e3d2e] transition-colors">
               <i class="fas fa-shopping-cart text-sm"></i>
             </button>
           `
-              : ""
-          }
+      : ""
+    }
                   </div>
         <!-- Availability Bar -->
         <div class="mb-2">
@@ -336,15 +323,14 @@ function renderBestSellingCard(product) {
             <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" />
           </div>
         </a>
-        ${
-          product.outOfStock
-            ? `
+        ${product.outOfStock
+      ? `
           <div class="absolute top-3 left-3 bg-gray-400 text-white px-2 py-1 rounded text-sm font-bold">
             HẾT HÀNG
           </div>
         `
-            : ""
-        }
+      : ""
+    }
         <!-- Wishlist Button (appears on hover) -->
         <button class="absolute top-3 right-3 bg-white text-gray-600 w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all duration-300 opacity-0 group-hover:opacity-100 shadow-lg">
           <i class="fas fa-heart text-sm"></i>
@@ -404,43 +390,41 @@ function renderBestSellingProducts() {
   }
 }
 
-// Promo cards data + renderer
+// Promo cards data + renderer (fashion)
 const promoCards = [
   {
-    bg: "https://vnn-imgs-f.vgcloud.vn/2019/05/22/10/cach-chon-rau-cu-qua-sach-tuoi-ngon-khong-ngam-doc.jpg?width=0&s=kF_8EzU5qugnDebVP2h6Lg",
-    overlay: "bg-green-900 bg-opacity-60",
-    badge: { text: "ƯU ĐÃI 50%", cls: "bg-orange-500" },
-    title: ["RAU CỦ TƯƠI"],
-    desc: "Rau củ tươi ngon, được chọn lọc kỹ càng từ những trang trại hữu cơ",
+    bg: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
+    overlay: "bg-black bg-opacity-50",
+    badge: { text: "BỘ SƯU TẬP MỚI", cls: "bg-orange-500" },
+    title: ["THU 2025"],
+    desc: "Phong cách tối giản, chất liệu cao cấp cho ngày mới tự tin",
     btnCls: "bg-[#d9624a] hover:bg-[#b8544a]",
     deco: [
-      { cls: "w-12 h-12 bg-green-200 rounded-full opacity-60", style: "top:1rem;right:1rem" },
-      { cls: "w-6 h-6 bg-green-300 rounded-full opacity-40", style: "top:2rem;right:2rem" },
+      { cls: "w-12 h-12 bg-white rounded-full opacity-20", style: "top:1rem;right:1rem" },
+      { cls: "w-6 h-6 bg-white rounded-full opacity-10", style: "top:2rem;right:2rem" },
     ],
   },
   {
-    bg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLRZ2j5v_8WDZDR3aVKPD4GZDhhaDCPTmArA&s",
+    bg: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
     overlay: "bg-black bg-opacity-40",
     badge: { text: "GIẢM NGAY 30%", cls: "bg-green-700" },
-    title: ["THẢO MỘC", "TỰ NHIÊN"],
-    desc: "Thảo mộc tự nhiên, tươi ngon và giàu dinh dưỡng",
+    title: ["OUTFIT HÀNG NGÀY"],
+    desc: "Đơn giản – thoải mái – dễ phối cho mọi hoạt động",
     btnCls: "bg-green-700 hover:bg-green-800",
     deco: [
-      { cls: "w-3 h-3 bg-red-500 rounded-full opacity-80", style: "top:1.5rem;right:1.5rem" },
-      { cls: "w-2 h-2 bg-black rounded-full opacity-60", style: "top:2.5rem;right:2.5rem" },
-      { cls: "w-2 h-2 bg-red-600 rounded-full opacity-70", style: "top:3.5rem;right:2rem" },
-      { cls: "w-1.5 h-1.5 bg-black rounded-full opacity-50", style: "top:4.5rem;right:3rem" },
+      { cls: "w-3 h-3 bg-white rounded-full opacity-40", style: "top:1.5rem;right:1.5rem" },
+      { cls: "w-2 h-2 bg-white rounded-full opacity-30", style: "top:2.5rem;right:2.5rem" },
     ],
   },
   {
-    bg: "https://lh6.googleusercontent.com/OgV3IWncnOD3uywgEeU350463ICty9MTfxf8c0MKJCd5a-bzZTCDN-lDTJMH_7q1sT7d1pABFnFKarFOJZnL6KOp2jtgpsKrBY5eGxgVPSIwuhJKhkLz8bpINdCFssT9YFQIqDHz=s0",
-    overlay: "bg-pink-900 bg-opacity-50",
-    badge: { text: "GIẢM NGAY 30%", cls: "bg-green-700" },
-    title: ["NƯỚC ÉP HỮU CƠ"],
-    desc: "Nước ép tươi ngon, được ép từ trái cây hữu cơ 100%",
+    bg: "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
+    overlay: "bg-pink-900 bg-opacity-40",
+    badge: { text: "FLASH SALE", cls: "bg-[#cd5d4a]" },
+    title: ["PHỤ KIỆN", "GIẢM ĐẾN 50%"],
+    desc: "Hoàn thiện set đồ với phụ kiện bắt mắt",
     btnCls: "bg-[#d9624a] hover:bg-[#b8544a]",
     deco: [
-      { cls: "w-8 h-8 bg-orange-200 rounded-full opacity-60", style: "top:1.5rem;right:1.5rem" },
+      { cls: "w-8 h-8 bg-orange-200 rounded-full opacity-40", style: "top:1.5rem;right:1.5rem" },
       { cls: "w-4 h-4 bg-pink-200 rounded-full opacity-40", style: "top:2.5rem;right:2.5rem" },
     ],
   },
@@ -455,24 +439,24 @@ function renderPromoCards() {
       <div class="absolute inset-0 ${c.overlay} rounded-3xl"></div>
       <div class="relative z-10">
         <div class="inline-block ${c.badge.cls} text-white px-4 py-2 rounded-full text-sm font-bold mb-4">${c.badge.text}</div>
-        ${c.title.map(t=>`<h3 class="text-white text-3xl font-bold mb-1">${t}</h3>`).join('')}
+        ${c.title.map(t => `<h3 class="text-white text-3xl font-bold mb-1">${t}</h3>`).join('')}
         <p class="text-white text-opacity-90 mb-6">${c.desc}</p>
         <button class="${c.btnCls} text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">XEM NGAY</button>
       </div>
-      ${c.deco.map(d=>`<div class="absolute ${d.cls}" style="${d.style}"></div>`).join('')}
+      ${c.deco.map(d => `<div class="absolute ${d.cls}" style="${d.style}"></div>`).join('')}
     </div>
   `)
     .join("");
 }
 
-// Customer Reviews data + renderer
+// Customer Reviews data + renderer (fashion)
 const reviews = [
   {
     name: "Minh Anh",
     initial: "M",
     bgColor: "bg-[#2f604a]",
     rating: 5,
-    comment: "Nước ép cam hữu cơ rất tươi ngon, vị đậm đà tự nhiên. Giao hàng nhanh, đóng gói cẩn thận. Sẽ tiếp tục ủng hộ shop!",
+    comment: "Áo thun cotton mềm, thấm hút tốt. Form vừa người, giao hàng nhanh. Sẽ mua lại!",
     time: "2 ngày trước"
   },
   {
@@ -480,7 +464,7 @@ const reviews = [
     initial: "T",
     bgColor: "bg-[#cd5d4a]",
     rating: 5,
-    comment: "Rau củ tươi ngon, chất lượng tốt. Gia đình tôi rất hài lòng với sản phẩm hữu cơ của shop. Cảm ơn shop!",
+    comment: "Quần jeans đẹp, chất dày dặn, mặc thoải mái. Màu ít phai sau khi giặt.",
     time: "1 tuần trước"
   },
   {
@@ -488,7 +472,7 @@ const reviews = [
     initial: "L",
     bgColor: "bg-green-500",
     rating: 4,
-    comment: "Sản phẩm chất lượng, giá cả hợp lý. Nhân viên tư vấn nhiệt tình. Sẽ giới thiệu cho bạn bè!",
+    comment: "Áo sơ mi form chuẩn, đường may chắc chắn. Giá hợp lý, tư vấn nhiệt tình.",
     time: "3 ngày trước"
   },
   {
@@ -496,7 +480,7 @@ const reviews = [
     initial: "H",
     bgColor: "bg-purple-500",
     rating: 5,
-    comment: "Nước ép táo hữu cơ rất ngon, vị ngọt tự nhiên. Con tôi rất thích. Shop giao hàng đúng giờ, đóng gói đẹp.",
+    comment: "Váy công sở tôn dáng, chất mát, mặc cả ngày không khó chịu. Đóng gói đẹp.",
     time: "5 ngày trước"
   },
   {
@@ -504,7 +488,7 @@ const reviews = [
     initial: "D",
     bgColor: "bg-blue-500",
     rating: 5,
-    comment: "Rau xanh hữu cơ tươi ngon, không có thuốc trừ sâu. Gia đình tôi yên tâm sử dụng. Cảm ơn shop!",
+    comment: "Áo khoác denim cá tính, đường chỉ đẹp. Mặc lên form rất ổn.",
     time: "1 tuần trước"
   },
   {
@@ -512,7 +496,7 @@ const reviews = [
     initial: "N",
     bgColor: "bg-orange-500",
     rating: 4,
-    comment: "Nước ép dứa hữu cơ rất thơm ngon, vị chua ngọt vừa phải. Sẽ mua thêm lần sau. Shop phục vụ tốt!",
+    comment: "Giày sneaker nhẹ, êm chân. Đi nhiều không bị đau. Sẽ quay lại.",
     time: "4 ngày trước"
   }
 ];
@@ -539,39 +523,39 @@ function renderReviews() {
     .join("");
 }
 
-// Knowledge Articles data + renderer
+// Knowledge Articles data + renderer (fashion)
 const articles = [
   {
-    image: "https://cdn.tgdd.vn/Files/2021/02/05/1325829/thanh-loc-lan-da-cho-ngay-tet-them-xinh-voi-cac-loai-nuoc-ep-cam-202201171029377144.jpg",
-    alt: "Rau củ hữu cơ",
+    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
+    alt: "Mix & Match áo thun",
     date: { day: "08", month: "TH3" },
-    author: "Monamedia — Dairy Farm, Healthy Foods",
-    title: "Rau Củ Hữu Cơ và Tương Lai Thực Phẩm",
-    excerpt: "Khám phá những lợi ích tuyệt vời của rau củ hữu cơ và cách chúng góp phần vào tương lai bền vững của ngành thực phẩm..."
+    author: "Monamedia — Fashion, Lifestyle",
+    title: "5 Cách Phối Áo Thun Chuẩn Trend",
+    excerpt: "Biến áo thun cơ bản thành set đồ cá tính cho nhiều hoàn cảnh khác nhau..."
   },
   {
-    image: "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
-    alt: "Dinh dưỡng theo nhu cầu",
+    image: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
+    alt: "Jeans lưng cao",
     date: { day: "25", month: "TH2" },
-    author: "Monamedia — Healthy Foods, Lifestyle",
-    title: "Dinh Dưỡng Theo Nhu Cầu và Sản Xuất",
-    excerpt: "Tìm hiểu về dinh dưỡng cá nhân hóa và cách sản xuất thực phẩm đáp ứng nhu cầu dinh dưỡng cụ thể của từng người..."
+    author: "Monamedia — Fashion, Lifestyle",
+    title: "Chọn Quần Jeans Phù Hợp Dáng Người",
+    excerpt: "Mẹo chọn jeans tôn dáng, thoải mái và dễ phối đồ cho nàng..."
   },
   {
-    image: "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
-    alt: "Trái cây đa dạng",
+    image: "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
+    alt: "Áo sơ mi trắng",
     date: { day: "25", month: "TH2" },
-    author: "Monamedia — Healthy Foods, Lifestyle",
-    title: "Ăn Nhiều Loại Trái Cây Cải Thiện Sức Khỏe",
-    excerpt: "Khám phá lợi ích của việc ăn đa dạng các loại trái cây và cách chúng giúp cải thiện sức khỏe tổng thể..."
+    author: "Monamedia — Fashion, Lifestyle",
+    title: "Sơ Mi Trắng: Item Không Thể Thiếu",
+    excerpt: "Tại sao sơ mi trắng luôn là món đồ must-have trong tủ áo của bạn..."
   },
   {
-    image: "https://media.istockphoto.com/id/1208790371/vi/anh/n%E1%BB%81n-tr%C3%A1i-c%C3%A2y-v%C3%A0-rau-qu%E1%BA%A3-m%C3%A0u-c%E1%BA%A7u-v%E1%BB%93ng-t%C6%B0%C6%A1i-t%E1%BB%91t-cho-s%E1%BB%A9c-kh%E1%BB%8Fe.jpg?s=612x612&w=0&k=20&c=btxH1rlvCP6JlpfvUv2T_ijTNOCKV5qJ6lfDUTU6FGg=",
-    alt: "Thịt tươi",
+    image: "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
+    alt: "Phụ kiện thời trang",
     date: { day: "25", month: "TH2" },
-    author: "Monamedia — Healthy Foods",
-    title: "Thịt Tươi Kể Tất Cả: Cách Tôi Tìm Thấy",
-    excerpt: "Chia sẻ kinh nghiệm về cách chọn và sử dụng thịt tươi chất lượng cao từ nông trại hữu cơ..."
+    author: "Monamedia — Fashion",
+    title: "Phụ Kiện: Điểm Nhấn Cho Outfit",
+    excerpt: "Cách chọn phụ kiện giúp outfit của bạn nổi bật mà vẫn tinh tế..."
   }
 ];
 

@@ -2,6 +2,7 @@
   .news-card {
     transition: all 0.3s ease;
   }
+
   .news-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
@@ -18,28 +19,44 @@
         <aside class="lg:col-span-3 space-y-6">
           <!-- Categories -->
           <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-            <h2 class="text-[#2f604a] font-bold text-lg mb-4">Chuyên mục</h2>
+            <h2 class="text-[#2f604a] font-bold text-lg mb-4">Danh mục sản phẩm</h2>
             <ul class="space-y-2 text-gray-700">
-              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Dinh dưỡng</a></li>
-              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Công thức nấu ăn</a></li>
-              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Kinh nghiệm mua sắm</a></li>
-              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Vệ sinh an toàn thực phẩm</a></li>
-              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Khuyến mãi</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Áo thun</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Quần jeans</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Áo sơ mi</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Đầm & Váy</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Áo khoác</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Phụ kiện</a></li>
+            </ul>
+          </section>
+
+          <!-- Brands -->
+          <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+            <h2 class="text-[#2f604a] font-bold text-lg mb-4">Thương hiệu nổi bật</h2>
+            <ul class="space-y-2 text-gray-700">
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Nike</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Adidas</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Puma</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Uniqlo</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded hover:bg-gray-50">Zara</a></li>
             </ul>
           </section>
 
           <!-- Tags -->
           <section class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
-            <h2 class="text-[#2f604a] font-bold text-lg mb-4">Từ khóa</h2>
+            <h2 class="text-[#2f604a] font-bold text-lg mb-4">Từ khóa nổi bật</h2>
             <div class="flex flex-wrap gap-2">
-              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">hữu cơ</a>
-              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">rau củ</a>
-              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">nước ép</a>
-              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">món chay</a>
-              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">healthy</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">thời trang nam</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">thời trang nữ</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">casual</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">đi làm</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">streetwear</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">basic</a>
+              <a href="#" class="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">unisex</a>
             </div>
           </section>
         </aside>
+
 
         <!-- News list -->
         <section class="lg:col-span-9">
@@ -47,11 +64,15 @@
 
           <!-- Pagination -->
           <div class="mt-8 flex items-center justify-center gap-2">
-            <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">&laquo;</button>
+            <button
+              class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">&laquo;</button>
             <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-[#cb5439] text-white">1</button>
-            <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">2</button>
-            <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">3</button>
-            <button class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">&raquo;</button>
+            <button
+              class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">2</button>
+            <button
+              class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">3</button>
+            <button
+              class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">&raquo;</button>
           </div>
         </section>
       </div>

@@ -1,4 +1,4 @@
-package com.example.spring_boot.controllers;
+package com.example.spring_boot.controllers.pages;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

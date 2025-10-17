@@ -1,0 +1,119 @@
+Date : 2025-10-15 17:36:33
+Directory : e:\WEB\Project-Shop-Spring-Boot
+Total : 61 files,  5482 codes, 436 comments, 672 blanks, all 6590 lines
+
+Languages
++-----------------+------------+------------+------------+------------+------------+
+| language        | files      | code       | comment    | blank      | total      |
++-----------------+------------+------------+------------+------------+------------+
+| HTML            |         31 |      2,750 |        210 |        283 |      3,243 |
+| JavaScript      |         10 |      1,963 |        101 |        224 |      2,288 |
+| Java            |         13 |        273 |         29 |         79 |        381 |
+| XML             |          2 |        209 |         28 |         33 |        270 |
+| Batch           |          1 |        139 |         26 |         25 |        190 |
+| CSS             |          2 |        105 |          5 |         14 |        124 |
+| Java Properties |          2 |         43 |         37 |         14 |         94 |
++-----------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                     | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                        |         61 |      5,482 |        436 |        672 |      6,590 |
+| . (Files)                                                                                                |          3 |        348 |         54 |         58 |        460 |
+| .mvn                                                                                                     |          1 |          3 |          0 |          1 |          4 |
+| .mvn\wrapper                                                                                             |          1 |          3 |          0 |          1 |          4 |
+| src                                                                                                      |         57 |      5,131 |        382 |        613 |      6,126 |
+| src\main                                                                                                 |         56 |      5,122 |        382 |        608 |      6,112 |
+| src\main\java                                                                                            |         12 |        264 |         29 |         74 |        367 |
+| src\main\java\com                                                                                        |         12 |        264 |         29 |         74 |        367 |
+| src\main\java\com\example                                                                                |         12 |        264 |         29 |         74 |        367 |
+| src\main\java\com\example\spring_boot                                                                    |         12 |        264 |         29 |         74 |        367 |
+| src\main\java\com\example\spring_boot (Files)                                                            |          1 |          9 |          0 |          5 |         14 |
+| src\main\java\com\example\spring_boot\configs                                                            |          3 |         95 |         11 |         20 |        126 |
+| src\main\java\com\example\spring_boot\controllers                                                        |          8 |        160 |         18 |         49 |        227 |
+| src\main\resources                                                                                       |         44 |      4,858 |        353 |        534 |      5,745 |
+| src\main\resources (Files)                                                                               |          1 |         40 |         37 |         13 |         90 |
+| src\main\resources\static                                                                                |         12 |      2,068 |        106 |        238 |      2,412 |
+| src\main\resources\static\css                                                                            |          2 |        105 |          5 |         14 |        124 |
+| src\main\resources\static\js                                                                             |         10 |      1,963 |        101 |        224 |      2,288 |
+| src\main\resources\views                                                                                 |         31 |      2,750 |        210 |        283 |      3,243 |
+| src\main\resources\views\admin                                                                           |         12 |        128 |          2 |         39 |        169 |
+| src\main\resources\views\clients                                                                         |         10 |      1,529 |        125 |        136 |      1,790 |
+| src\main\resources\views\config                                                                          |          1 |         88 |         13 |         10 |        111 |
+| src\main\resources\views\error                                                                           |          3 |        387 |         25 |         29 |        441 |
+| src\main\resources\views\layouts                                                                         |          5 |        618 |         45 |         69 |        732 |
+| src\test                                                                                                 |          1 |          9 |          0 |          5 |         14 |
+| src\test\java                                                                                            |          1 |          9 |          0 |          5 |         14 |
+| src\test\java\com                                                                                        |          1 |          9 |          0 |          5 |         14 |
+| src\test\java\com\example                                                                                |          1 |          9 |          0 |          5 |         14 |
+| src\test\java\com\example\spring_boot                                                                    |          1 |          9 |          0 |          5 |         14 |
++----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------+-----------------+------------+------------+------------+------------+
+| filename                                                                                                 | language        | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------+-----------------+------------+------------+------------+------------+
+| e:\WEB\Project-Shop-Spring-Boot\.mvn\wrapper\maven-wrapper.properties                                    | Java Properties |          3 |          0 |          1 |          4 |
+| e:\WEB\Project-Shop-Spring-Boot\checkstyle.xml                                                           | XML             |         99 |         16 |         19 |        134 |
+| e:\WEB\Project-Shop-Spring-Boot\mvnw.cmd                                                                 | Batch           |        139 |         26 |         25 |        190 |
+| e:\WEB\Project-Shop-Spring-Boot\pom.xml                                                                  | XML             |        110 |         12 |         14 |        136 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\Application.java                   | Java            |          9 |          0 |          5 |         14 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\configs\CheckDb.java               | Java            |         40 |          5 |          9 |         54 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\configs\ErrorConfigController.java | Java            |         23 |          3 |          6 |         32 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\configs\SwaggerConfig.java         | Java            |         32 |          3 |          5 |         40 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\controllers\AdminController.java   | Java            |         30 |          0 |         16 |         46 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\controllers\AuthController.java    | Java            |         12 |          0 |          3 |         15 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\controllers\CartController.java    | Java            |         12 |          0 |          3 |         15 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\controllers\Contactcontroller.java | Java            |         12 |          0 |          3 |         15 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\controllers\HealthController.java  | Java            |         28 |          9 |          7 |         44 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\controllers\HomeController.java    | Java            |         26 |          9 |          7 |         42 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\controllers\NewsController.java    | Java            |         18 |          0 |          4 |         22 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\java\com\example\spring_boot\controllers\ProductController.java | Java            |         22 |          0 |          6 |         28 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\application.properties                                | Java Properties |         40 |         37 |         13 |         90 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\css\mona.css                                   | CSS             |         68 |          4 |          4 |         76 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\css\style.css                                  | CSS             |         37 |          1 |         10 |         48 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\admin-sidebar.js                            | JavaScript      |         64 |          2 |          9 |         75 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\cart.js                                     | JavaScript      |         96 |         15 |         22 |        133 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\header-menu.js                              | JavaScript      |         61 |         13 |         12 |         86 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\index.js                                    | JavaScript      |        570 |         14 |         19 |        603 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\main-modal.js                               | JavaScript      |        548 |         39 |        112 |        699 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\news-detail.js                              | JavaScript      |         57 |          6 |          6 |         69 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\news.js                                     | JavaScript      |         88 |          0 |          4 |         92 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\product-detail.js                           | JavaScript      |        178 |          7 |          7 |        192 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\products.js                                 | JavaScript      |        117 |          1 |         11 |        129 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\static\js\wishlist.js                                 | JavaScript      |        184 |          4 |         22 |        210 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\analytics.html                            | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\customers-blocked-history.html            | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\customers.html                            | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\dashboard.html                            | HTML            |         62 |          2 |          6 |         70 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\news-create.html                          | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\news-deleted.html                         | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\news.html                                 | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\orders-pending.html                       | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\orders.html                               | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\products-create.html                      | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\products-deleted.html                     | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\admin\products.html                             | HTML            |          6 |          0 |          3 |          9 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\about.html                              | HTML            |        257 |          7 |         22 |        286 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\cart.html                               | HTML            |        221 |         15 |         23 |        259 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\contact.html                            | HTML            |         81 |          4 |          4 |         89 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\health-db.html                          | HTML            |         84 |          9 |         11 |        104 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\index.html                              | HTML            |        247 |         47 |         23 |        317 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\news-detail.html                        | HTML            |        126 |         13 |          9 |        148 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\news.html                               | HTML            |         67 |          8 |          9 |         84 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\product-detail.html                     | HTML            |        255 |          7 |         19 |        281 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\products.html                           | HTML            |        113 |          9 |         10 |        132 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\clients\wishlist.html                           | HTML            |         78 |          6 |          6 |         90 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\config\health-db.html                           | HTML            |         88 |         13 |         10 |        111 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\error\404.html                                  | HTML            |        126 |          8 |          9 |        143 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\error\500.html                                  | HTML            |        135 |          9 |         11 |        155 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\error\error.html                                | HTML            |        126 |          8 |          9 |        143 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\layouts\authLayout.html                         | HTML            |        113 |          6 |         12 |        131 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\layouts\footer.html                             | HTML            |         92 |         11 |         10 |        113 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\layouts\header.html                             | HTML            |        355 |         22 |         42 |        419 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\layouts\main-layout.html                        | HTML            |         49 |          4 |          4 |         57 |
+| e:\WEB\Project-Shop-Spring-Boot\src\main\resources\views\layouts\sidebar.html                            | HTML            |          9 |          2 |          1 |         12 |
+| e:\WEB\Project-Shop-Spring-Boot\src\test\java\com\example\spring_boot\ApplicationTests.java              | Java            |          9 |          0 |          5 |         14 |
+| Total                                                                                                    |                 |      5,482 |        436 |        672 |      6,590 |
++----------------------------------------------------------------------------------------------------------+-----------------+------------+------------+------------+------------+

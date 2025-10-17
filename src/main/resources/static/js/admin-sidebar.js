@@ -62,13 +62,41 @@
       }
     });
 
-    // Active link highlight by pathname
+    // Active link highlight by pathname (chọn khớp nhất)
     const path = window.location.pathname;
-    nav.querySelectorAll('a[href]').forEach(a => {
-      const href = a.getAttribute('href');
-      if (href && href !== '#' && path.startsWith(href)) {
-        a.classList.add('bg-green-500','text-white');
+    const links = Array.from(nav.querySelectorAll('a[href]'));
+    links.forEach(a => a.classList.remove('bg-green-500','text-white'));
+
+    function scoreMatch(href) {
+      if (!href || href === '#') return -1;
+      if (href === path) return 100000 + href.length; // ưu tiên khớp tuyệt đối
+      const prefix = href.endsWith('/') ? href : href + '/';
+      return path.startsWith(prefix) ? href.length : -1; // khớp tiền tố dài nhất
+    }
+
+    let best = null, bestScore = -1;
+    links.forEach(a => {
+      const s = scoreMatch(a.getAttribute('href'));
+      if (s > bestScore) { bestScore = s; best = a; }
+    });
+
+    if (best) {
+      best.classList.add('bg-green-500','text-white');
+      const submenu = best.closest('.submenu');
+      if (submenu) {
+        submenu.classList.add('open');
+        const header = submenu.previousElementSibling;
+        if (header) {
+          const chev = header.querySelector('.fa-chevron-down');
+          if (chev) chev.classList.add('rotate-180');
+          header.classList.add('bg-green-50');
+        }
       }
+    }
+
+    // Ngăn click vào mục con làm ảnh hưởng header (đóng/mở ngoài ý muốn)
+    nav.querySelectorAll('.submenu a').forEach(a => {
+      a.addEventListener('click', (e) => e.stopPropagation());
     });
   });
 })();

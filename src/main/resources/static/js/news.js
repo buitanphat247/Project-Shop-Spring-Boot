@@ -1,57 +1,57 @@
 const newsItems = [
   {
-    date: '12/10/2025', category: 'Dinh dưỡng',
-    title: 'Bí quyết chọn rau củ tươi ngon đúng mùa',
-    excerpt: 'Mẹo nhỏ giúp bạn chọn rau củ quả tươi giòn, giàu dưỡng chất và an toàn cho gia đình.',
-    image: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1500&auto=format&fit=crop'
+    date: '12/10/2025', category: 'Phong cách',
+    title: 'Bí quyết phối áo thun và quần jean chuẩn trend',
+    excerpt: 'Học cách phối áo thun basic cùng quần jean để tạo phong cách năng động, trẻ trung cho mọi dịp.',
+    image: 'https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=1500&auto=format&fit=crop'
   },
   {
-    date: '09/10/2025', category: 'Công thức',
-    title: '3 công thức nước ép detox giúp da sáng khoẻ',
-    excerpt: 'Kết hợp trái cây hữu cơ để tạo nên ly nước ép mát lạnh, giàu vitamin cho ngày mới.',
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1500&auto=format&fit=crop'
+    date: '09/10/2025', category: 'Xu hướng',
+    title: 'Top 5 mẫu áo sơ mi nữ thanh lịch 2025',
+    excerpt: 'Cập nhật ngay các kiểu áo sơ mi được ưa chuộng nhất, giúp bạn tự tin trong mọi hoàn cảnh.',
+    image: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1500&auto=format&fit=crop'
   },
   {
-    date: '05/10/2025', category: 'Lối sống',
-    title: 'Gợi ý bữa sáng healthy nhanh gọn cho dân văn phòng',
-    excerpt: 'Chỉ 10 phút chuẩn bị, bạn đã có bữa sáng ngon lành, cân bằng dinh dưỡng cho một ngày hiệu quả.',
-    image: 'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?q=80&w=1500&auto=format&fit=crop'
+    date: '05/10/2025', category: 'Mẹo hay',
+    title: 'Cách bảo quản quần áo để luôn như mới',
+    excerpt: 'Giữ quần áo bền màu, không bai giãn với các mẹo giặt và phơi đơn giản mà hiệu quả.',
+    image: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1500&auto=format&fit=crop'
   },
   {
-    date: '03/10/2025', category: 'Vệ sinh ATTP',
-    title: 'Cách bảo quản thực phẩm hữu cơ đúng chuẩn',
-    excerpt: 'Giữ trọn dưỡng chất và hương vị bằng các mẹo bảo quản đơn giản tại nhà.',
-    image: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?q=80&w=1500&auto=format&fit=crop'
+    date: '03/10/2025', category: 'Thời trang nam',
+    title: 'Phong cách tối giản cho phái mạnh – đơn giản mà cuốn hút',
+    excerpt: 'Áo polo, sơ mi và quần kaki – công thức tạo nên phong thái lịch lãm cho các chàng trai hiện đại.',
+    image: 'https://images.unsplash.com/photo-1516822003754-cca485356ecb?q=80&w=1500&auto=format&fit=crop'
   },
   {
-    date: '30/09/2025', category: 'Lối sống',
-    title: '5 thói quen xanh giúp bạn sống khoẻ mỗi ngày',
-    excerpt: 'Những thay đổi nhỏ nhưng bền vững cho sức khoẻ và môi trường.',
-    image: 'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?q=80&w=1500&auto=format&fit=crop'
+    date: '30/09/2025', category: 'Thời trang nữ',
+    title: '5 gợi ý mix đồ công sở thanh lịch cho nàng',
+    excerpt: 'Từ áo sơ mi trắng đến chân váy bút chì – phối thế nào để vừa thanh lịch vừa thoải mái?',
+    image: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1500&auto=format&fit=crop'
   },
   {
-    date: '27/09/2025', category: 'Mua sắm',
-    title: 'Bí quyết mua sắm thực phẩm tiết kiệm mà vẫn chất lượng',
-    excerpt: 'Danh sách mẹo nhỏ giúp bạn quản lý chi tiêu thông minh khi đi chợ.',
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1500&auto=format&fit=crop'
+    date: '27/09/2025', category: 'Mẹo mua sắm',
+    title: 'Cách chọn size quần áo online không lo bị sai',
+    excerpt: 'Những bí kíp giúp bạn đo chính xác và chọn size phù hợp khi mua hàng trực tuyến.',
+    image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1500&auto=format&fit=crop'
   },
   {
-    date: '25/09/2025', category: 'Công thức',
-    title: 'Thực đơn chay 7 ngày cho người mới bắt đầu',
-    excerpt: 'Gợi ý phong phú, cân đối dinh dưỡng và dễ chế biến tại nhà.',
-    image: 'https://images.unsplash.com/photo-1506084868230-bb9d95c24759?q=80&w=1500&auto=format&fit=crop'
+    date: '25/09/2025', category: 'Bí quyết',
+    title: 'Phân biệt chất liệu vải – cotton, linen và polyester',
+    excerpt: 'Tìm hiểu đặc điểm từng loại vải để chọn trang phục phù hợp với thời tiết và phong cách.',
+    image: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1500&auto=format&fit=crop'
   },
   {
-    date: '22/09/2025', category: 'Dinh dưỡng',
-    title: 'Top 6 nguồn vitamin tự nhiên bạn nên bổ sung hằng ngày',
-    excerpt: 'Danh sách thực phẩm giàu vitamin, tốt cho miễn dịch và làn da.',
-    image: 'https://images.unsplash.com/photo-1478144592103-25e218a04891?q=80&w=1500&auto=format&fit=crop'
+    date: '22/09/2025', category: 'Xu hướng',
+    title: 'Màu sắc chủ đạo trong thời trang thu đông 2025',
+    excerpt: 'Khám phá bảng màu thời trang được dự đoán “lên ngôi” trong mùa thu đông năm nay.',
+    image: 'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1500&auto=format&fit=crop'
   },
   {
     date: '20/09/2025', category: 'Khuyến mãi',
-    title: 'Ưu đãi tháng 10: Giảm đến 30% cho nước ép hữu cơ',
-    excerpt: 'Đừng bỏ lỡ chương trình ưu đãi cực hấp dẫn trong tháng này.',
-    image: 'https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?q=80&w=1500&auto=format&fit=crop'
+    title: 'Ưu đãi tháng 10: Giảm đến 40% cho bộ sưu tập Thu – Đông',
+    excerpt: 'Cơ hội sở hữu những mẫu áo khoác, hoodie hot nhất với mức giá cực hấp dẫn.',
+    image: 'https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=1500&auto=format&fit=crop'
   }
 ];
 
@@ -65,8 +65,8 @@ function newsCard(n) {
   />
 </a>
 
-<div class="p-4 flex flex-col flex-1"> <!-- flex-1 giúp nội dung dãn đều -->
-  <div class="flex-1"> <!-- phần nội dung trên -->
+<div class="p-4 flex flex-col flex-1">
+  <div class="flex-1">
     <div class="text-xs text-gray-500 mb-1">${n.date} • ${n.category}</div>
     <h3 class="font-semibold text-[17px] text-[#1f2d3d] line-clamp-2">
     ${n.title}
@@ -75,13 +75,8 @@ function newsCard(n) {
     ${n.excerpt}
     </p>
   </div>
-
-  <!-- phần dưới: nút Đọc tiếp nằm sát đáy -->
   <div class="mt-4">
-    <a
-      href="#"
-      class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-auto"
-    >
+    <a href="#" class="inline-flex items-center gap-2 text-[#cb5439] font-medium mt-auto">
       Đọc tiếp <i class="fas fa-arrow-right text-xs"></i>
     </a>
   </div>
@@ -90,7 +85,7 @@ function newsCard(n) {
 `;
 }
 
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
   const grid = document.getElementById('news-grid');
   if (grid) grid.innerHTML = newsItems.map(newsCard).join('');
 });

@@ -2,13 +2,14 @@
 document.addEventListener("DOMContentLoaded", function () {
     try {
         const images = [
-            "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
-            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
-            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
-            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
-            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
-            "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
-            "https://media.istockphoto.com/id/1155240408/vi/anh/b%C3%A0n-ch%E1%BB%A9a-nhi%E1%BB%81u-lo%E1%BA%A1i-th%E1%BB%B1c-ph%E1%BA%A9m.jpg?s=612x612&w=0&k=20&c=IbFG8N9b41uM-RBYw8r0ASDoJX5RSWz9oDBN4m9gFcY=",
+            "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
+            "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
+            "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5yFEEaLV5sTkXmHgAz2zbBIVfsWDRbtkW3w&s",
+            "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7yDva6T0UfL4OacdxCrZqErvd8FIxZNbf0A&s",
+            "https://pos.nvncdn.com/4e732c-26/art/artCT/20210510_LQurOt2vEZXrgsRaG9WqNnyQ.jpg",
+            "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-4.jpg",
         ];
         // Render slides
         const mainWrap = document.getElementById("pdMainWrapper");
@@ -105,9 +106,9 @@ function showTab(name) {
 const rel = [
     {
         id: 1,
-        name: "Sản phẩm Hữu Cơ 1",
-        price: 45000,
-        img: "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
+        name: "Áo Thun Nam Cotton",
+        price: 189000,
+        img: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
         available: 8,
         sold: 15,
         progress: 65,
@@ -115,9 +116,9 @@ const rel = [
     },
     {
         id: 2,
-        name: "Sản phẩm Hữu Cơ 2",
-        price: 95000,
-        img: "https://mtcs.1cdn.vn/2023/05/30/rau-cu-qua.jpg",
+        name: "Quần Jeans Nữ Lưng Cao",
+        price: 399000,
+        img: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
         available: 12,
         sold: 9,
         progress: 45,
@@ -125,9 +126,9 @@ const rel = [
     },
     {
         id: 3,
-        name: "Sản phẩm Hữu Cơ 3",
-        price: 130000,
-        img: "https://cdn.tgdd.vn/2021/01/CookProduct/2-1200x676-6.jpg",
+        name: "Áo Sơ Mi Trắng Classic",
+        price: 329000,
+        img: "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
         available: 5,
         sold: 20,
         progress: 80,
@@ -135,21 +136,22 @@ const rel = [
     },
     {
         id: 4,
-        name: "Sản phẩm Hữu Cơ 4",
-        price: 47000,
-        img: "https://media.istockphoto.com/id/1208790371/vi/anh/n%E1%BB%81n-tr%C3%A1i-c%C3%A2y-v%C3%A0-rau-qu%E1%BA%A3-m%C3%A0u-c%E1%BA%A7u-v%E1%BB%93ng-t%C6%B0%C6%A1i-t%E1%BB%91t-cho-s%E1%BB%A9c-kh%E1%BB%8Fe.jpg?s=612x612&w=0&k=20&c=btxH1rlvCP6JlpfvUv2T_ijTNOCKV5qJ6lfDUTU6FGg=",
+        name: "Váy Công Sở Thanh Lịch",
+        price: 459000,
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5yFEEaLV5sTkXmHgAz2zbBIVfsWDRbtkW3w&s",
         available: 20,
         sold: 11,
         progress: 55,
         rating: 5,
-    }, {
+    },
+    {
         id: 5,
-        name: "Sản phẩm Hữu Cơ 4",
-        price: 47000,
-        img: "https://media.istockphoto.com/id/1208790371/vi/anh/n%E1%BB%81n-tr%C3%A1i-c%C3%A2y-v%C3%A0-rau-qu%E1%BA%A3-m%C3%A0u-c%E1%BA%A7u-v%E1%BB%93ng-t%C6%B0%C6%A1i-t%E1%BB%91t-cho-s%E1%BB%A9c-kh%E1%BB%8Fe.jpg?s=612x612&w=0&k=20&c=btxH1rlvCP6JlpfvUv2T_ijTNOCKV5qJ6lfDUTU6FGg=",
-        available: 20,
-        sold: 11,
-        progress: 55,
+        name: "Áo Khoác Denim",
+        price: 489000,
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7yDva6T0UfL4OacdxCrZqErvd8FIxZNbf0A&s",
+        available: 14,
+        sold: 7,
+        progress: 40,
         rating: 5,
     },
 ];
