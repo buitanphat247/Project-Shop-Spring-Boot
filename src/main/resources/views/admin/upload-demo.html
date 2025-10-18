@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Demo - Progress Bar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8">Upload Demo với Progress Bar</h1>
+            
+            <!-- Upload Form -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Chọn ảnh để upload</h2>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Chọn nhiều ảnh (JPG, PNG, GIF)
+                    </label>
+                    <input 
+                        type="file" 
+                        id="imageInput" 
+                        multiple 
+                        accept="image/*"
+                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    >
+                </div>
+                
+                <button 
+                    onclick="startUpload()" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                >
+                    <i class="fas fa-upload mr-2"></i>Bắt đầu Upload
+                </button>
+                
+                <button 
+                    onclick="clearFiles()" 
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors ml-2"
+                >
+                    <i class="fas fa-trash mr-2"></i>Xóa files
+                </button>
+            </div>
+            
+            <!-- File Preview -->
+            <div id="filePreview" class="bg-white rounded-lg shadow-md p-6 mb-6 hidden">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Files đã chọn:</h3>
+                <div id="fileList" class="space-y-2"></div>
+            </div>
+            
+            <!-- Upload Results -->
+            <div id="uploadResults" class="bg-white rounded-lg shadow-md p-6 hidden">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Kết quả upload:</h3>
+                <div id="resultList" class="space-y-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include products.js for upload functions -->
+    <script src="/js/admin/products.js"></script>
+    
+    <script>
+        // Demo-specific functions
+        function startUpload() {
+            const input = document.getElementById('imageInput');
+            if (!input.files || input.files.length === 0) {
+                alert('Vui lòng chọn ít nhất một file ảnh!');
+                return;
+            }
+            
+            console.log('🚀 [DEMO] Starting upload demo with', input.files.length, 'files');
+            handleImageUploadWithProgress(input);
+        }
+        
+        function clearFiles() {
+            const input = document.getElementById('imageInput');
+            input.value = '';
+            
+            // Hide preview and results
+            document.getElementById('filePreview').classList.add('hidden');
+            document.getElementById('uploadResults').classList.add('hidden');
+            
+            console.log('🗑️ [DEMO] Files cleared');
+        }
+        
+        // Show file preview when files are selected
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const files = e.target.files;
+            if (files.length > 0) {
+                showFilePreview(files);
+            } else {
+                document.getElementById('filePreview').classList.add('hidden');
+            }
+        });
+        
+        function showFilePreview(files) {
+            const preview = document.getElementById('filePreview');
+            const fileList = document.getElementById('fileList');
+            
+            fileList.innerHTML = '';
+            
+            Array.from(files).forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+                fileItem.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-image text-blue-500 mr-3"></i>
+                        <div>
+                            <div class="font-medium text-gray-900">${file.name}</div>
+                            <div class="text-sm text-gray-500">${formatBytes(file.size)}</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-400">
+                        File ${index + 1}
+                    </div>
+                `;
+                fileList.appendChild(fileItem);
+            });
+            
+            preview.classList.remove('hidden');
+        }
+        
+        // Override processUploadedImages to show results
+        function processUploadedImages(imageData) {
+            console.log('🖼️ [DEMO] Processing uploaded images:', imageData);
+            
+            const results = document.getElementById('uploadResults');
+            const resultList = document.getElementById('resultList');
+            
+            resultList.innerHTML = '';
+            
+            imageData.forEach((img, index) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200';
+                resultItem.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                        <div>
+                            <div class="font-medium text-gray-900">Image ${index + 1}</div>
+                            <div class="text-sm text-gray-500 break-all">${img.url}</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-green-600">
+                        <i class="fas fa-external-link-alt"></i>
+                    </div>
+                `;
+                resultList.appendChild(resultItem);
+            });
+            
+            results.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

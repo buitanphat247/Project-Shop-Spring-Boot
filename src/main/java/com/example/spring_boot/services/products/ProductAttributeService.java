@@ -6,6 +6,9 @@ import com.example.spring_boot.repository.products.ProductAttributeRepository; /
 import lombok.RequiredArgsConstructor; // Inject constructor cho field final
 import lombok.extern.slf4j.Slf4j; // Hỗ trợ logging
 import org.bson.types.ObjectId; // ObjectId MongoDB
+import org.springframework.data.mongodb.core.MongoTemplate; // MongoDB template cho query tối ưu
+import org.springframework.data.mongodb.core.query.Criteria; // Criteria cho query
+import org.springframework.data.mongodb.core.query.Query; // Query builder
 import org.springframework.stereotype.Service; // Bean service Spring
 import org.springframework.transaction.annotation.Transactional; // Transactional wrapper
 
@@ -19,6 +22,7 @@ import java.util.List; // Danh sách kết quả
 public class ProductAttributeService {
 
     private final ProductAttributeRepository productAttributeRepository; // DAO thuộc tính sản phẩm
+    private final MongoTemplate mongoTemplate; // MongoDB template cho query tối ưu
 
     /** Tạo thuộc tính mới cho sản phẩm. */
     public ProductAttribute create(ProductAttribute attr) {
@@ -48,13 +52,25 @@ public class ProductAttributeService {
     }
 
     @Transactional(readOnly = true)
-    /** Lấy danh sách thuộc tính active theo productId. */
+    /** Lấy danh sách thuộc tính active theo productId - TỐI ƯU HÓA với projection. */
     public List<ProductAttribute> getByProductId(String productId) {
+        long startTime = System.currentTimeMillis();
+        log.info("🔧 [PERFORMANCE] Getting attributes by product: {}", productId);
+        
         try {
-            return productAttributeRepository.findActiveByProductId(new ObjectId(productId)); // Truy vấn theo ObjectId
+            Query query = new Query(Criteria.where("productId").is(new ObjectId(productId))
+                    .and("deletedAt").isNull());
+            query.fields().include("name", "value", "productId", "createdAt");
+            
+            List<ProductAttribute> attributes = mongoTemplate.find(query, ProductAttribute.class);
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Retrieved {} attributes for product {} in {}ms", 
+                    attributes.size(), productId, endTime - startTime);
+            return attributes;
         } catch (Exception e) {
-            log.error("Get attributes by product failed, productId={}", productId, e); // Log lỗi
-            throw new RuntimeException("Failed to get product attributes: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
+            log.error("❌ [PERFORMANCE] Get attributes by product failed, productId={}", productId, e);
+            throw new RuntimeException("Failed to get product attributes: " + e.getMessage(), e);
         }
     }
 }

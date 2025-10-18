@@ -238,55 +238,10 @@ $(document).ready(function() {
                 }
             }
             
-            // Step 3: Upload images and save to database
+            // Step 3: Upload images with progress tracking
             if (formData.imageFiles && formData.imageFiles.length > 0) {
-                console.log('🖼️ Step 3: Uploading images...');
-                for (let i = 0; i < formData.imageFiles.length; i++) {
-                    try {
-                        const file = formData.imageFiles[i];
-                        console.log(`Uploading image ${i + 1}/${formData.imageFiles.length}:`, file.name);
-                        
-                        // Upload to Cloudinary
-                        const formDataUpload = new FormData();
-                        formDataUpload.append('image', file);
-                        
-                        const uploadResponse = await $.ajax({
-                            url: '/api/cloudinary',
-                            method: 'POST',
-                            data: formDataUpload,
-                            processData: false,
-                            contentType: false
-                        });
-                        
-                        console.log('Cloudinary response:', uploadResponse);
-                        
-                        // CloudinaryController now returns ApiResponse format
-                        if (uploadResponse.success && uploadResponse.data && uploadResponse.data.url) {
-                            // Save image URL to database
-                            const imageData = {
-                                productId: productId,
-                                imageUrl: uploadResponse.data.url
-                            };
-                            
-                            const imageResponse = await $.ajax({
-                                url: '/api/product-images',
-                                method: 'POST',
-                                contentType: 'application/json',
-                                data: JSON.stringify(imageData)
-                            });
-                            
-                            if (imageResponse.success) {
-                                console.log('✅ Image saved:', uploadResponse.data.url);
-                            } else {
-                                console.warn('⚠️ Failed to save image to database:', imageResponse.message);
-                            }
-                        } else {
-                            console.warn('⚠️ Failed to upload image:', uploadResponse.message);
-                        }
-                    } catch (error) {
-                        console.error('❌ Error uploading image:', error);
-                    }
-                }
+                console.log('🖼️ Step 3: Uploading images with progress...');
+                await uploadImagesWithProgress(formData.imageFiles, productId);
             }
             
             // Success!
@@ -556,6 +511,202 @@ $(document).ready(function() {
         });
     }
     
+    // Upload images with progress tracking
+    async function uploadImagesWithProgress(files, productId) {
+        console.log(`🚀 [UPLOAD PROGRESS] Starting upload of ${files.length} images`);
+        
+        // Add progress bars to each image preview
+        addProgressBarsToImages(files.length);
+        
+        const results = [];
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            console.log(`📤 [UPLOAD PROGRESS] Uploading image ${i + 1}/${files.length}: ${file.name}`);
+            
+            try {
+                // Update image status to uploading
+                updateImageStatus(i, 'uploading', 'Đang upload...');
+                
+                // Upload with progress tracking
+                const result = await uploadSingleImageWithProgress(file, i, (percent, loaded, total) => {
+                    updateImageProgress(i, percent, loaded, total);
+                });
+                
+                if (result.success) {
+                    // Save to database
+                    const imageData = {
+                        productId: productId,
+                        imageUrl: result.data.url
+                    };
+                    
+                    const imageResponse = await $.ajax({
+                        url: '/api/product-images',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(imageData)
+                    });
+                    
+                    if (imageResponse.success) {
+                        updateImageStatus(i, 'success', 'Upload thành công');
+                        results.push(result.data);
+                        console.log(`✅ [UPLOAD PROGRESS] Image ${i + 1} uploaded successfully`);
+                    } else {
+                        updateImageStatus(i, 'error', 'Lỗi lưu database');
+                        console.warn(`⚠️ [UPLOAD PROGRESS] Failed to save image ${i + 1} to database:`, imageResponse.message);
+                    }
+                } else {
+                    updateImageStatus(i, 'error', 'Upload thất bại');
+                    console.warn(`⚠️ [UPLOAD PROGRESS] Failed to upload image ${i + 1}:`, result.message);
+                }
+            } catch (error) {
+                updateImageStatus(i, 'error', 'Lỗi upload');
+                console.error(`❌ [UPLOAD PROGRESS] Error uploading image ${i + 1}:`, error);
+            }
+        }
+        
+        console.log(`🎉 [UPLOAD PROGRESS] Upload process completed: ${results.length}/${files.length} successful`);
+        return results;
+    }
+    
+    // Upload single image with progress tracking
+    function uploadSingleImageWithProgress(file, index, onProgress) {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            const xhr = new XMLHttpRequest();
+            
+            // Track upload progress
+            xhr.upload.addEventListener('progress', function(e) {
+                if (e.lengthComputable) {
+                    const percentComplete = Math.round((e.loaded / e.total) * 100);
+                    console.log(`📊 [UPLOAD PROGRESS] Image ${index + 1} progress: ${percentComplete}%`);
+                    
+                    if (onProgress) {
+                        onProgress(percentComplete, e.loaded, e.total);
+                    }
+                }
+            });
+            
+            // Handle upload completion
+            xhr.addEventListener('load', function() {
+                if (xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            resolve(response);
+                        } else {
+                            reject(new Error(response.message || 'Upload failed'));
+                        }
+                    } catch (e) {
+                        reject(new Error('Parse response error'));
+                    }
+                } else {
+                    reject(new Error(`HTTP error: ${xhr.status}`));
+                }
+            });
+            
+            // Handle upload error
+            xhr.addEventListener('error', function() {
+                reject(new Error('Upload failed'));
+            });
+            
+            // Handle upload timeout
+            xhr.addEventListener('timeout', function() {
+                reject(new Error('Upload timeout'));
+            });
+            
+            // Configure request
+            xhr.open('POST', '/api/cloudinary');
+            xhr.timeout = 30000; // 30 seconds timeout
+            
+            // Start upload
+            xhr.send(formData);
+        });
+    }
+    
+    // Add progress bars to image previews
+    function addProgressBarsToImages(fileCount) {
+        console.log(`🎨 [UPLOAD PROGRESS] Adding progress bars to ${fileCount} images`);
+        
+        const $previewGrid = $('#imagePreviewGrid');
+        const $previewItems = $previewGrid.find('.relative.group');
+        
+        $previewItems.each(function(index) {
+            if (index < fileCount) {
+                const $item = $(this);
+                
+                // Add progress overlay
+                const progressHtml = `
+                    <div class="upload-progress-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20" style="display: none;">
+                        <div class="bg-white rounded-lg p-4 w-32">
+                            <div class="text-center mb-2">
+                                <i class="fas fa-cloud-upload-alt text-blue-500 text-lg"></i>
+                            </div>
+                            <div class="text-xs text-gray-600 text-center mb-2 upload-status">Chuẩn bị...</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                <div class="upload-progress-bar bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 text-center upload-percent">0%</div>
+                        </div>
+                    </div>
+                `;
+                
+                $item.append(progressHtml);
+            }
+        });
+    }
+    
+    // Update image progress
+    function updateImageProgress(index, percent, loaded, total) {
+        const $previewItems = $('#imagePreviewGrid').find('.relative.group');
+        const $item = $previewItems.eq(index);
+        const $overlay = $item.find('.upload-progress-overlay');
+        const $progressBar = $item.find('.upload-progress-bar');
+        const $percent = $item.find('.upload-percent');
+        
+        if ($overlay.length) {
+            $overlay.show();
+            $progressBar.css('width', percent + '%');
+            $percent.text(percent + '%');
+        }
+    }
+    
+    // Update image status
+    function updateImageStatus(index, status, message) {
+        const $previewItems = $('#imagePreviewGrid').find('.relative.group');
+        const $item = $previewItems.eq(index);
+        const $overlay = $item.find('.upload-progress-overlay');
+        const $status = $item.find('.upload-status');
+        const $progressBar = $item.find('.upload-progress-bar');
+        const $percent = $item.find('.upload-percent');
+        
+        if ($overlay.length) {
+            $status.text(message);
+            
+            if (status === 'success') {
+                $progressBar.removeClass('bg-blue-600').addClass('bg-green-600');
+                $progressBar.css('width', '100%');
+                $percent.text('100%');
+                
+                // Hide overlay after 2 seconds
+                setTimeout(() => {
+                    $overlay.fadeOut(500);
+                }, 2000);
+            } else if (status === 'error') {
+                $progressBar.removeClass('bg-blue-600').addClass('bg-red-600');
+                $overlay.find('.bg-white').removeClass('bg-white').addClass('bg-red-50');
+                $status.removeClass('text-gray-600').addClass('text-red-600');
+                
+                // Hide overlay after 3 seconds
+                setTimeout(() => {
+                    $overlay.fadeOut(500);
+                }, 3000);
+            }
+        }
+    }
+
     // Show toast notification
     function showToast(message, type = 'success') {
         const toastId = 'toast-' + Date.now();

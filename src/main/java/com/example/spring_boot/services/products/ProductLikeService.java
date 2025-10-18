@@ -6,6 +6,9 @@ import com.example.spring_boot.repository.products.ProductLikeRepository; // Rep
 import lombok.RequiredArgsConstructor; // Tự sinh constructor với các field final
 import lombok.extern.slf4j.Slf4j; // Log hỗ trợ debug/truy vết
 import org.bson.types.ObjectId; // Kiểu ObjectId của MongoDB
+import org.springframework.data.mongodb.core.MongoTemplate; // MongoDB template cho query tối ưu
+import org.springframework.data.mongodb.core.query.Criteria; // Criteria cho query
+import org.springframework.data.mongodb.core.query.Query; // Query builder
 import org.springframework.stereotype.Service; // Đánh dấu bean service Spring
 import org.springframework.transaction.annotation.Transactional; // Quản lý transaction
 
@@ -19,6 +22,7 @@ import java.util.List; // Danh sách kết quả
 public class ProductLikeService {
 
     private final ProductLikeRepository productLikeRepository; // DAO truy cập dữ liệu like
+    private final MongoTemplate mongoTemplate; // MongoDB template cho query tối ưu
 
     /** Like sản phẩm cho một người dùng. */
     public ProductLike like(String productId, String userId) {
@@ -57,13 +61,25 @@ public class ProductLikeService {
     }
 
     @Transactional(readOnly = true)
-    /** Lấy danh sách like đang hoạt động theo productId. */
+    /** Lấy danh sách like đang hoạt động theo productId - TỐI ƯU HÓA với projection. */
     public List<ProductLike> getByProductId(String productId) {
+        long startTime = System.currentTimeMillis();
+        log.info("❤️ [PERFORMANCE] Getting likes by product: {}", productId);
+        
         try {
-            return productLikeRepository.findActiveByProductId(new ObjectId(productId)); // Truy vấn theo ObjectId
+            Query query = new Query(Criteria.where("productId").is(new ObjectId(productId))
+                    .and("deletedAt").isNull());
+            query.fields().include("productId", "userId", "createdAt");
+            
+            List<ProductLike> likes = mongoTemplate.find(query, ProductLike.class);
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Retrieved {} likes for product {} in {}ms", 
+                    likes.size(), productId, endTime - startTime);
+            return likes;
         } catch (Exception e) {
-            log.error("Get likes by product failed, productId={}", productId, e); // Log lỗi
-            throw new RuntimeException("Failed to get product likes: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
+            log.error("❌ [PERFORMANCE] Get likes by product failed, productId={}", productId, e);
+            throw new RuntimeException("Failed to get product likes: " + e.getMessage(), e);
         }
     }
 }

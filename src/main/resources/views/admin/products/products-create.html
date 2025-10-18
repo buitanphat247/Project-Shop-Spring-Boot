@@ -194,6 +194,36 @@
     background-color: #f9fafb !important;
     border-color: #d1d5db !important;
   }
+  
+  /* Upload progress overlay styles */
+  .upload-progress-overlay {
+    backdrop-filter: blur(2px);
+    transition: all 0.3s ease;
+  }
+  
+  .upload-progress-overlay .bg-white {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: progressPulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes progressPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  .upload-progress-bar {
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .upload-status {
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .upload-percent {
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
 </style>
 
 <!-- jQuery -->

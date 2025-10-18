@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j; // Hỗ trợ logging
 import org.springframework.data.domain.Page; // Kết quả phân trang
 import org.springframework.data.domain.PageImpl; // Page impl dựa trên danh sách
 import org.springframework.data.domain.Pageable; // Đầu vào phân trang
+import org.springframework.data.mongodb.core.MongoTemplate; // MongoDB template cho query tối ưu
+import org.springframework.data.mongodb.core.query.Criteria; // Criteria cho query
+import org.springframework.data.mongodb.core.query.Query; // Query builder
 import org.springframework.stereotype.Service; // Bean service Spring
 import org.springframework.transaction.annotation.Transactional; // Transaction wrapper
 
@@ -21,6 +24,7 @@ import java.util.List; // Danh sách kết quả
 public class CategoryService {
 
     private final CategoryRepository categoryRepository; // DAO danh mục
+    private final MongoTemplate mongoTemplate; // MongoDB template cho query tối ưu
 
     /** Tạo category mới. */
     public Category createCategory(String name, String description) {
@@ -123,61 +127,129 @@ public class CategoryService {
         }
     }
 
-    /** Lấy tất cả category đang hoạt động. */
+    /** Lấy tất cả category đang hoạt động - TỐI ƯU HÓA với projection. */
     @Transactional(readOnly = true)
     public List<Category> getAllActiveCategories() {
-        log.info("Getting all active categories"); // Log truy vấn
+        long startTime = System.currentTimeMillis();
+        log.info("🚀 [PERFORMANCE] Getting all active categories with optimization");
+        
         try {
-            return categoryRepository.findAllActive(); // Query custom chỉ lấy bản ghi chưa xóa mềm
+            // Sử dụng MongoTemplate với projection để chỉ lấy fields cần thiết
+            Query query = new Query(Criteria.where("deletedAt").isNull());
+            query.fields().include("name", "description", "createdAt", "updatedAt");
+            
+            List<Category> categories = mongoTemplate.find(query, Category.class);
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Retrieved {} categories in {}ms", categories.size(), endTime - startTime);
+            return categories;
         } catch (Exception e) {
-            log.error("getAllActiveCategories failed", e); // Log lỗi
+            log.error("❌ [PERFORMANCE] getAllActiveCategories failed", e); // Log lỗi
             throw new RuntimeException("Failed to list categories: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
         }
     }
 
-    /** Tìm kiếm category theo tên (ignore-case). */
+    /** Tìm kiếm category theo tên - TỐI ƯU HÓA với compound query. */
     @Transactional(readOnly = true)
     public List<Category> searchCategoriesByName(String name) {
-        log.info("Searching categories by name: {}", name); // Log truy vấn
+        long startTime = System.currentTimeMillis();
+        log.info("🔍 [PERFORMANCE] Searching categories by name: {}", name);
+        
         try {
-            return categoryRepository.findByNameContainingIgnoreCase(name); // Truy vấn like ignore-case
+            Query query = new Query();
+            
+            if (name == null || name.trim().isEmpty()) {
+                query.addCriteria(Criteria.where("deletedAt").isNull());
+            } else {
+                query.addCriteria(Criteria.where("deletedAt").isNull())
+                     .addCriteria(Criteria.where("name").regex(name, "i"));
+            }
+            
+            query.fields().include("name", "description", "createdAt", "updatedAt");
+            
+            List<Category> categories = mongoTemplate.find(query, Category.class);
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Found {} categories matching '{}' in {}ms", 
+                    categories.size(), name, endTime - startTime);
+            return categories;
         } catch (Exception e) {
-            log.error("searchCategoriesByName failed, name={}", name, e); // Log lỗi
+            log.error("❌ [PERFORMANCE] searchCategoriesByName failed, name={}", name, e); // Log lỗi
             throw new RuntimeException("Failed to search categories: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
         }
     }
 
-    /** Phân trang category active (manual pagination). */
+    /** Phân trang category active - TỐI ƯU HÓA với skip/limit. */
     @Transactional(readOnly = true)
     public Page<Category> getCategoriesWithPagination(Pageable pageable) {
-        log.info("Getting categories with pagination: page={}, size={}",
-                pageable.getPageNumber(), pageable.getPageSize()); // Log truy vấn
+        long startTime = System.currentTimeMillis();
+        log.info("📄 [PERFORMANCE] Getting categories with pagination: page={}, size={}",
+                pageable.getPageNumber(), pageable.getPageSize());
+        
         try {
-            List<Category> categories = categoryRepository.findAllActive(); // Toàn bộ danh sách active
-            // Manual pagination (MongoDB không hỗ trợ Pageable tốt với custom query)
-            int start = (int) pageable.getOffset(); // Vị trí bắt đầu
-            if (start < 0)
-                start = 0; // Ràng buộc dưới
-            if (start > categories.size())
-                start = categories.size(); // Ràng buộc trên
-            int end = Math.min((start + pageable.getPageSize()), categories.size()); // Vị trí kết thúc
-            List<Category> pagedCategories = categories.subList(start, end); // Cắt danh sách
-            return new PageImpl<>(pagedCategories, pageable, categories.size()); // Trả về Page
+            Query query = new Query(Criteria.where("deletedAt").isNull());
+            query.fields().include("name", "description", "createdAt", "updatedAt");
+            
+            // Apply pagination
+            query.skip(pageable.getOffset());
+            query.limit(pageable.getPageSize());
+            
+            // Apply sorting
+            if (pageable.getSort().isSorted()) {
+                pageable.getSort().forEach(order -> {
+                    query.with(org.springframework.data.domain.Sort.by(
+                        order.getDirection(), order.getProperty()));
+                });
+            } else {
+                query.with(org.springframework.data.domain.Sort.by("createdAt").descending());
+            }
+            
+            List<Category> categories = mongoTemplate.find(query, Category.class);
+            
+            // Count total records
+            long totalCount = getTotalActiveCount();
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Retrieved {} categories for page {} in {}ms", 
+                    categories.size(), pageable.getPageNumber(), endTime - startTime);
+            
+            return new PageImpl<>(categories, pageable, totalCount);
         } catch (Exception e) {
-            log.error("getCategoriesWithPagination failed, page={}, size={}", pageable.getPageNumber(),
-                    pageable.getPageSize(), e); // Log lỗi
-            throw new RuntimeException("Failed to paginate categories: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
+            log.error("❌ [PERFORMANCE] getCategoriesWithPagination failed, page={}, size={}", 
+                    pageable.getPageNumber(), pageable.getPageSize(), e);
+            throw new RuntimeException("Failed to paginate categories: " + e.getMessage(), e);
         }
     }
 
-    /** Đếm số lượng category đang hoạt động. */
+    /** Đếm số lượng category đang hoạt động - TỐI ƯU HÓA với count query. */
     @Transactional(readOnly = true)
     public long countActiveCategories() {
+        long startTime = System.currentTimeMillis();
+        log.info("📊 [PERFORMANCE] Counting active categories");
+        
         try {
-            return categoryRepository.countActive(); // Query custom chỉ đếm bản ghi chưa xóa mềm
+            Query countQuery = new Query(Criteria.where("deletedAt").isNull());
+            long count = mongoTemplate.count(countQuery, Category.class);
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Counted {} active categories in {}ms", count, endTime - startTime);
+            return count;
         } catch (Exception e) {
-            log.error("countActiveCategories failed", e); // Log lỗi
-            throw new RuntimeException("Failed to count categories: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
+            log.error("❌ [PERFORMANCE] countActiveCategories failed", e);
+            throw new RuntimeException("Failed to count categories: " + e.getMessage(), e);
         }
+    }
+
+    // =====================================================
+    // HELPER METHODS - Các phương thức hỗ trợ tối ưu hóa
+    // =====================================================
+
+    /**
+     * Get total count of active categories
+     * Tối ưu: Sử dụng count query với index
+     */
+    private long getTotalActiveCount() {
+        Query countQuery = new Query(Criteria.where("deletedAt").isNull());
+        return mongoTemplate.count(countQuery, Category.class);
     }
 }

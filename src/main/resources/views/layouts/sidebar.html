@@ -1,12 +1,8 @@
-<div th:fragment="sidebar" style="height: 100% !important">
+<div th:fragment="sidebar" style="height: 100% !important; position: fixed; width: 100%">
   <!-- Sidebar below header -->
-  <div
-    id="sidebar"
-    class="h-full bg-white shadow-lg sidebar-no-scroll border-r-2"
-  >
+  <div id="sidebar" class="h-full bg-white shadow-lg sidebar-no-scroll border-r-2">
     <!-- Navigation (rendered by JS) -->
     <nav id="adminSidebarNav" class="p-4 space-y-2 select-none"></nav>
     <script defer src="/js/sidebar.js"></script>
   </div>
 </div>
-
