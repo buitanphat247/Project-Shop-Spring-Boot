@@ -37,25 +37,41 @@ $(document).ready(function() {
     
     // Add new attribute function
     function addNewAttribute() {
-        const $template = $('#attributeTemplate');
         const $container = $('#attributesContainer');
         
-        // Clone the template (which is now inside the container)
-        const $newAttribute = $template.clone().removeClass('hidden');
-        
-        // Add unique IDs to inputs
+        // Create new attribute HTML directly
         attributeCount++;
         const keyId = 'attr_key_' + attributeCount;
         const valueId = 'attr_value_' + attributeCount;
         
-        $newAttribute.find('input').first().attr('id', keyId).attr('name', 'attributes[' + attributeCount + '].key');
-        $newAttribute.find('input').last().attr('id', valueId).attr('name', 'attributes[' + attributeCount + '].value');
+        const newAttributeHtml = `
+            <div class="attribute-item flex items-center space-x-3 p-4 border border-gray-200 rounded-lg bg-white">
+                <div class="flex-1">
+                    <input
+                        type="text"
+                        id="${keyId}"
+                        name="attributes[${attributeCount}].key"
+                        placeholder="Tên thuộc tính (VD: Màu sắc, Kích thước, Chất liệu...)"
+                        class="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none transition-colors text-sm no-scale"
+                    />
+                </div>
+                <div class="flex-1">
+                    <input
+                        type="text"
+                        id="${valueId}"
+                        name="attributes[${attributeCount}].value"
+                        placeholder="Giá trị (VD: Đỏ, XL, Cotton...)"
+                        class="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:border-blue-500 focus:outline-none transition-colors text-sm no-scale"
+                    />
+                </div>
+                <button type="button" class="remove-attribute-btn px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
         
-        // Add to container with animation (after the template)
-        $template.after($newAttribute);
-        
-        // Don't auto focus on first input
-        // $newAttribute.find('input').first().focus();
+        // Add to container
+        $container.append(newAttributeHtml);
         
         console.log('New attribute added, count:', attributeCount);
     }
@@ -87,6 +103,9 @@ $(document).ready(function() {
         // Set submitting flag
         isSubmitting = true;
         console.log('Setting isSubmitting to true');
+        
+        // Disable all form elements
+        disableAllFormElements();
         
         // Disable submit button and show loading state
         const $submitBtn = $('#saveProductBtn');
@@ -286,10 +305,63 @@ $(document).ready(function() {
         }
     }
     
+    // Disable all form elements during submission
+    function disableAllFormElements() {
+        console.log('Disabling all form elements');
+        
+        // Disable all inputs
+        $('input[type="text"], input[type="number"], textarea, select').prop('disabled', true);
+        
+        // Disable image upload
+        $('#imageInput').prop('disabled', true);
+        
+        // Disable add attribute button
+        $('#addAttributeBtn').prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
+        
+        // Disable all remove attribute buttons
+        $('.remove-attribute-btn').prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
+        
+        // Disable clear all images button
+        $('#clearAllImages').prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
+        
+        // Disable cancel button
+        $('button[type="button"]:not(#saveProductBtn)').prop('disabled', true).addClass('opacity-50 cursor-not-allowed');
+        
+        console.log('All form elements disabled');
+    }
+    
+    // Enable all form elements after submission
+    function enableAllFormElements() {
+        console.log('Enabling all form elements');
+        
+        // Enable all inputs
+        $('input[type="text"], input[type="number"], textarea, select').prop('disabled', false);
+        
+        // Enable image upload
+        $('#imageInput').prop('disabled', false);
+        
+        // Enable add attribute button
+        $('#addAttributeBtn').prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+        
+        // Enable all remove attribute buttons
+        $('.remove-attribute-btn').prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+        
+        // Enable clear all images button
+        $('#clearAllImages').prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+        
+        // Enable cancel button
+        $('button[type="button"]:not(#saveProductBtn)').prop('disabled', false).removeClass('opacity-50 cursor-not-allowed');
+        
+        console.log('All form elements enabled');
+    }
+    
     // Reset submit button state
     function resetSubmitButton() {
         console.log('Resetting submit button state');
         isSubmitting = false;
+        
+        // Enable all form elements
+        enableAllFormElements();
         
         const $submitBtn = $('#saveProductBtn');
         $submitBtn.prop('disabled', false);
@@ -299,19 +371,26 @@ $(document).ready(function() {
     
     // Reset form after successful save
     function resetForm() {
+        console.log('Starting form reset...');
+        
         // Reset all form fields
         $('input[type="text"], input[type="number"], textarea').val('');
         $('#categorySelect').val('');
         
-        // Clear attributes
-        $('#attributesContainer').empty();
+        // Clear ALL attributes including template
+        $('.attribute-item').remove();
         attributeCount = 0;
-        addNewAttribute(); // Add default attribute
         
         // Clear images
         $('#imageInput').val('');
         $('#imagePreviewContainer').addClass('hidden');
         $('#imagePreviewGrid').empty();
+        
+        // Add default attribute after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            addNewAttribute(); // Add default attribute
+            console.log('Default attribute added after reset, count:', attributeCount);
+        }, 100);
         
         console.log('Form reset completed');
     }

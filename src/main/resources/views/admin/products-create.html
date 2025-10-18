@@ -170,6 +170,30 @@
   textarea.no-scale:focus {
     transform: none !important;
   }
+  
+  /* Disabled form elements styling */
+  input:disabled,
+  select:disabled,
+  textarea:disabled,
+  button:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    background-color: #f3f4f6 !important;
+    color: #6b7280 !important;
+  }
+  
+  /* Disabled buttons with additional styling */
+  button:disabled {
+    pointer-events: none !important;
+  }
+  
+  /* Disabled image upload area */
+  #imageInput:disabled + div {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    background-color: #f9fafb !important;
+    border-color: #d1d5db !important;
+  }
 </style>
 
 <!-- jQuery -->

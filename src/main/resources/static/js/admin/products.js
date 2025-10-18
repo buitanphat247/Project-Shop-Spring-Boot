@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (addFirstBtn) {
         addFirstBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            console.log('Add first product clicked');
-            showToast('Chức năng thêm sản phẩm sẽ được triển khai sớm!', 'info');
+            console.log('Add first product clicked - redirecting to create page');
+            window.location.href = '/admin/products/create';
         });
     }
 });
