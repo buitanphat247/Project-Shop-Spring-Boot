@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.spring_boot.dto.ApiResponse;
 import com.example.spring_boot.services.CloudinaryService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/cloudinary")
+@RequestMapping("/api/cloudinary")
 @RequiredArgsConstructor
 @Tag(name = "Cloudinary", description = "Upload và quản lý ảnh trên Cloudinary")
 public class CloudinaryController {
@@ -30,9 +31,23 @@ public class CloudinaryController {
 
     @PostMapping
     @Operation(summary = "Upload ảnh")
-    public ResponseEntity<Map<String, Object>> uploadImage(@RequestParam("image") MultipartFile file) {
-        Map<String, Object> data = this.cloudinaryService.upload(file);
-        return new ResponseEntity<>(data, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<Map<String, Object>>> uploadImage(@RequestParam("image") MultipartFile file) {
+        try {
+            Map<String, Object> data = this.cloudinaryService.upload(file);
+            ApiResponse<Map<String, Object>> response = new ApiResponse<>(
+                true, 
+                "Ảnh đã được upload thành công", 
+                data
+            );
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse<Map<String, Object>> response = new ApiResponse<>(
+                false, 
+                "Lỗi khi upload ảnh: " + e.getMessage(), 
+                null
+            );
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/images/{folder}")

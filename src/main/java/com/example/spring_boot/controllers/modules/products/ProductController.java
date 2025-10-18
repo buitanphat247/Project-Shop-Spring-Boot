@@ -69,13 +69,21 @@ public class ProductController {
         return ApiResponse.success(productService.getById(id), "Product retrieved successfully");
     }
 
-    /** Danh sách products; GET /api/products?name=... */
+    /** Danh sách products; GET /api/products?name=...&categoryId=... */
     @GetMapping
     @Operation(summary = "Danh sách products (PageResponse)")
     public ApiResponse<PageResponse<Product>> list(@RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "categoryId", required = false) String categoryId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "1000") int size) {
-        var items = name != null ? productService.searchByName(name) : productService.getAllActive();
+        List<Product> items;
+        if (categoryId != null) {
+            items = productService.getByCategoryId(categoryId);
+        } else if (name != null) {
+            items = productService.searchByName(name);
+        } else {
+            items = productService.getAllActive();
+        }
         return ApiResponse.success(new PageResponse<>(items, items.size(), page, size),
                 "Products retrieved successfully");
     }

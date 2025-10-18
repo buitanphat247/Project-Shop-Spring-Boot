@@ -135,16 +135,7 @@ public class AdminController {
         return "admin/search-customers";
     }
 
-    // Promotions Management
-    @GetMapping("/promotions")
-    public String promotions() {
-        return "admin/promotions";
-    }
-
-    @GetMapping("/promotions/create")
-    public String promotionsCreate() {
-        return "admin/promotions-create";
-    }
+    
 
     // Reports Management
     @GetMapping("/reports")
@@ -167,56 +158,13 @@ public class AdminController {
         return "admin/reports/customers";
     }
 
-    // Sales Management - Quản lý bán hàng
-    @GetMapping("/sales/product-lookup")
-    public String salesProductLookup() {
-        return "admin/sales-product-lookup";
+    @GetMapping("/users")
+    public String User() {
+        return "admin/Users";
     }
 
-    @GetMapping("/sales/product-list")
-    public String salesProductList() {
-        return "admin/sales-product-list";
+    @GetMapping("/categories-news")
+    public String CategoriesNews() {
+        return "admin/news-categories";
     }
-
-    @GetMapping("/sales/edit-product")
-    public String salesEditProduct() {
-        return "admin/sales-edit-product";
-    }
-
-    @GetMapping("/sales/invoice-list")
-    public String salesInvoiceList() {
-        return "admin/sales-invoice-list";
-    }
-
-    // Warehouse Management - Quản lý kho
-    @GetMapping("/warehouse/import")
-    public String warehouseImport() {
-        return "admin/warehouse-import";
-    }
-
-    @GetMapping("/warehouse/import/create")
-    public String warehouseImportCreate() {
-        return "admin/warehouse-import-create";
-    }
-
-    @GetMapping("/warehouse/import/history")
-    public String warehouseImportHistory() {
-        return "admin/warehouse-import-history";
-    }
-
-    @GetMapping("/warehouse/create-import-slip")
-    public String warehouseCreateImportSlip() {
-        return "admin/warehouse-create-import-slip";
-    }
-
-    @GetMapping("/warehouse/export")
-    public String warehouseExport() {
-        return "admin/warehouse-export";
-    }
-
-    @GetMapping("/promotions/edit/{id}")
-    public String promotionsEdit(@PathVariable Long id) {
-        return "admin/promotions-edit";
-    }
-
 }

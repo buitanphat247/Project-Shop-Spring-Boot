@@ -14,8 +14,7 @@
       .sidebar-transition { transition: all 0.3s ease; }
       .sidebar-collapsed { width: 4rem; }
       .sidebar-expanded { width: 20rem; }
-      .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-      .submenu.open { max-height: 200px; }
+      /* Submenu styles moved to sidebar.html to avoid conflicts */
       /* Hide scrollbar for sidebar */
       .sidebar-no-scroll {
         overflow-y: auto;
@@ -181,7 +180,7 @@
         </aside>
 
         <!-- Page content -->
-        <main id="page-content" class="flex-1 bg-white">
+        <main id="page-content" class="flex-1 bg-white z-[3]">
           <div th:replace="${content}"></div>
         </main>
       </div>

@@ -15,6 +15,9 @@ public interface ProductRepository extends MongoRepository<Product, String> {
 
     @Query("{ 'name': { $regex: ?0, $options: 'i' }, 'deletedAt': null }")
     List<Product> findByNameContainingIgnoreCase(String name);
+    
+    @Query("{ 'categoryId': ?0, 'deletedAt': null }")
+    List<Product> findByCategoryIdAndDeletedAtIsNull(String categoryId);
 }
 
 

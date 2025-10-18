@@ -170,6 +170,27 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    /** Lấy sản phẩm theo categoryId (chỉ trả về sản phẩm chưa bị xóa mềm). */
+    public List<Product> getByCategoryId(String categoryId) {
+        try {
+            List<Product> products = productRepository.findByCategoryIdAndDeletedAtIsNull(categoryId);
+
+            // Populate category cho từng product
+            products.forEach(product -> {
+                if (product.getCategory() == null && product.getCategoryId() != null) {
+                    categoryRepository.findById(product.getCategoryId().toHexString())
+                            .ifPresent(product::setCategory);
+                }
+            });
+
+            return products; // Trả về danh sách đã populate
+        } catch (Exception e) {
+            log.error("Get products by categoryId failed, categoryId={}", categoryId, e); // Log lỗi
+            throw new RuntimeException("Failed to get products by category: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
+        }
+    }
+
+    @Transactional(readOnly = true)
     /** Phân trang sản phẩm active (manual pagination). */
     public Page<Product> getPaged(Pageable pageable) {
         try {

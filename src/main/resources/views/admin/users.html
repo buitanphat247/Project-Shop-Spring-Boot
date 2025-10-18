@@ -1,0 +1,156 @@
+<div th:replace="~{layouts/authLayout :: layout('Người Dùng', ~{::content})}">
+  <div th:fragment="content">
+    <div class="bg-white rounded-lg p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Quản lý người dùng</h1>
+      </div>
+
+      <div class="mb-6">
+        <div class="flex items-center space-x-4">
+          <div class="flex-1">
+            <input
+              type="text"
+              placeholder="Tìm kiếm người dùng..."
+              class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors no-scale"
+            />
+          </div>
+          <!-- <select
+            class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-blue-500 focus:border-transparent no-scale"
+          >
+            <option>Tất cả trạng thái</option>
+            <option>Hoạt động</option>
+            <option>Bị chặn</option>
+            <option>Chờ xác nhận</option>
+          </select> -->
+          <!-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+            <i class="fas fa-filter mr-2"></i>Lọc
+          </button> -->
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Người dùng</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số điện thoại</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày tham gia</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <!-- Dynamic content will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+
+<style>
+  /* Custom smooth animations */
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translateX(-3px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translateX(3px);
+    }
+  }
+
+  @keyframes zoomIn {
+    from {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes zoomOut {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Smooth transitions for all interactive elements */
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Button hover effects */
+  button {
+    transition: all 0.2s ease-in-out;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  button:active {
+    transform: translateY(0);
+  }
+
+  /* Input focus effects */
+  input:focus {
+    border-color: #60a5fa;
+    outline: none;
+  }
+
+  /* Do not scale for basic search input */
+  .no-scale:focus {
+    border-color: #60a5fa;
+    outline: none;
+  }
+
+  /* Table row hover effects */
+  .user-row:hover {
+    background-color: #f9fafb;
+  }
+
+  /* Status badge animations */
+  .status-badge {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .status-badge:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+<!-- External JavaScript -->
+<script src="/js/admin/users.js" defer></script>

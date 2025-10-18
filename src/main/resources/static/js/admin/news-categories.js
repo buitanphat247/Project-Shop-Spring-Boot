@@ -1,5 +1,5 @@
 // API Configuration
-const API_BASE_URL = '/api/categories';
+const API_BASE_URL = '/api/news-categories';
 
 // Wait for jQuery to be ready
 function initApp() {
@@ -10,14 +10,15 @@ function initApp() {
     }
 
     console.log('jQuery ready, setting up event listeners');
+    console.log('Grid container found:', $('.grid.grid-cols-1').length);
 
-    // Load categories on page load
-    loadCategories();
+    // Load news categories on page load
+    loadNewsCategories();
 
     // Show modal with smooth animation
     $('#addCategoryButton').click(function (e) {
         e.preventDefault();
-        console.log('Add category button clicked');
+        console.log('Add news category button clicked');
         showAddCategoryModal();
     });
 
@@ -126,7 +127,7 @@ if (document.readyState === 'loading') {
 
 // Show modal with zoom in animation
 function showAddCategoryModal() {
-    console.log('Showing add category modal');
+    console.log('Showing add news category modal');
     const $modal = $('#addCategoryModal');
     const $content = $('#modalContent');
 
@@ -155,7 +156,7 @@ function showAddCategoryModal() {
 
 // Hide modal with zoom out animation
 function hideAddCategoryModal() {
-    console.log('Hiding add category modal');
+    console.log('Hiding add news category modal');
     const $modal = $('#addCategoryModal');
     const $content = $('#modalContent');
 
@@ -286,10 +287,10 @@ function handleAddCategorySubmit() {
 
     // Check if editing or adding
     if (categoryId) {
-        console.log('Updating category:', { id: categoryId, name, description });
+        console.log('Updating news category:', { id: categoryId, name, description });
         updateCategoryAjax(categoryId, name, description);
     } else {
-        console.log('Adding category:', { name, description });
+        console.log('Adding news category:', { name, description });
         submitCategoryAjax(name, description);
     }
 }
@@ -327,7 +328,7 @@ function submitCategoryAjax(name, description) {
         // Show loading state
         $submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Đang thêm...');
 
-        console.log('Making AJAX call to add category');
+        console.log('Making AJAX call to add news category');
         console.log('Data:', { name, description });
 
         // AJAX call
@@ -351,7 +352,7 @@ function submitCategoryAjax(name, description) {
                         $submitBtn.prop('disabled', false).html(originalText);
                         $submitBtn.removeClass('bg-green-600').addClass('bg-blue-600 hover:bg-blue-700');
                         // Reload categories to show new category
-                        loadCategories();
+                        loadNewsCategories();
                     }, 150);
                 } else {
                     // Error handling
@@ -406,7 +407,7 @@ function updateCategoryAjax(categoryId, name, description) {
         // Show loading state
         $submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-2"></i>Đang cập nhật...');
 
-        console.log('Making AJAX call to update category');
+        console.log('Making AJAX call to update news category');
         console.log('Data:', { id: categoryId, name, description });
 
         // AJAX call
@@ -430,7 +431,7 @@ function updateCategoryAjax(categoryId, name, description) {
                         $submitBtn.prop('disabled', false).html(originalText);
                         $submitBtn.removeClass('bg-green-600').addClass('bg-blue-600 hover:bg-blue-700');
                         // Reload categories to show updated category
-                        loadCategories();
+                        loadNewsCategories();
                     }, 150);
                 } else {
                     // Error handling
@@ -476,17 +477,19 @@ function updateCategoryAjax(categoryId, name, description) {
     }
 }
 
-// Load categories with AJAX
-function loadCategories() {
-    console.log('Loading categories...');
+// Load news categories with AJAX
+function loadNewsCategories() {
+    console.log('Loading news categories...');
+    console.log('API URL:', API_BASE_URL);
 
     // Show loading state
-    const $container = $('.grid');
+    const $container = $('.grid.grid-cols-1');
+    console.log('Container found:', $container.length);
     $container.html(`
     <div class="col-span-full flex justify-center items-center py-12">
       <div class="text-center">
         <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
-        <p class="text-gray-600">Đang tải danh mục...</p>
+        <p class="text-gray-600">Đang tải danh mục tin tức...</p>
       </div>
     </div>
   `);
@@ -496,44 +499,52 @@ function loadCategories() {
             url: API_BASE_URL,
             method: 'GET',
             success: function (result) {
-                console.log('Categories loaded:', result);
+                console.log('News categories loaded:', result);
                 console.log('Result success:', result.success);
                 console.log('Result data:', result.data);
                 console.log('Result data items:', result.data ? result.data.items : 'No data');
 
                 if (result.success && result.data && result.data.items && result.data.items.length > 0) {
-                    console.log('Displaying categories with count:', result.data.items.length);
-                    displayCategories(result.data.items);
+                    // Filter out deleted categories (those with deletedAt not null)
+                    const activeCategories = result.data.items.filter(category => !category.deletedAt);
+                    console.log('Displaying news categories with count:', activeCategories.length);
+                    
+                    if (activeCategories.length > 0) {
+                        displayNewsCategories(activeCategories);
+                    } else {
+                        console.log('No active news categories found, showing empty state');
+                        showEmptyState();
+                    }
                 } else {
-                    console.log('No categories found, showing empty state');
+                    console.log('No news categories found, showing empty state');
                     showEmptyState();
                 }
             },
             error: function (xhr, status, error) {
-                console.error('Error loading categories:', error);
+                console.error('Error loading news categories:', error);
                 showErrorState();
             }
         });
     } catch (error) {
-        console.error('Error in loadCategories:', error);
+        console.error('Error in loadNewsCategories:', error);
         showErrorState();
     }
 }
 
-// Display categories in grid
-function displayCategories(categories) {
-    console.log('Displaying categories:', categories);
-    console.log('Categories count:', categories.length);
+// Display news categories in grid
+function displayNewsCategories(categories) {
+    console.log('Displaying news categories:', categories);
+    console.log('News categories count:', categories.length);
 
     // Store categories data globally for edit/delete functions
-    window.categoriesData = categories;
+    window.newsCategoriesData = categories;
 
-    const $container = $('.grid');
+    const $container = $('.grid.grid-cols-1');
     let html = '';
 
     categories.forEach(function (category, index) {
         const colors = ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-red-500', 'bg-yellow-500', 'bg-indigo-500'];
-        const icons = ['fas fa-mobile-alt', 'fas fa-laptop', 'fas fa-headphones', 'fas fa-gamepad', 'fas fa-camera', 'fas fa-tv'];
+        const icons = ['fas fa-newspaper', 'fas fa-globe', 'fas fa-microchip', 'fas fa-gamepad', 'fas fa-camera', 'fas fa-music'];
 
         const colorClass = colors[index % colors.length];
         const iconClass = icons[index % icons.length];
@@ -547,9 +558,7 @@ function displayCategories(categories) {
             </div>
             <div class="ml-4">
               <h3 class="text-lg font-semibold text-gray-900">${category.name}</h3>
-              <p class="text-sm text-gray-600">
-                <i class="fas fa-spinner fa-spin mr-1"></i>Đang đếm sản phẩm...
-              </p>
+              <p class="text-sm text-gray-600">${category.description || 'Không có mô tả'}</p>
             </div>
           </div>
           <div class="flex space-x-2">
@@ -561,7 +570,6 @@ function displayCategories(categories) {
             </button>
           </div>
         </div>
-        <p class="text-sm text-gray-600">${category.description || 'Không có mô tả'}</p>
         <div class="mt-3 text-xs text-gray-500">
           <span class="bg-gray-100 px-2 py-1 rounded">ID: ${category.id}</span>
           <span class="bg-gray-100 px-2 py-1 rounded ml-2">Slug: ${category.description}</span>
@@ -587,75 +595,17 @@ function displayCategories(categories) {
             'transition': 'all 0.3s ease-out'
         });
     });
-
-    // Load product count for each category
-    loadProductCountsForCategories(categories);
-}
-
-// Load product counts for all categories
-function loadProductCountsForCategories(categories) {
-    console.log('Loading product counts for categories...');
-    
-    categories.forEach(function(category, index) {
-        // Add delay to avoid overwhelming the server
-        setTimeout(function() {
-            loadProductCountForCategory(category.id, index);
-        }, index * 200); // 200ms delay between each request
-    });
-}
-
-// Load product count for a specific category
-function loadProductCountForCategory(categoryId, index) {
-    console.log(`Loading product count for category ${categoryId}...`);
-    
-    try {
-        $.ajax({
-            url: `/api/products?categoryId=${categoryId}`,
-            method: 'GET',
-            success: function(result) {
-                console.log(`Product count for category ${categoryId}:`, result);
-                
-                let productCount = 0;
-                if (result.success && result.data && result.data.items) {
-                    productCount = result.data.items.length;
-                }
-                
-                // Update the product count in the UI
-                updateProductCountInUI(categoryId, productCount);
-            },
-            error: function(xhr, status, error) {
-                console.error(`Error loading product count for category ${categoryId}:`, error);
-                // Show error state
-                updateProductCountInUI(categoryId, 'Lỗi');
-            }
-        });
-    } catch (error) {
-        console.error(`Error in loadProductCountForCategory for ${categoryId}:`, error);
-        updateProductCountInUI(categoryId, 'Lỗi');
-    }
-}
-
-// Update product count in the UI
-function updateProductCountInUI(categoryId, count) {
-    const $categoryCard = $(`.category-card[data-category-id="${categoryId}"]`);
-    const $productCountElement = $categoryCard.find('p.text-sm.text-gray-600');
-    
-    if (count === 'Lỗi') {
-        $productCountElement.html('<i class="fas fa-exclamation-triangle text-red-500 mr-1"></i>Lỗi đếm sản phẩm');
-    } else {
-        $productCountElement.html(`<i class="fas fa-box text-blue-500 mr-1"></i>${count} sản phẩm`);
-    }
 }
 
 // Show empty state
 function showEmptyState() {
-    const $container = $('.grid');
+    const $container = $('.grid.grid-cols-1');
     $container.html(`
     <div class="col-span-full flex justify-center items-center py-12">
       <div class="text-center">
-        <i class="fas fa-folder-open text-6xl text-gray-300 mb-4"></i>
-        <h3 class="text-xl font-semibold text-gray-700 mb-2">Chưa có danh mục nào</h3>
-        <p class="text-gray-500 mb-4">Hãy thêm danh mục đầu tiên để bắt đầu</p>
+        <i class="fas fa-newspaper text-6xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">Chưa có danh mục tin tức nào</h3>
+        <p class="text-gray-500 mb-4">Hãy thêm danh mục tin tức đầu tiên để bắt đầu</p>
         <button id="addFirstCategory" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
           <i class="fas fa-plus mr-2"></i>Thêm danh mục đầu tiên
         </button>
@@ -672,13 +622,13 @@ function showEmptyState() {
 
 // Show error state
 function showErrorState() {
-    const $container = $('.grid');
+    const $container = $('.grid.grid-cols-1');
     $container.html(`
     <div class="col-span-full flex justify-center items-center py-12">
       <div class="text-center">
         <i class="fas fa-exclamation-triangle text-6xl text-red-300 mb-4"></i>
         <h3 class="text-xl font-semibold text-gray-700 mb-2">Lỗi tải dữ liệu</h3>
-        <p class="text-gray-500 mb-4">Không thể tải danh sách danh mục</p>
+        <p class="text-gray-500 mb-4">Không thể tải danh sách danh mục tin tức</p>
         <button id="retryLoad" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
           <i class="fas fa-redo mr-2"></i>Thử lại
         </button>
@@ -689,13 +639,13 @@ function showErrorState() {
     // Add click handler for retry button
     $('#retryLoad').click(function (e) {
         e.preventDefault();
-        loadCategories();
+        loadNewsCategories();
     });
 }
 
 // Edit category function
 function editCategory(categoryId) {
-    console.log('Edit category:', categoryId);
+    console.log('Edit news category:', categoryId);
 
     // Find category data
     const category = findCategoryById(categoryId);
@@ -711,15 +661,15 @@ function editCategory(categoryId) {
 // Find category by ID
 function findCategoryById(categoryId) {
     // This will be populated when categories are loaded
-    return window.categoriesData ? window.categoriesData.find(cat => cat.id === categoryId) : null;
+    return window.newsCategoriesData ? window.newsCategoriesData.find(cat => cat.id === categoryId) : null;
 }
 
 // Show edit category modal
 function showEditCategoryModal(category) {
-    console.log('Showing edit category modal for:', category);
+    console.log('Showing edit news category modal for:', category);
 
     // Update modal title
-    $('#modalTitle').text('Chỉnh sửa danh mục');
+    $('#modalTitle').text('Chỉnh sửa danh mục tin tức');
 
     // Populate form with category data
     $('#categoryName').val(category.name);
@@ -739,7 +689,7 @@ function showEditCategoryModal(category) {
 
 // Delete category function
 function deleteCategory(categoryId) {
-    console.log('Delete category:', categoryId);
+    console.log('Delete news category:', categoryId);
 
     // Find category data
     const category = findCategoryById(categoryId);
@@ -754,7 +704,7 @@ function deleteCategory(categoryId) {
 
 // AJAX delete function
 function deleteCategoryAjax(categoryId) {
-    console.log('Deleting category:', categoryId);
+    console.log('Deleting news category:', categoryId);
 
     // Find category data for toast message
     const category = findCategoryById(categoryId);
@@ -801,8 +751,19 @@ function deleteCategoryAjax(categoryId) {
                     // Fade out and remove immediately
                     $categoryCard.fadeOut(150, function () {
                         $(this).remove();
-                        // Reload categories to refresh the grid
-                        loadCategories();
+                        // Update the global data array to remove the deleted category
+                        if (window.newsCategoriesData) {
+                            window.newsCategoriesData = window.newsCategoriesData.filter(cat => cat.id !== categoryId);
+                        }
+                        
+                        // Check if no more categories left, show empty state
+                        setTimeout(() => {
+                            const remainingCategories = $('.category-card').length;
+                            console.log('Remaining categories after delete:', remainingCategories);
+                            if (remainingCategories === 0) {
+                                showEmptyState();
+                            }
+                        }, 100);
                     });
                 } else {
                     // Error handling
