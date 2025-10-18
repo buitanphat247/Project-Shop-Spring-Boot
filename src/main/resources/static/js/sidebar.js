@@ -1,12 +1,27 @@
 (function () {
+    // Check if sidebar is already initialized
+    if (window.sidebarInitialized) {
+        console.log('Sidebar already initialized, skipping...');
+        return;
+    }
+    
     document.addEventListener('DOMContentLoaded', function () {
         const nav = document.getElementById('adminSidebarNav');
-        if (!nav) return;
+        if (!nav) {
+            console.log('Sidebar nav element not found');
+            return;
+        }
+
+        // Check if menu is already rendered
+        if (nav.children.length > 0) {
+            console.log('Sidebar already rendered, skipping...');
+            window.sidebarInitialized = true;
+            return;
+        }
 
         // Menu data
         const menuData = [
             { type: 'link', href: '/auth/dashboard', icon: 'fas fa-tachometer-alt text-blue-600', text: 'Dashboard' },
-
 
             {
                 type: 'group', icon: 'fas fa-shopping-cart text-green-600', text: 'Quản lý bán hàng', children: [
@@ -15,7 +30,6 @@
                     { href: '/admin/products/create', icon: 'fas fa-plus text-gray-600', text: 'Thêm sản phẩm' },
                 ]
             },
-
 
             {
                 type: 'group', icon: 'fas fa-newspaper text-indigo-500', text: 'Tin tức & Hệ thống', children: [
@@ -63,7 +77,7 @@
             (item.children || []).forEach(child => {
                 const link = document.createElement('a');
                 link.href = child.href || '#';
-                link.className = 'flex items-center space-x-3 rounded-lg p-2 mt-2';
+                link.className = 'flex items-center space-x-3 rounded-lg p-2 mt-2 ml-6';
                 link.innerHTML = `<i class="${child.icon} menu-icon"></i><span class="menu-text">${child.text}</span>`;
                 submenu.appendChild(link);
             });
@@ -85,29 +99,17 @@
                     $(submenu).hide().slideDown(300);
                     if (chev) chev.classList.add('rotate-180');
                 }
-
-                // Close other submenus with animation
-                nav.querySelectorAll('.menu-header').forEach(otherHeader => {
-                    if (otherHeader !== header) {
-                        const otherSubmenu = otherHeader.nextElementSibling;
-                        if (otherSubmenu && otherSubmenu.classList.contains('submenu')) {
-                            if (otherSubmenu.style.display === 'block') {
-                                $(otherSubmenu).slideUp(300, () => {
-                                    otherSubmenu.style.display = 'none';
-                                });
-                            }
-                            const otherChev = otherHeader.querySelector('.fa-chevron-down');
-                            if (otherChev) otherChev.classList.remove('rotate-180');
-                        }
-                    }
-                });
             });
 
             return [header, submenu];
         }
 
-        // Render menu
-        nav.innerHTML = '';
+        // Render menu only once
+        console.log('Rendering sidebar menu...');
+        
+        // Set flag before rendering to prevent double initialization
+        window.sidebarInitialized = true;
+        
         menuData.forEach(item => {
             if (item.type === 'link') {
                 nav.appendChild(createLink(item));
@@ -154,5 +156,7 @@
         nav.querySelectorAll('.submenu a').forEach(a => {
             a.addEventListener('click', (e) => e.stopPropagation());
         });
+
+        console.log('Sidebar initialized successfully');
     });
 })();

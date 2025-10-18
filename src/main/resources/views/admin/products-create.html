@@ -123,7 +123,7 @@
 
         <div class="flex justify-end space-x-4">
           <button type="button" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">Hủy</button>
-          <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+          <button type="submit" id="saveProductBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
             <i class="fas fa-save mr-2"></i>Lưu sản phẩm
           </button>
         </div>
@@ -182,6 +182,7 @@ $(document).ready(function() {
     console.log('Product create page loaded');
     
     let attributeCount = 0;
+    let isSubmitting = false; // Flag to prevent multiple submissions
     
     // Load categories on page load
     loadCategories();
@@ -256,6 +257,23 @@ $(document).ready(function() {
     // Handle form submit
     function handleFormSubmit() {
         console.log('Handling form submit');
+        
+        // Check if already submitting
+        if (isSubmitting) {
+            console.log('Form is already being submitted, ignoring...');
+            return;
+        }
+        
+        // Set submitting flag
+        isSubmitting = true;
+        console.log('Setting isSubmitting to true');
+        
+        // Disable submit button and show loading state
+        const $submitBtn = $('#saveProductBtn');
+        const originalText = $submitBtn.html();
+        $submitBtn.prop('disabled', true);
+        $submitBtn.html('<i class="fas fa-spinner fa-spin mr-2"></i>Đang tạo sản phẩm...');
+        $submitBtn.removeClass('hover:bg-blue-700').addClass('bg-blue-400 cursor-not-allowed');
         
         // Collect form data
         const formData = {
@@ -442,7 +460,21 @@ $(document).ready(function() {
         } catch (error) {
             console.error('❌ Error in save process:', error);
             showToast('Lỗi khi tạo sản phẩm: ' + (error.message || 'Lỗi không xác định'), 'error');
+        } finally {
+            // Always reset the submitting flag and button state
+            resetSubmitButton();
         }
+    }
+    
+    // Reset submit button state
+    function resetSubmitButton() {
+        console.log('Resetting submit button state');
+        isSubmitting = false;
+        
+        const $submitBtn = $('#saveProductBtn');
+        $submitBtn.prop('disabled', false);
+        $submitBtn.html('<i class="fas fa-save mr-2"></i>Lưu sản phẩm');
+        $submitBtn.removeClass('bg-blue-400 cursor-not-allowed').addClass('hover:bg-blue-700');
     }
     
     // Reset form after successful save

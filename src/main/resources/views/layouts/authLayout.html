@@ -10,10 +10,31 @@
     <!-- Swiper -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- CKEditor 5 -->
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.css" />
+    <script src="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.umd.js"></script>
     <style>
-      .sidebar-transition { transition: all 0.3s ease; }
-      .sidebar-collapsed { width: 4rem; }
-      .sidebar-expanded { width: 20rem; }
+      .sidebar-transition {
+        transition: width 0.3s ease, transform 0.3s ease;
+      }
+      
+      /* Prevent initial flicker */
+      #sidebar-container {
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+      }
+      
+      /* Ensure sidebar is visible from start */
+      #sidebar-container:not(.sidebar-transition) {
+        transition: none !important;
+      }
+      .sidebar-collapsed {
+        width: 4rem;
+      }
+      .sidebar-expanded {
+        width: 20rem;
+      }
       /* Submenu styles moved to sidebar.html to avoid conflicts */
       /* Hide scrollbar for sidebar */
       .sidebar-no-scroll {
@@ -25,9 +46,17 @@
         display: none; /* Chrome, Safari, Opera */
       }
       /* Backdrop for mobile */
-      #sidebar-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; z-index: 40; }
-      #sidebar-backdrop.show { display: block; }
-      
+      #sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
+        display: none;
+        z-index: 40;
+      }
+      #sidebar-backdrop.show {
+        display: block;
+      }
+
       /* Notification panel slide animation like YouTube */
       #notification-panel {
         transform: translateX(100%);
@@ -36,7 +65,7 @@
       #notification-panel.show {
         transform: translateX(0);
       }
-      
+
       /* Backdrop fade animation */
       #notification-backdrop {
         opacity: 0;
@@ -47,7 +76,7 @@
         opacity: 1;
         pointer-events: auto;
       }
-      
+
       /* Notification item styles */
       .notification-item {
         transition: all 0.2s ease;
@@ -64,31 +93,41 @@
       .notification-item.unread:hover {
         background-color: #fde68a;
       }
-      
+
       /* Stagger animation for notification items */
       .notification-item {
         animation: slideInFromRight 0.4s ease-out forwards;
         opacity: 0;
         transform: translateX(10px);
       }
-      .notification-item:nth-child(1) { animation-delay: 0.05s; }
-      .notification-item:nth-child(2) { animation-delay: 0.1s; }
-      .notification-item:nth-child(3) { animation-delay: 0.15s; }
-      .notification-item:nth-child(4) { animation-delay: 0.2s; }
-      .notification-item:nth-child(5) { animation-delay: 0.25s; }
-      
+      .notification-item:nth-child(1) {
+        animation-delay: 0.05s;
+      }
+      .notification-item:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .notification-item:nth-child(3) {
+        animation-delay: 0.15s;
+      }
+      .notification-item:nth-child(4) {
+        animation-delay: 0.2s;
+      }
+      .notification-item:nth-child(5) {
+        animation-delay: 0.25s;
+      }
+
       @keyframes slideInFromRight {
         to {
           opacity: 1;
           transform: translateX(0);
         }
       }
-      
+
       /* Loading animation */
       .notification-loading {
         animation: pulse 2s infinite;
       }
-      
+
       /* Smooth scroll for notification list */
       #notification-list {
         scrollbar-width: none;
@@ -105,7 +144,9 @@
       <div id="sidebar-backdrop"></div>
 
       <!-- Header fixed -->
-      <header class="fixed top-0 left-0 right-0 z-30 bg-white border-b border-gray-200 h-16 px-4 lg:px-6 flex items-center justify-between border-b-2">
+      <header
+        class="fixed top-0 left-0 right-0 z-[20] bg-white border-b border-gray-200 h-16 px-4 lg:px-6 flex items-center justify-between border-b-2"
+      >
         <div class="flex items-center gap-3">
           <button id="top-toggle-sidebar" class="p-2 rounded-lg">
             <i class="fas fa-bars text-gray-600"></i>
@@ -118,11 +159,18 @@
             <button id="notification-btn" class="p-2 rounded-lg hover:bg-gray-100 relative">
               <i class="fas fa-bell text-gray-600"></i>
               <!-- Notification badge -->
-              <span id="notification-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">3</span>
+              <span
+                id="notification-badge"
+                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden"
+                >3</span
+              >
             </button>
-            
+
             <!-- Notification Panel - Slide from right like YouTube -->
-            <div id="notification-panel" class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-out z-50">
+            <div
+              id="notification-panel"
+              class="fixed top-0 right-0 h-full w-80 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-out z-50"
+            >
               <!-- Panel Header -->
               <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
                 <h3 class="text-lg font-semibold text-gray-800">Thông báo</h3>
@@ -130,7 +178,7 @@
                   <i class="fas fa-times text-gray-600"></i>
                 </button>
               </div>
-              
+
               <!-- Panel Actions -->
               <div class="p-4 border-b border-gray-200 bg-white">
                 <div class="flex items-center justify-between">
@@ -142,7 +190,7 @@
                   </button>
                 </div>
               </div>
-              
+
               <!-- Notifications List -->
               <div id="notification-list" class="flex-1 overflow-y-auto h-[calc(100vh-140px)]">
                 <!-- Loading state -->
@@ -151,17 +199,23 @@
                   <p class="text-sm">Đang tải thông báo...</p>
                 </div>
               </div>
-              
+
               <!-- Panel Footer -->
               <div class="p-4 border-t border-gray-200 bg-gray-50">
-                <a href="#" class="block w-full text-center py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium">
+                <a
+                  href="#"
+                  class="block w-full text-center py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
                   <i class="fas fa-external-link-alt mr-2"></i>Xem tất cả
                 </a>
               </div>
             </div>
-            
+
             <!-- Backdrop -->
-            <div id="notification-backdrop" class="fixed inset-0 bg-black bg-opacity-30 z-40 opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+            <div
+              id="notification-backdrop"
+              class="fixed inset-0 bg-black bg-opacity-30 z-40 opacity-0 transition-opacity duration-300 pointer-events-none"
+            ></div>
           </div>
           <div class="flex items-center gap-2">
             <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
@@ -175,7 +229,7 @@
       <!-- Body: sidebar + content in one container -->
       <div id="main-content" class="pt-16 min-h-screen flex bg-gray-50">
         <!-- Sidebar container (desktop visible by default) -->
-        <aside id="sidebar-container" class="w-80 lg:block sidebar-transition overflow-hidden">
+        <aside id="sidebar-container" class="w-80 lg:block sidebar-transition overflow-hidden" style="width: 360px;">
           <div th:replace="~{layouts/sidebar :: sidebar}"></div>
         </aside>
 
@@ -186,87 +240,90 @@
       </div>
 
       <script>
-        document.addEventListener('DOMContentLoaded', function () {
-          const sidebar = document.getElementById('sidebar');
-          const sidebarContainer = document.getElementById('sidebar-container');
-          const mainContent = document.getElementById('main-content');
-          const headerToggle = document.getElementById('top-toggle-sidebar');
-          const backdrop = document.getElementById('sidebar-backdrop');
+        document.addEventListener("DOMContentLoaded", function () {
+          const sidebar = document.getElementById("sidebar");
+          const sidebarContainer = document.getElementById("sidebar-container");
+          const mainContent = document.getElementById("main-content");
+          const headerToggle = document.getElementById("top-toggle-sidebar");
+          const backdrop = document.getElementById("sidebar-backdrop");
 
           function setDesktopVisible(visible) {
             if (!sidebarContainer) return;
-            const $sc = $('#sidebar-container');
+            const $sc = $("#sidebar-container");
             const targetWidth = visible ? 360 : 0; // px (tăng từ 320 lên 360)
-            const duration = visible ? 180 : 140; // đóng nhanh hơn
-            $sc.stop(true, false).animate({ width: targetWidth }, duration, 'swing');
+            const duration = visible ? 300 : 200; // mở chậm hơn, đóng nhanh hơn
+            $sc.stop(true, false).animate({ width: targetWidth }, duration, "swing");
           }
 
           function setMobileVisible(visible) {
             if (!sidebar) return;
             if (visible) {
-              sidebar.classList.remove('-translate-x-full');
-              if (backdrop) backdrop.classList.add('show');
+              sidebar.classList.remove("-translate-x-full");
+              if (backdrop) backdrop.classList.add("show");
             } else {
-              sidebar.classList.add('-translate-x-full');
-              if (backdrop) backdrop.classList.remove('show');
+              sidebar.classList.add("-translate-x-full");
+              if (backdrop) backdrop.classList.remove("show");
             }
           }
 
           function initByViewport() {
             if (window.innerWidth < 1024) {
               setMobileVisible(false);
-              setDesktopVisible(true); // để container có width mặc định, panel mobile trượt riêng
+              // Keep default width for mobile
             } else {
-              $('#sidebar-container').css('width', '360px');
-              setDesktopVisible(true);
+              // Keep default width for desktop - no need to set again
             }
           }
+          // Initialize immediately to prevent flicker
           initByViewport();
-          window.addEventListener('resize', initByViewport);
+          
+          window.addEventListener("resize", initByViewport);
 
           function handleToggle() {
             if (window.innerWidth < 1024) {
-              const hidden = sidebar && sidebar.classList.contains('-translate-x-full');
+              const hidden = sidebar && sidebar.classList.contains("-translate-x-full");
               setMobileVisible(hidden);
             } else {
-              const currentWidth = $('#sidebar-container').width() || 0;
+              const currentWidth = $("#sidebar-container").width() || 0;
               setDesktopVisible(currentWidth === 0);
             }
           }
 
-          if (headerToggle) headerToggle.addEventListener('click', handleToggle);
+          if (headerToggle) headerToggle.addEventListener("click", handleToggle);
 
-          document.querySelectorAll('.menu-header').forEach((header) => {
-            header.addEventListener('click', () => {
+          document.querySelectorAll(".menu-header").forEach((header) => {
+            header.addEventListener("click", () => {
               const submenu = header.nextElementSibling;
-              const chevron = header.querySelector('.fa-chevron-down');
-              if (submenu) submenu.classList.toggle('open');
-              if (chevron) chevron.classList.toggle('rotate-180');
+              const chevron = header.querySelector(".fa-chevron-down");
+              if (submenu) submenu.classList.toggle("open");
+              if (chevron) chevron.classList.toggle("rotate-180");
             });
           });
 
           if (backdrop) {
-            backdrop.addEventListener('click', function () { setMobileVisible(false); });
+            backdrop.addEventListener("click", function () {
+              setMobileVisible(false);
+            });
           }
 
           // Notification panel system
-          const notificationBtn = document.getElementById('notification-btn');
-          const notificationPanel = document.getElementById('notification-panel');
-          const notificationBackdrop = document.getElementById('notification-backdrop');
-          const notificationList = document.getElementById('notification-list');
-          const notificationLoading = document.getElementById('notification-loading');
-          const notificationBadge = document.getElementById('notification-badge');
-          const markAllReadBtn = document.getElementById('mark-all-read');
-          const closeNotificationPanel = document.getElementById('close-notification-panel');
-          const refreshNotifications = document.getElementById('refresh-notifications');
-          
+          const notificationBtn = document.getElementById("notification-btn");
+          const notificationPanel = document.getElementById("notification-panel");
+          const notificationBackdrop = document.getElementById("notification-backdrop");
+          const notificationList = document.getElementById("notification-list");
+          const notificationLoading = document.getElementById("notification-loading");
+          const notificationBadge = document.getElementById("notification-badge");
+          const markAllReadBtn = document.getElementById("mark-all-read");
+          const closeNotificationPanel = document.getElementById("close-notification-panel");
+          const refreshNotifications = document.getElementById("refresh-notifications");
+
           let isNotificationOpen = false;
           let notifications = [];
 
           // Toggle notification panel
           function toggleNotification() {
             isNotificationOpen = !isNotificationOpen;
-            
+
             if (isNotificationOpen) {
               showNotificationPanel();
               loadNotifications();
@@ -277,50 +334,50 @@
 
           // Show notification panel with slide animation
           function showNotificationPanel() {
-            notificationPanel.classList.add('show');
-            notificationBackdrop.classList.add('show');
-            
+            notificationPanel.classList.add("show");
+            notificationBackdrop.classList.add("show");
+
             // Add body scroll lock
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = "hidden";
           }
 
           // Hide notification panel with slide animation
           function hideNotificationPanel() {
-            notificationPanel.classList.remove('show');
-            notificationBackdrop.classList.remove('show');
-            
+            notificationPanel.classList.remove("show");
+            notificationBackdrop.classList.remove("show");
+
             // Remove body scroll lock
-            document.body.style.overflow = '';
+            document.body.style.overflow = "";
             isNotificationOpen = false;
           }
 
           // Load notifications via AJAX
           function loadNotifications() {
             // Show loading state
-            notificationLoading.style.display = 'block';
-            notificationList.innerHTML = '';
+            notificationLoading.style.display = "block";
+            notificationList.innerHTML = "";
             notificationList.appendChild(notificationLoading);
-            
+
             $.ajax({
-              url: '/api/notifications',
-              method: 'GET',
-              dataType: 'json',
-              success: function(data) {
+              url: "/api/notifications",
+              method: "GET",
+              dataType: "json",
+              success: function (data) {
                 notifications = data.notifications || [];
                 renderNotifications(notifications);
-                updateBadge(notifications.filter(n => !n.read).length);
+                updateBadge(notifications.filter((n) => !n.read).length);
               },
-              error: function() {
+              error: function () {
                 renderErrorState();
-              }
+              },
             });
           }
 
           // Render notifications with beautiful animations
           function renderNotifications(notifications) {
             // Hide loading state
-            notificationLoading.style.display = 'none';
-            
+            notificationLoading.style.display = "none";
+
             if (notifications.length === 0) {
               notificationList.innerHTML = `
                 <div class="p-6 text-center text-gray-500">
@@ -334,12 +391,24 @@
               return;
             }
 
-            const html = notifications.map((notification, index) => `
-              <div class="notification-item p-4 hover:bg-gray-50 cursor-pointer ${!notification.read ? 'unread' : ''}" data-id="${notification.id}" style="animation-delay: ${index * 0.05}s">
+            const html = notifications
+              .map(
+                (notification, index) => `
+              <div class="notification-item p-4 hover:bg-gray-50 cursor-pointer ${!notification.read ? "unread" : ""}" data-id="${
+                  notification.id
+                }" style="animation-delay: ${index * 0.05}s">
                 <div class="flex items-start space-x-3">
                   <div class="flex-shrink-0">
-                    <div class="w-10 h-10 bg-${notification.type === 'success' ? 'green' : notification.type === 'warning' ? 'yellow' : notification.type === 'error' ? 'red' : 'blue'}-500 rounded-full flex items-center justify-center">
-                      <i class="fas fa-${notification.icon || 'bell'} text-white text-sm"></i>
+                    <div class="w-10 h-10 bg-${
+                      notification.type === "success"
+                        ? "green"
+                        : notification.type === "warning"
+                        ? "yellow"
+                        : notification.type === "error"
+                        ? "red"
+                        : "blue"
+                    }-500 rounded-full flex items-center justify-center">
+                      <i class="fas fa-${notification.icon || "bell"} text-white text-sm"></i>
                     </div>
                   </div>
                   <div class="flex-1 min-w-0">
@@ -349,28 +418,50 @@
                         <p class="text-xs text-gray-600 mb-2">${notification.message}</p>
                         <div class="flex items-center space-x-2">
                           <span class="text-xs text-gray-400">${formatTime(notification.createdAt)}</span>
-                          ${notification.type ? `<span class="px-2 py-0.5 text-xs font-medium bg-${notification.type === 'success' ? 'green' : notification.type === 'warning' ? 'yellow' : notification.type === 'error' ? 'red' : 'blue'}-100 text-${notification.type === 'success' ? 'green' : notification.type === 'warning' ? 'yellow' : notification.type === 'error' ? 'red' : 'blue'}-800 rounded-full">${notification.type}</span>` : ''}
+                          ${
+                            notification.type
+                              ? `<span class="px-2 py-0.5 text-xs font-medium bg-${
+                                  notification.type === "success"
+                                    ? "green"
+                                    : notification.type === "warning"
+                                    ? "yellow"
+                                    : notification.type === "error"
+                                    ? "red"
+                                    : "blue"
+                                }-100 text-${
+                                  notification.type === "success"
+                                    ? "green"
+                                    : notification.type === "warning"
+                                    ? "yellow"
+                                    : notification.type === "error"
+                                    ? "red"
+                                    : "blue"
+                                }-800 rounded-full">${notification.type}</span>`
+                              : ""
+                          }
                         </div>
                       </div>
-                      ${!notification.read ? '<div class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>' : ''}
+                      ${!notification.read ? '<div class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>' : ""}
                     </div>
                   </div>
                 </div>
               </div>
-            `).join('');
+            `
+              )
+              .join("");
 
             notificationList.innerHTML = html;
-            
+
             // Add click handlers for notification items
-            document.querySelectorAll('.notification-item').forEach((item) => {
-              item.addEventListener('click', function() {
+            document.querySelectorAll(".notification-item").forEach((item) => {
+              item.addEventListener("click", function () {
                 const notificationId = this.dataset.id;
                 markAsRead(notificationId);
-                
+
                 // Add click animation
-                this.style.transform = 'scale(0.98)';
+                this.style.transform = "scale(0.98)";
                 setTimeout(() => {
-                  this.style.transform = '';
+                  this.style.transform = "";
                 }, 150);
               });
             });
@@ -391,40 +482,40 @@
           function markAsRead(notificationId) {
             $.ajax({
               url: `/api/notifications/${notificationId}/read`,
-              method: 'PUT',
-              success: function() {
+              method: "PUT",
+              success: function () {
                 const item = document.querySelector(`[data-id="${notificationId}"]`);
                 if (item) {
-                  item.classList.remove('unread');
-                  item.querySelector('.w-2.h-2')?.remove();
+                  item.classList.remove("unread");
+                  item.querySelector(".w-2.h-2")?.remove();
                 }
-                updateBadge(notifications.filter(n => !n.read && n.id !== notificationId).length);
-              }
+                updateBadge(notifications.filter((n) => !n.read && n.id !== notificationId).length);
+              },
             });
           }
 
           // Mark all as read
           function markAllAsRead() {
             $.ajax({
-              url: '/api/notifications/mark-all-read',
-              method: 'PUT',
-              success: function() {
-                document.querySelectorAll('.notification-item').forEach(item => {
-                  item.classList.remove('unread');
-                  item.querySelector('.w-2.h-2')?.remove();
+              url: "/api/notifications/mark-all-read",
+              method: "PUT",
+              success: function () {
+                document.querySelectorAll(".notification-item").forEach((item) => {
+                  item.classList.remove("unread");
+                  item.querySelector(".w-2.h-2")?.remove();
                 });
                 updateBadge(0);
-              }
+              },
             });
           }
 
           // Update notification badge
           function updateBadge(count) {
             if (count > 0) {
-              notificationBadge.textContent = count > 99 ? '99+' : count;
-              notificationBadge.classList.remove('hidden');
+              notificationBadge.textContent = count > 99 ? "99+" : count;
+              notificationBadge.classList.remove("hidden");
             } else {
-              notificationBadge.classList.add('hidden');
+              notificationBadge.classList.add("hidden");
             }
           }
 
@@ -433,58 +524,58 @@
             const date = new Date(dateString);
             const now = new Date();
             const diff = now - date;
-            
-            if (diff < 60000) return 'Vừa xong';
+
+            if (diff < 60000) return "Vừa xong";
             if (diff < 3600000) return `${Math.floor(diff / 60000)} phút trước`;
             if (diff < 86400000) return `${Math.floor(diff / 3600000)} giờ trước`;
-            return date.toLocaleDateString('vi-VN');
+            return date.toLocaleDateString("vi-VN");
           }
 
           // Event listeners
           if (notificationBtn) {
-            notificationBtn.addEventListener('click', function(e) {
+            notificationBtn.addEventListener("click", function (e) {
               e.stopPropagation();
               toggleNotification();
             });
           }
 
           if (closeNotificationPanel) {
-            closeNotificationPanel.addEventListener('click', function(e) {
+            closeNotificationPanel.addEventListener("click", function (e) {
               e.stopPropagation();
               hideNotificationPanel();
             });
           }
 
           if (markAllReadBtn) {
-            markAllReadBtn.addEventListener('click', function(e) {
+            markAllReadBtn.addEventListener("click", function (e) {
               e.stopPropagation();
               markAllAsRead();
             });
           }
 
           if (refreshNotifications) {
-            refreshNotifications.addEventListener('click', function(e) {
+            refreshNotifications.addEventListener("click", function (e) {
               e.stopPropagation();
               loadNotifications();
-              
+
               // Add refresh animation
-              this.style.transform = 'rotate(360deg)';
+              this.style.transform = "rotate(360deg)";
               setTimeout(() => {
-                this.style.transform = '';
+                this.style.transform = "";
               }, 500);
             });
           }
 
           // Close panel when clicking backdrop
           if (notificationBackdrop) {
-            notificationBackdrop.addEventListener('click', function() {
+            notificationBackdrop.addEventListener("click", function () {
               hideNotificationPanel();
             });
           }
 
           // Close panel with Escape key
-          document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && isNotificationOpen) {
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && isNotificationOpen) {
               hideNotificationPanel();
             }
           });
@@ -494,5 +585,124 @@
         });
       </script>
     </div>
+
+    <!-- CKEditor Initialization Script -->
+    <script>
+      console.log('🚀 CKEditor initialization script loaded');
+      
+      // Function to initialize CKEditor for news create page
+      function initCKEditorForNews() {
+        console.log('🔄 Checking for CKEditor initialization...');
+        
+        // Only run on news create page
+        if (!window.location.pathname.includes('/news/create')) {
+          console.log('📄 Not on news create page, skipping CKEditor init');
+          return;
+        }
+        
+        console.log('📄 On news create page, initializing CKEditor...');
+        
+        // Check if CKEditor is loaded
+        if (typeof CKEDITOR === 'undefined') {
+          console.log('⏳ CKEditor not loaded yet, retrying in 200ms...');
+          setTimeout(initCKEditorForNews, 200);
+          return;
+        }
+        
+        // Check if editor element exists
+        const editorElement = document.querySelector("#editor");
+        if (!editorElement) {
+          console.log('❌ Editor element not found, retrying in 200ms...');
+          setTimeout(initCKEditorForNews, 200);
+          return;
+        }
+        
+        // Check if already initialized
+        if (window.editor) {
+          console.log('✅ CKEditor already initialized, skipping...');
+          return;
+        }
+        
+        console.log('✅ Both CKEditor and element ready, creating editor...');
+        
+        try {
+          const {
+            ClassicEditor,
+            Essentials,
+            Bold,
+            Italic,
+            Underline,
+            Link,
+            Paragraph,
+            Heading,
+            List,
+            BlockQuote,
+            Table,
+            TableToolbar,
+            Undo,
+            Redo
+          } = CKEDITOR;
+
+          ClassicEditor
+            .create(editorElement, {
+              plugins: [
+                Essentials,
+                Bold,
+                Italic,
+                Underline,
+                Link,
+                Paragraph,
+                Heading,
+                List,
+                BlockQuote,
+                Table,
+                TableToolbar,
+                Undo,
+                Redo
+              ],
+              toolbar: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'underline',
+                'link',
+                '|',
+                'bulletedList',
+                'numberedList',
+                '|',
+                'blockQuote',
+                'insertTable',
+                '|',
+                'undo',
+                'redo'
+              ],
+              language: 'vi'
+            })
+            .then(editor => {
+              window.editor = editor;
+              console.log('🎉 CKEditor initialized successfully!');
+            })
+            .catch(error => {
+              console.error('💥 CKEditor initialization failed:', error);
+            });
+        } catch (error) {
+          console.error('💥 Error creating CKEditor:', error);
+        }
+      }
+      
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('📄 DOMContentLoaded fired, checking for CKEditor...');
+        setTimeout(initCKEditorForNews, 1000);
+      });
+      
+      // Also try after window load
+      window.addEventListener('load', function() {
+        console.log('🌐 Window load fired, checking for CKEditor...');
+        setTimeout(initCKEditorForNews, 500);
+      });
+    </script>
+
   </body>
 </html>
