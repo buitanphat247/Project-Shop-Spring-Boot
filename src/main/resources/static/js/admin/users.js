@@ -118,7 +118,7 @@ function loadUsers() {
         $.ajax({
             url: API_BASE_URL + '?basic=true', // Request only basic info
             method: 'GET',
-            timeout: 1000, // Reduced to 1 second for basic info
+            timeout: 10000, // Increased to 10 seconds for basic info
             cache: true, // Enable cache for better performance
             dataType: 'json', // Explicitly set data type
             beforeSend: function(xhr) {
@@ -303,7 +303,7 @@ function searchUsers(searchTerm) {
         $.ajax({
             url: `${API_BASE_URL}?name=${encodeURIComponent(searchTerm)}`,
             method: 'GET',
-            timeout: 1000, // 5 second timeout for search
+            timeout: 10000, // Increased to 10 seconds for search
             success: function(result) {
                 console.log('Search results:', result);
                 
@@ -429,7 +429,7 @@ function loadUserDetails(userId) {
         $.ajax({
             url: `${API_BASE_URL}/${userId}`,
             method: 'GET',
-            timeout: 3000, // 3 second timeout for details
+            timeout: 10000, // Increased to 10 seconds for details
             success: function(result) {
                 console.log('User details loaded:', result);
                 
