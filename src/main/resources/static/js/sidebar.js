@@ -31,13 +31,13 @@
                 ]
             },
 
-            {
-                type: 'group', icon: 'fas fa-newspaper text-indigo-500', text: 'Tin tức & Hệ thống', children: [
-                    { href: '/admin/categories-news', icon: 'fas fa-tags text-gray-600', text: 'Danh mục tin tức' },
-                    { href: '/admin/news', icon: 'fas fa-list text-gray-600', text: 'Danh sách tin tức' },
-                    { href: '/admin/news/create', icon: 'fas fa-plus text-gray-600', text: 'Thêm tin tức' },
-                ]
-            },
+            // {
+            //     type: 'group', icon: 'fas fa-newspaper text-indigo-500', text: 'Tin tức & Hệ thống', children: [
+            //         { href: '/admin/categories-news', icon: 'fas fa-tags text-gray-600', text: 'Danh mục tin tức' },
+            //         { href: '/admin/news', icon: 'fas fa-list text-gray-600', text: 'Danh sách tin tức' },
+            //         { href: '/admin/news/create', icon: 'fas fa-plus text-gray-600', text: 'Thêm tin tức' },
+            //     ]
+            // },
 
             {
                 type: 'group', icon: 'fas fa-users text-purple-500', text: 'Quản lý tài khoản', children: [
