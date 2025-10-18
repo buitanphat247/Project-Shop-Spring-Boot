@@ -145,7 +145,7 @@
                 if (header) {
                     const chev = header.querySelector('.fa-chevron-down');
                     if (chev) chev.classList.add('rotate-180');
-                    header.classList.add('bg-green-50');
+                    header.classList.add('bg-gray-300');
                 }
             }
         }
