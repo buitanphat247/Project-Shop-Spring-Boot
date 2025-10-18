@@ -46,9 +46,9 @@ function loadProducts() {
     // Show loading state immediately
     showLoadingState();
 
-    // Faster timeout - 3 seconds instead of 5
+    // Increased timeout - 10 seconds for better reliability
     const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timeout')), 3000)
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
     );
 
     // Optimized fetch with headers for faster response
@@ -84,7 +84,7 @@ function loadProducts() {
         })
         .catch(error => {
             console.error('Error loading products:', error);
-            showErrorState();
+            showErrorState(error.message);
         });
 }
 
@@ -106,10 +106,10 @@ function searchProducts(searchTerm) {
         // Show loading state immediately
         showLoadingState();
 
-        // Faster timeout - 2 seconds instead of 3
-        const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('Search timeout')), 2000)
-        );
+    // Increased timeout - 8 seconds for better reliability
+    const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Search timeout')), 8000)
+    );
 
         // Optimized fetch with headers
         const fetchOptions = {
@@ -144,7 +144,7 @@ function searchProducts(searchTerm) {
             })
             .catch(error => {
                 console.error('Error searching products:', error);
-                showErrorState();
+                showErrorState('Lỗi tìm kiếm: ' + error.message);
             });
     }, 50); // 50ms debounce - much faster
 }
@@ -244,8 +244,15 @@ function showEmptyState() {
 }
 
 // Show error state
-function showErrorState() {
-    document.getElementById('errorState').classList.remove('hidden');
+function showErrorState(errorMessage = 'Không thể tải danh sách sản phẩm') {
+    const errorState = document.getElementById('errorState');
+    const errorText = errorState.querySelector('.error-message');
+    
+    if (errorText) {
+        errorText.textContent = errorMessage;
+    }
+    
+    errorState.classList.remove('hidden');
     document.getElementById('productsTable').classList.add('hidden');
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('emptyState').classList.add('hidden');

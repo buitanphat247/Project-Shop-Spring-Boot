@@ -27,11 +27,11 @@
       <div id="main-content" class="pt-16 min-h-screen">
         <!-- Sidebar container -->
         <aside id="sidebar-container" class="sidebar-transition overflow-hidden">
-          <div th:replace="~{layouts/sidebar :: sidebar}"></div>
+          <div th:replace="~{layouts/sidebar :: sidebar}" style="height: 100% !important"></div>
         </aside>
 
         <!-- Page content -->
-        <main id="page-content" class="bg-white" >
+        <main id="page-content" class="bg-white">
           <div th:replace="${content}"></div>
         </main>
       </div>
