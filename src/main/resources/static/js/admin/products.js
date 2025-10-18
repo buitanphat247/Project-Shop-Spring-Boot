@@ -2,16 +2,16 @@
 const API_BASE_URL = '/api/products';
 
 // Initialize app when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM ready, initializing products app');
-    
+
     // Load products on page load
     loadProducts();
 
     // Search functionality
     const searchInput = document.querySelector('input[placeholder="Tìm kiếm sản phẩm..."]');
     if (searchInput) {
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             const searchTerm = this.value.trim();
             console.log('Searching for:', searchTerm);
             searchProducts(searchTerm);
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Retry button
     const retryBtn = document.getElementById('retryLoad');
     if (retryBtn) {
-        retryBtn.addEventListener('click', function(e) {
+        retryBtn.addEventListener('click', function (e) {
             e.preventDefault();
             console.log('Retry button clicked');
             loadProducts();
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add first product button
     const addFirstBtn = document.getElementById('addFirstProduct');
     if (addFirstBtn) {
-        addFirstBtn.addEventListener('click', function(e) {
+        addFirstBtn.addEventListener('click', function (e) {
             e.preventDefault();
             console.log('Add first product clicked - redirecting to create page');
             window.location.href = '/admin/products/create';
@@ -39,18 +39,41 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Load products with fetch API
+// Load products with fetch API - optimized for speed
 function loadProducts() {
     console.log('Loading products...');
-    
-    // Show loading state
+
+    // Show loading state immediately
     showLoadingState();
-    
-    fetch(API_BASE_URL)
-        .then(response => response.json())
+
+    // Faster timeout - 3 seconds instead of 5
+    const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timeout')), 3000)
+    );
+
+    // Optimized fetch with headers for faster response
+    const fetchOptions = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+        }
+    };
+
+    Promise.race([
+        fetch(API_BASE_URL, fetchOptions),
+        timeoutPromise
+    ])
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(result => {
             console.log('Products loaded:', result);
-            
+
             if (result.success && result.data && result.data.items && result.data.items.length > 0) {
                 console.log('Displaying products with count:', result.data.items.length);
                 displayProducts(result.data.items);
@@ -65,54 +88,99 @@ function loadProducts() {
         });
 }
 
-// Search products
+// Search products with debouncing - optimized for speed
+let searchTimeout;
 function searchProducts(searchTerm) {
     console.log('Searching products for:', searchTerm);
-    
+
+    // Clear previous timeout
+    clearTimeout(searchTimeout);
+
     if (!searchTerm) {
         loadProducts();
         return;
     }
-    
-    // Show loading state
-    showLoadingState();
-    
-    fetch(`${API_BASE_URL}/search?name=${encodeURIComponent(searchTerm)}`)
-        .then(response => response.json())
-        .then(result => {
-            console.log('Search results:', result);
-            
-            if (result.success && result.data && result.data.length > 0) {
-                console.log('Displaying search results with count:', result.data.length);
-                displayProducts(result.data);
-            } else {
-                console.log('No search results found');
-                showEmptyState();
+
+    // Faster debounce - 50ms instead of 100ms
+    searchTimeout = setTimeout(() => {
+        // Show loading state immediately
+        showLoadingState();
+
+        // Faster timeout - 2 seconds instead of 3
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Search timeout')), 2000)
+        );
+
+        // Optimized fetch with headers
+        const fetchOptions = {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
             }
-        })
-        .catch(error => {
-            console.error('Error searching products:', error);
-            showErrorState();
-        });
+        };
+
+        Promise.race([
+            fetch(`${API_BASE_URL}/search?name=${encodeURIComponent(searchTerm)}`, fetchOptions),
+            timeoutPromise
+        ])
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(result => {
+                console.log('Search results:', result);
+
+                if (result.success && result.data && result.data.length > 0) {
+                    console.log('Displaying search results with count:', result.data.length);
+                    displayProducts(result.data);
+                } else {
+                    console.log('No search results found');
+                    showEmptyState();
+                }
+            })
+            .catch(error => {
+                console.error('Error searching products:', error);
+                showErrorState();
+            });
+    }, 50); // 50ms debounce - much faster
 }
 
-// Display products in table
+// Display products in table - optimized for speed
 function displayProducts(products) {
     console.log('Displaying products:', products);
     console.log('Products count:', products.length);
-    
+
     // Store products data globally for edit/delete functions
     window.productsData = products;
-    
+
     const tbody = document.getElementById('productsTableBody');
-    let html = '';
     
-    products.forEach(function(product, index) {
-        const statusClass = product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-        const statusText = product.stock > 0 ? 'Còn hàng' : 'Hết hàng';
+    // Use DocumentFragment for faster DOM manipulation
+    const fragment = document.createDocumentFragment();
+    
+    // Pre-calculate common values
+    const statusClasses = {
+        inStock: 'bg-green-100 text-green-800',
+        outOfStock: 'bg-red-100 text-red-800'
+    };
+    const statusTexts = {
+        inStock: 'Còn hàng',
+        outOfStock: 'Hết hàng'
+    };
+
+    // Build HTML string more efficiently
+    const html = products.map(product => {
+        const isInStock = product.stock > 0;
+        const statusClass = isInStock ? statusClasses.inStock : statusClasses.outOfStock;
+        const statusText = isInStock ? statusTexts.inStock : statusTexts.outOfStock;
         const price = formatPrice(product.price);
-        
-        html += `
+        const categoryName = product.category ? product.category.name : 'Không có danh mục';
+
+        return `
             <tr class="product-row" data-product-id="${product.id}">
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
@@ -123,7 +191,7 @@ function displayProducts(products) {
                         </div>
                         <div class="ml-4">
                             <div class="text-sm font-medium text-gray-900">${product.name}</div>
-                            <div class="text-sm text-gray-500">${product.category ? product.category.name : 'Không có danh mục'}</div>
+                            <div class="text-sm text-gray-500">${categoryName}</div>
                         </div>
                     </div>
                 </td>
@@ -142,23 +210,29 @@ function displayProducts(products) {
                 </td>
             </tr>
         `;
-    });
-    
+    }).join('');
+
+    // Single DOM update
     tbody.innerHTML = html;
-    
-    // Show table and hide other states
-    document.getElementById('productsTable').classList.remove('hidden');
-    document.getElementById('loadingState').classList.add('hidden');
-    document.getElementById('errorState').classList.add('hidden');
-    document.getElementById('emptyState').classList.add('hidden');
+
+    // Use requestAnimationFrame for smooth state transitions
+    requestAnimationFrame(() => {
+        document.getElementById('productsTable').classList.remove('hidden');
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('errorState').classList.add('hidden');
+        document.getElementById('emptyState').classList.add('hidden');
+    });
 }
 
-// Show loading state
+// Show loading state - optimized for instant display
 function showLoadingState() {
-    document.getElementById('loadingState').classList.remove('hidden');
-    document.getElementById('productsTable').classList.add('hidden');
-    document.getElementById('errorState').classList.add('hidden');
-    document.getElementById('emptyState').classList.add('hidden');
+    // Use requestAnimationFrame for instant display
+    requestAnimationFrame(() => {
+        document.getElementById('loadingState').classList.remove('hidden');
+        document.getElementById('productsTable').classList.add('hidden');
+        document.getElementById('errorState').classList.add('hidden');
+        document.getElementById('emptyState').classList.add('hidden');
+    });
 }
 
 // Show empty state
@@ -188,14 +262,14 @@ function formatPrice(price) {
 // Edit product function
 function editProduct(productId) {
     console.log('Edit product:', productId);
-    
+
     // Find product data
     const product = findProductById(productId);
     if (!product) {
         showToast('Không tìm thấy sản phẩm', 'error');
         return;
     }
-    
+
     // TODO: Implement edit product modal
     showToast('Chức năng chỉnh sửa sản phẩm sẽ được triển khai sớm!', 'info');
 }
@@ -208,52 +282,52 @@ function findProductById(productId) {
 // Delete product function
 function deleteProduct(productId) {
     console.log('Delete product:', productId);
-    
+
     // Find product data
     const product = findProductById(productId);
     if (!product) {
         showToast('Không tìm thấy sản phẩm', 'error');
         return;
     }
-    
+
     // Show confirmation
     if (!confirm(`Bạn có chắc chắn muốn xóa sản phẩm "${product.name}"?`)) {
         return;
     }
-    
+
     // Show loading state on the product row
     const productRow = document.querySelector(`.product-row[data-product-id="${productId}"]`);
     if (productRow) {
         productRow.classList.add('opacity-50');
     }
-    
+
     // Call delete API
     fetch(`${API_BASE_URL}/${productId}`, {
         method: 'DELETE'
     })
-    .then(response => response.json())
-    .then(result => {
-        console.log('Product deleted:', result);
-        showToast('Xóa sản phẩm thành công!', 'success');
-        
-        // Remove the row with animation
-        if (productRow) {
-            productRow.style.transition = 'opacity 0.3s ease';
-            productRow.style.opacity = '0';
-            setTimeout(() => {
-                productRow.remove();
-                // Reload products to ensure data is fresh
-                loadProducts();
-            }, 300);
-        }
-    })
-    .catch(error => {
-        console.error('Error deleting product:', error);
-        if (productRow) {
-            productRow.classList.remove('opacity-50');
-        }
-        showToast('Lỗi khi xóa sản phẩm: ' + error, 'error');
-    });
+        .then(response => response.json())
+        .then(result => {
+            console.log('Product deleted:', result);
+            showToast('Xóa sản phẩm thành công!', 'success');
+
+            // Remove the row with ultra-fast animation
+            if (productRow) {
+                productRow.style.transition = 'opacity 0.08s ease';
+                productRow.style.opacity = '0';
+                setTimeout(() => {
+                    productRow.remove();
+                    // Reload products to ensure data is fresh
+                    loadProducts();
+                }, 80);
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting product:', error);
+            if (productRow) {
+                productRow.classList.remove('opacity-50');
+            }
+            showToast('Lỗi khi xóa sản phẩm: ' + error, 'error');
+        });
 }
 
 // Image upload functions removed - no longer needed
@@ -263,11 +337,11 @@ function showToast(message, type = 'success') {
     const toastId = 'toast-' + Date.now();
     const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
     const icon = type === 'success' ? 'fas fa-check' : type === 'error' ? 'fas fa-times' : 'fas fa-info';
-    
+
     // Count existing toasts to calculate position
     const existingToasts = document.querySelectorAll('.toast-notification').length;
     const topPosition = 16 + (existingToasts * 80); // 16px base + 80px per toast
-    
+
     const toastHtml = `
         <div id="${toastId}" class="toast-notification fixed right-4 ${bgColor} text-white px-4 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-all duration-300 ease-out max-w-sm" style="top: ${topPosition}px;">
             <div class="flex items-center">
@@ -279,35 +353,35 @@ function showToast(message, type = 'success') {
             </div>
         </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', toastHtml);
-    
-    // Show toast with slide-in effect from right
-    setTimeout(() => {
+
+    // Show toast with slide-in effect from right (instant)
+    requestAnimationFrame(() => {
         const toast = document.getElementById(toastId);
         if (toast) {
             toast.classList.remove('translate-x-full');
             toast.classList.add('translate-x-0');
         }
-    }, 30);
-    
-    // Auto hide after 2.5 seconds
+    });
+
+    // Auto hide after 1.5 seconds (faster)
     setTimeout(() => {
         closeToast(toastId);
-    }, 2500);
+    }, 1500);
 }
 
 // Close specific toast
 function closeToast(toastId) {
     const toast = document.getElementById(toastId);
     if (toast) {
-        // Slide out to left with opacity fade
+        // Slide out to left with opacity fade (ultra-fast)
         toast.classList.add('-translate-x-full', 'opacity-0');
         setTimeout(() => {
             toast.remove();
             // Reposition remaining toasts
             repositionToasts();
-        }, 150);
+        }, 50);
     }
 }
 
