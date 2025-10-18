@@ -1,66 +1,219 @@
-<!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layouts/authLayout :: layout('Dashboard', ~{::content})}">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard - Admin</title>
-</head>
-<body>
-    <div th:fragment="content">
-        <div class="bg-white rounded-lg shadow-sm p-6">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
-            <p class="text-gray-600">Chào mừng đến với trang quản trị hệ thống.</p>
-            
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-                <div class="bg-blue-50 p-6 rounded-lg">
-                    <div class="flex items-center">
-                        <div class="p-3 bg-blue-500 rounded-full">
-                            <i class="fas fa-shopping-cart text-white"></i>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-600">Tổng đơn hàng</p>
-                            <p class="text-2xl font-bold text-gray-900">1,234</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-green-50 p-6 rounded-lg">
-                    <div class="flex items-center">
-                        <div class="p-3 bg-green-500 rounded-full">
-                            <i class="fas fa-box text-white"></i>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-600">Sản phẩm</p>
-                            <p class="text-2xl font-bold text-gray-900">567</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-yellow-50 p-6 rounded-lg">
-                    <div class="flex items-center">
-                        <div class="p-3 bg-yellow-500 rounded-full">
-                            <i class="fas fa-users text-white"></i>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-600">Khách hàng</p>
-                            <p class="text-2xl font-bold text-gray-900">89</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-purple-50 p-6 rounded-lg">
-                    <div class="flex items-center">
-                        <div class="p-3 bg-purple-500 rounded-full">
-                            <i class="fas fa-dollar-sign text-white"></i>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-600">Doanh thu</p>
-                            <p class="text-2xl font-bold text-gray-900">$12,345</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div th:replace="~{layouts/authLayout :: layout('Dashboard', ~{::content})}">
+  <div th:fragment="content">
+   <div class="p-6">
+
+    <!-- Header Section -->
+    <div class="mb-8 ">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-4xl font-bold text-gray-900 mb-2">Dashboard</h1>
+          <p class="text-gray-600 text-lg">Chào mừng đến với trang quản trị hệ thống</p>
         </div>
+        <div class="flex items-center space-x-4">
+          <div class="text-right">
+            <p class="text-sm text-gray-500">Hôm nay</p>
+            <p class="text-lg font-semibold text-gray-900" id="currentDate"></p>
+          </div>
+          <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+            <i class="fas fa-calendar-day text-white text-xl"></i>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
-</html>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Orders Card -->
+      <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-blue-600 mb-1">Tổng đơn hàng</p>
+            <p class="text-3xl font-bold text-blue-900">1,234</p>
+            <p class="text-xs text-blue-500 mt-1">
+              <i class="fas fa-arrow-up mr-1"></i>+12% so với tháng trước
+            </p>
+          </div>
+          <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-shopping-cart text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Card -->
+      <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-green-600 mb-1">Sản phẩm</p>
+            <p class="text-3xl font-bold text-green-900">567</p>
+            <p class="text-xs text-green-500 mt-1">
+              <i class="fas fa-arrow-up mr-1"></i>+8% so với tháng trước
+            </p>
+          </div>
+          <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-box text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customers Card -->
+      <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-yellow-600 mb-1">Khách hàng</p>
+            <p class="text-3xl font-bold text-yellow-900">89</p>
+            <p class="text-xs text-yellow-500 mt-1">
+              <i class="fas fa-arrow-up mr-1"></i>+15% so với tháng trước
+            </p>
+          </div>
+          <div class="w-16 h-16 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-users text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue Card -->
+      <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-purple-600 mb-1">Doanh thu</p>
+            <p class="text-3xl font-bold text-purple-900">$12,345</p>
+            <p class="text-xs text-purple-500 mt-1">
+              <i class="fas fa-arrow-up mr-1"></i>+22% so với tháng trước
+            </p>
+          </div>
+          <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-dollar-sign text-white text-2xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts and Analytics Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <!-- Sales Chart -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold text-gray-900">Doanh thu theo tháng</h3>
+          <div class="flex space-x-2">
+            <button class="px-3 py-1 bg-blue-100 text-blue-600 rounded-lg text-sm font-medium">7 ngày</button>
+            <button class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium">30 ngày</button>
+            <button class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-sm font-medium">90 ngày</button>
+          </div>
+        </div>
+        <div class="h-64 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg flex items-center justify-center">
+          <div class="text-center">
+            <i class="fas fa-chart-line text-4xl text-gray-400 mb-2"></i>
+            <p class="text-gray-500">Biểu đồ doanh thu</p>
+            <p class="text-sm text-gray-400">Dữ liệu sẽ được hiển thị ở đây</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold text-gray-900">Đơn hàng gần đây</h3>
+          <a href="/admin/orders" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Xem tất cả</a>
+        </div>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-check text-green-600"></i>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">#1234</p>
+                <p class="text-sm text-gray-500">Nguyễn Văn A</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="font-semibold text-gray-900">$299</p>
+              <p class="text-sm text-gray-500">2 giờ trước</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-clock text-yellow-600"></i>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">#1235</p>
+                <p class="text-sm text-gray-500">Trần Thị B</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="font-semibold text-gray-900">$149</p>
+              <p class="text-sm text-gray-500">4 giờ trước</p>
+            </div>
+          </div>
+          
+          <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-truck text-blue-600"></i>
+              </div>
+              <div>
+                <p class="font-medium text-gray-900">#1236</p>
+                <p class="text-sm text-gray-500">Lê Văn C</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="font-semibold text-gray-900">$89</p>
+              <p class="text-sm text-gray-500">6 giờ trước</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white p-6 rounded-xl shadow-lg">
+      <h3 class="text-xl font-bold text-gray-900 mb-6">Thao tác nhanh</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="/admin/products/create" class="flex flex-col items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group">
+          <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <i class="fas fa-plus text-white text-xl"></i>
+          </div>
+          <p class="text-sm font-medium text-gray-900">Thêm sản phẩm</p>
+        </a>
+        
+        <a href="/admin/orders" class="flex flex-col items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors group">
+          <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <i class="fas fa-shopping-cart text-white text-xl"></i>
+          </div>
+          <p class="text-sm font-medium text-gray-900">Xem đơn hàng</p>
+        </a>
+        
+        <a href="/admin/customers" class="flex flex-col items-center p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors group">
+          <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <i class="fas fa-users text-white text-xl"></i>
+          </div>
+          <p class="text-sm font-medium text-gray-900">Quản lý khách hàng</p>
+        </a>
+        
+        <a href="/admin/reports" class="flex flex-col items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors group">
+          <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+            <i class="fas fa-chart-bar text-white text-xl"></i>
+          </div>
+          <p class="text-sm font-medium text-gray-900">Báo cáo</p>
+        </a>
+      </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script>
+  // Set current date
+  document.addEventListener('DOMContentLoaded', function() {
+    const now = new Date();
+    const options = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    document.getElementById('currentDate').textContent = now.toLocaleDateString('vi-VN', options);
+  });
+</script>

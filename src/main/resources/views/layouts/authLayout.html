@@ -10,9 +10,7 @@
     <!-- Swiper -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <!-- CKEditor 5 -->
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.css" />
-    <script src="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.umd.js"></script>
+    <!-- CKEditor 5 - Removed to avoid conflicts -->
     <style>
       .sidebar-transition {
         transition: width 0.3s ease, transform 0.3s ease;
@@ -351,13 +349,20 @@
             isNotificationOpen = false;
           }
 
-          // Load notifications via AJAX
+          // Load notifications via AJAX - DISABLED
           function loadNotifications() {
-            // Show loading state
-            notificationLoading.style.display = "block";
-            notificationList.innerHTML = "";
-            notificationList.appendChild(notificationLoading);
-
+            // Show empty state instead of loading notifications
+            notificationLoading.style.display = "none";
+            notificationList.innerHTML = `
+              <div class="p-4 text-center text-gray-500">
+                <i class="fas fa-bell-slash text-2xl mb-2"></i>
+                <p>Thông báo đã được tắt</p>
+              </div>
+            `;
+            updateBadge(0);
+            
+            // Commented out API call
+            /*
             $.ajax({
               url: "/api/notifications",
               method: "GET",
@@ -371,6 +376,7 @@
                 renderErrorState();
               },
             });
+            */
           }
 
           // Render notifications with beautiful animations
@@ -478,8 +484,11 @@
             `;
           }
 
-          // Mark notification as read
+          // Mark notification as read - DISABLED
           function markAsRead(notificationId) {
+            // No API call - notifications are disabled
+            console.log("Notifications are disabled");
+            /*
             $.ajax({
               url: `/api/notifications/${notificationId}/read`,
               method: "PUT",
@@ -492,10 +501,14 @@
                 updateBadge(notifications.filter((n) => !n.read && n.id !== notificationId).length);
               },
             });
+            */
           }
 
-          // Mark all as read
+          // Mark all as read - DISABLED
           function markAllAsRead() {
+            // No API call - notifications are disabled
+            console.log("Notifications are disabled");
+            /*
             $.ajax({
               url: "/api/notifications/mark-all-read",
               method: "PUT",
@@ -507,16 +520,21 @@
                 updateBadge(0);
               },
             });
+            */
           }
 
-          // Update notification badge
+          // Update notification badge - DISABLED
           function updateBadge(count) {
+            // Always hide badge since notifications are disabled
+            notificationBadge.classList.add("hidden");
+            /*
             if (count > 0) {
               notificationBadge.textContent = count > 99 ? "99+" : count;
               notificationBadge.classList.remove("hidden");
             } else {
               notificationBadge.classList.add("hidden");
             }
+            */
           }
 
           // Format time
@@ -586,123 +604,7 @@
       </script>
     </div>
 
-    <!-- CKEditor Initialization Script -->
-    <script>
-      console.log('🚀 CKEditor initialization script loaded');
-      
-      // Function to initialize CKEditor for news create page
-      function initCKEditorForNews() {
-        console.log('🔄 Checking for CKEditor initialization...');
-        
-        // Only run on news create page
-        if (!window.location.pathname.includes('/news/create')) {
-          console.log('📄 Not on news create page, skipping CKEditor init');
-          return;
-        }
-        
-        console.log('📄 On news create page, initializing CKEditor...');
-        
-        // Check if CKEditor is loaded
-        if (typeof CKEDITOR === 'undefined') {
-          console.log('⏳ CKEditor not loaded yet, retrying in 200ms...');
-          setTimeout(initCKEditorForNews, 200);
-          return;
-        }
-        
-        // Check if editor element exists
-        const editorElement = document.querySelector("#editor");
-        if (!editorElement) {
-          console.log('❌ Editor element not found, retrying in 200ms...');
-          setTimeout(initCKEditorForNews, 200);
-          return;
-        }
-        
-        // Check if already initialized
-        if (window.editor) {
-          console.log('✅ CKEditor already initialized, skipping...');
-          return;
-        }
-        
-        console.log('✅ Both CKEditor and element ready, creating editor...');
-        
-        try {
-          const {
-            ClassicEditor,
-            Essentials,
-            Bold,
-            Italic,
-            Underline,
-            Link,
-            Paragraph,
-            Heading,
-            List,
-            BlockQuote,
-            Table,
-            TableToolbar,
-            Undo,
-            Redo
-          } = CKEDITOR;
-
-          ClassicEditor
-            .create(editorElement, {
-              plugins: [
-                Essentials,
-                Bold,
-                Italic,
-                Underline,
-                Link,
-                Paragraph,
-                Heading,
-                List,
-                BlockQuote,
-                Table,
-                TableToolbar,
-                Undo,
-                Redo
-              ],
-              toolbar: [
-                'heading',
-                '|',
-                'bold',
-                'italic',
-                'underline',
-                'link',
-                '|',
-                'bulletedList',
-                'numberedList',
-                '|',
-                'blockQuote',
-                'insertTable',
-                '|',
-                'undo',
-                'redo'
-              ],
-              language: 'vi'
-            })
-            .then(editor => {
-              window.editor = editor;
-              console.log('🎉 CKEditor initialized successfully!');
-            })
-            .catch(error => {
-              console.error('💥 CKEditor initialization failed:', error);
-            });
-        } catch (error) {
-          console.error('💥 Error creating CKEditor:', error);
-        }
-      }
-      
-      // Initialize when page loads
-      document.addEventListener('DOMContentLoaded', function() {
-        console.log('📄 DOMContentLoaded fired, checking for CKEditor...');
-        setTimeout(initCKEditorForNews, 1000);
-      });
-      
-      // Also try after window load
-      window.addEventListener('load', function() {
-        console.log('🌐 Window load fired, checking for CKEditor...');
-        setTimeout(initCKEditorForNews, 500);
-      });
-    </script>
+    <!-- CKEditor Initialization Script - Removed to avoid conflicts -->
 
   </body>
 </html>
