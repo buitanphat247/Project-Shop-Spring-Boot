@@ -1,27 +1,75 @@
 // Auth Layout JavaScript
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("Auth Layout JS loaded");
+  
   const sidebar = document.getElementById("sidebar");
   const sidebarContainer = document.getElementById("sidebar-container");
   const mainContent = document.getElementById("main-content");
   const headerToggle = document.getElementById("top-toggle-sidebar");
   const backdrop = document.getElementById("sidebar-backdrop");
+  
+  console.log("Elements found:", {
+    sidebar: !!sidebar,
+    sidebarContainer: !!sidebarContainer,
+    headerToggle: !!headerToggle
+  });
 
   function setDesktopVisible(visible) {
-    if (!sidebarContainer) return;
-    const $sc = $("#sidebar-container");
-    const targetWidth = visible ? 360 : 0; // px (tăng từ 320 lên 360)
-    const duration = visible ? 300 : 200; // mở chậm hơn, đóng nhanh hơn
-    $sc.stop(true, false).animate({ width: targetWidth }, duration, "swing");
+    console.log("setDesktopVisible called with:", visible);
+    if (!sidebarContainer) {
+      console.log("sidebarContainer not found!");
+      return;
+    }
+    
+    console.log("Setting sidebar visibility to:", visible);
+    
+    // Add smooth transition class
+    sidebarContainer.classList.add("sidebar-transition");
+    
+    if (visible) {
+      // Show sidebar with smooth animation
+      sidebarContainer.classList.remove("hidden");
+      sidebarContainer.classList.add("sidebar-expanded");
+      sidebarContainer.classList.remove("sidebar-collapsed");
+      
+      // Animate page content
+      const pageContent = document.getElementById("page-content");
+      if (pageContent) {
+        pageContent.style.width = "calc(100% - 360px)";
+        pageContent.style.transform = "translateX(0)";
+      }
+    } else {
+      // Hide sidebar with smooth animation
+      sidebarContainer.classList.add("hidden");
+      sidebarContainer.classList.remove("sidebar-expanded");
+      sidebarContainer.classList.add("sidebar-collapsed");
+      
+      // Animate page content
+      const pageContent = document.getElementById("page-content");
+      if (pageContent) {
+        pageContent.style.width = "100%";
+        pageContent.style.transform = "translateX(0)";
+      }
+    }
+    
+    // Remove transition class after animation completes
+    setTimeout(() => {
+      sidebarContainer.classList.remove("sidebar-transition");
+    }, 400);
   }
 
   function setMobileVisible(visible) {
-    if (!sidebar) return;
+    if (!sidebarContainer) return;
     if (visible) {
-      sidebar.classList.remove("-translate-x-full");
+      sidebarContainer.classList.add("show");
       if (backdrop) backdrop.classList.add("show");
+      // Prevent body scroll on mobile
+      document.body.style.overflow = "hidden";
     } else {
-      sidebar.classList.add("-translate-x-full");
+      sidebarContainer.classList.remove("show");
       if (backdrop) backdrop.classList.remove("show");
+      // Restore body scroll
+      document.body.style.overflow = "";
     }
   }
 
@@ -30,7 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
       setMobileVisible(false);
       // Keep default width for mobile
     } else {
-      // Keep default width for desktop - no need to set again
+      // Desktop: Start with sidebar visible
+      setDesktopVisible(true);
     }
   }
   // Initialize immediately to prevent flicker
@@ -39,12 +88,18 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("resize", initByViewport);
 
   function handleToggle() {
+    console.log("Toggle clicked, window width:", window.innerWidth);
+    
     if (window.innerWidth < 1024) {
-      const hidden = sidebar && sidebar.classList.contains("-translate-x-full");
-      setMobileVisible(hidden);
+      // Mobile: Toggle sidebar visibility
+      const isVisible = sidebarContainer && sidebarContainer.classList.contains("show");
+      console.log("Mobile toggle, isVisible:", isVisible);
+      setMobileVisible(!isVisible);
     } else {
-      const currentWidth = $("#sidebar-container").width() || 0;
-      setDesktopVisible(currentWidth === 0);
+      // Desktop: Toggle sidebar width
+      const isVisible = sidebarContainer && !sidebarContainer.classList.contains("hidden");
+      console.log("Desktop toggle, isVisible:", isVisible);
+      setDesktopVisible(!isVisible);
     }
   }
 

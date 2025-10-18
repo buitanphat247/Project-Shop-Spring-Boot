@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- CKEditor 5 - Removed to avoid conflicts -->
-    
+
     <!-- Auth Layout CSS -->
     <link rel="stylesheet" href="/css/layouts/auth-layout.css" />
   </head>
@@ -24,14 +24,14 @@
       <div th:replace="~{layouts/headerAuth :: header}"></div>
 
       <!-- Body: sidebar + content in one container -->
-      <div id="main-content" class="pt-16 min-h-screen flex bg-gray-50">
-        <!-- Sidebar container (desktop visible by default) -->
-        <aside id="sidebar-container" class="w-80 lg:block sidebar-transition overflow-hidden" style="width: 360px;">
+      <div id="main-content" class="pt-16 min-h-screen">
+        <!-- Sidebar container -->
+        <aside id="sidebar-container" class="sidebar-transition overflow-hidden">
           <div th:replace="~{layouts/sidebar :: sidebar}"></div>
         </aside>
 
         <!-- Page content -->
-        <main id="page-content" class="flex-1 bg-white z-[3]">
+        <main id="page-content" class="bg-white" >
           <div th:replace="${content}"></div>
         </main>
       </div>
@@ -41,6 +41,5 @@
     </div>
 
     <!-- CKEditor Initialization Script - Removed to avoid conflicts -->
-
   </body>
 </html>
