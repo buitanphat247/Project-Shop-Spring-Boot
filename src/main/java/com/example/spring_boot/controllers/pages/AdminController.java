@@ -22,6 +22,12 @@ public class AdminController {
         return "admin/products/products-create";
     }
 
+    @GetMapping("/products/edit/{id}")
+    public String productsEdit(@PathVariable String id, org.springframework.ui.Model model) {
+        model.addAttribute("productId", id);
+        return "admin/products/products-edit";
+    }
+
     @GetMapping("/news")
     public String news() {
         return "admin/news/news";
@@ -67,4 +73,5 @@ public class AdminController {
     public String uploadDemo() {
         return "admin/upload-demo";
     }
+
 }

@@ -195,8 +195,190 @@ function editProduct(productId) {
         return;
     }
 
-    // TODO: Implement edit product modal
-    showToast('Chức năng chỉnh sửa sản phẩm sẽ được triển khai sớm!', 'info');
+    // Show edit modal
+    showEditProductModal(product);
+}
+
+// Show edit product modal
+function showEditProductModal(product) {
+    console.log('Showing edit modal for product:', product);
+    
+    // Populate form with product data
+    document.getElementById('editProductName').value = product.name || '';
+    document.getElementById('editProductPrice').value = product.price || 0;
+    document.getElementById('editProductStock').value = product.stock || 0;
+    document.getElementById('editProductDescription').value = product.description || '';
+    
+    // Set current product ID
+    window.currentEditProductId = product.id;
+    
+    // Reset button state to ensure clean start
+    const saveBtn = document.getElementById('saveEdit');
+    if (saveBtn) {
+        saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Lưu thay đổi';
+        saveBtn.disabled = false;
+    }
+    
+    // Load categories for dropdown
+    loadCategoriesForEdit();
+    
+    // Show modal with animation
+    const modal = document.getElementById('editProductModal');
+    const content = modal.querySelector('.relative');
+    
+    // Reset CSS properties first
+    content.style.transform = 'scale(0.8)';
+    content.style.opacity = '0';
+    
+    // Show modal
+    modal.classList.remove('hidden');
+    
+    // Add zoom in animation
+    setTimeout(() => {
+        content.style.transform = 'scale(1)';
+        content.style.opacity = '1';
+    }, 10);
+    
+    // Add click outside listener for this modal instance
+    const clickOutsideHandler = function(e) {
+        if (e.target === modal || e.target.hasAttribute('data-modal-backdrop')) {
+            console.log('Edit modal clicked outside (instance) - closing');
+            hideEditProductModal();
+            modal.removeEventListener('click', clickOutsideHandler);
+        }
+    };
+    
+    // Add the event listener
+    modal.addEventListener('click', clickOutsideHandler);
+}
+
+// Load categories for edit modal
+async function loadCategoriesForEdit() {
+    try {
+        const response = await fetch('/api/categories');
+        const result = await response.json();
+        
+        if (result.success && result.data && result.data.items) {
+            const categorySelect = document.getElementById('editProductCategory');
+            categorySelect.innerHTML = '<option value="">Chọn danh mục...</option>';
+            
+            result.data.items.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+            
+            // Set current category if exists
+            const currentProduct = findProductById(window.currentEditProductId);
+            if (currentProduct && currentProduct.category) {
+                categorySelect.value = currentProduct.category.id;
+            }
+            
+            console.log('Categories loaded for edit:', result.data.items.length);
+        } else {
+            console.error('Invalid categories response:', result);
+            showToast('Lỗi tải danh mục', 'error');
+        }
+    } catch (error) {
+        console.error('Error loading categories:', error);
+        showToast('Lỗi tải danh mục', 'error');
+    }
+}
+
+// Hide edit product modal
+function hideEditProductModal() {
+    const modal = document.getElementById('editProductModal');
+    const content = modal.querySelector('.relative');
+    
+    // Add zoom out animation
+    content.style.transform = 'scale(0.8)';
+    content.style.opacity = '0';
+    
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        
+        // Reset all CSS properties to ensure clean state
+        content.style.transform = '';
+        content.style.opacity = '';
+        
+        // Reset button state
+        const saveBtn = document.getElementById('saveEdit');
+        if (saveBtn) {
+            saveBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Lưu thay đổi';
+            saveBtn.disabled = false;
+        }
+        
+        // Reset form
+        document.getElementById('editProductForm').reset();
+        window.currentEditProductId = null;
+        
+        console.log('Edit modal closed and reset');
+    }, 200);
+}
+
+// Update product function
+async function updateProduct() {
+    if (!window.currentEditProductId) {
+        showToast('Không tìm thấy ID sản phẩm', 'error');
+        return;
+    }
+
+    const form = document.getElementById('editProductForm');
+    const formData = new FormData(form);
+    
+    const productData = {
+        name: formData.get('name'),
+        categoryId: formData.get('categoryId'),
+        price: parseFloat(formData.get('price')),
+        stock: parseInt(formData.get('stock')),
+        description: formData.get('description')
+    };
+
+    // Log the data being sent
+    console.log('Updating product with data:', productData);
+    console.log('Product ID:', window.currentEditProductId);
+
+    // Validate required fields
+    if (!productData.name || !productData.categoryId) {
+        showToast('Vui lòng điền đầy đủ thông tin bắt buộc', 'error');
+        return;
+    }
+
+    try {
+        // Show loading state
+        const saveBtn = document.getElementById('saveEdit');
+        const originalText = saveBtn.innerHTML;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Đang lưu...';
+        saveBtn.disabled = true;
+
+        const response = await fetch(`/api/products/${window.currentEditProductId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(productData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showToast('Cập nhật sản phẩm thành công!', 'success');
+            hideEditProductModal();
+            // Reload products to show updated data
+            loadProducts();
+        } else {
+            showToast(result.message || 'Có lỗi xảy ra khi cập nhật sản phẩm', 'error');
+        }
+    } catch (error) {
+        console.error('Error updating product:', error);
+        showToast('Lỗi kết nối, vui lòng thử lại', 'error');
+    } finally {
+        // Reset button state
+        const saveBtn = document.getElementById('saveEdit');
+        saveBtn.innerHTML = originalText;
+        saveBtn.disabled = false;
+    }
 }
 
 // Show toast notification with stack effect

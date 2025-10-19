@@ -94,24 +94,80 @@ document.addEventListener('DOMContentLoaded', function () {
     // Close modal with Escape key
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
-            const modal = document.getElementById('deleteModal');
-            if (!modal.classList.contains('hidden')) {
+            const deleteModal = document.getElementById('deleteModal');
+            const editModal = document.getElementById('editProductModal');
+            if (deleteModal && !deleteModal.classList.contains('hidden')) {
                 hideDeleteModal();
+            }
+            if (editModal && !editModal.classList.contains('hidden')) {
+                hideEditProductModal();
             }
         }
     });
 
-    // jQuery click outside to close modal
+    // Edit modal event listeners
+    const cancelEditBtn = document.getElementById('cancelEdit');
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            hideEditProductModal();
+        });
+    }
+
+    // Close edit modal button
+    const closeEditModalBtn = document.getElementById('closeEditModal');
+    if (closeEditModalBtn) {
+        closeEditModalBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            hideEditProductModal();
+        });
+    }
+
+    // Edit form submission
+    const editForm = document.getElementById('editProductForm');
+    if (editForm) {
+        editForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            updateProduct();
+        });
+    }
+
+    // Close edit modal when clicking backdrop
+    const editModal = document.getElementById('editProductModal');
+    if (editModal) {
+        editModal.addEventListener('click', function (e) {
+            // Check if click is on the backdrop (not on modal content)
+            if (e.target.hasAttribute('data-modal-backdrop') || e.target === this) {
+                console.log('Edit modal clicked outside - closing');
+                hideEditProductModal();
+            }
+        });
+    }
+
+    // jQuery click outside to close modals
     $(document).on('click', '#deleteModal', function(e) {
         if (e.target === this) {
             hideDeleteModal();
         }
     });
+    
+    $(document).on('click', '#editProductModal', function(e) {
+        // Check if click is on the backdrop (not on modal content)
+        if (e.target === this || $(e.target).attr('data-modal-backdrop')) {
+            console.log('Edit modal clicked outside (jQuery) - closing');
+            hideEditProductModal();
+        }
+    });
 
-    // jQuery escape key to close modal
+    // jQuery escape key to close modals
     $(document).on('keydown', function(e) {
-        if (e.key === 'Escape' && $('#deleteModal').is(':visible')) {
-            hideDeleteModal();
+        if (e.key === 'Escape') {
+            if ($('#deleteModal').is(':visible')) {
+                hideDeleteModal();
+            }
+            if ($('#editProductModal').is(':visible')) {
+                hideEditProductModal();
+            }
         }
     });
 });
@@ -130,3 +186,6 @@ window.showToast = showToast;
 window.closeToast = closeToast;
 window.showDeleteModal = showDeleteModal;
 window.hideDeleteModal = hideDeleteModal;
+window.showEditProductModal = showEditProductModal;
+window.hideEditProductModal = hideEditProductModal;
+window.updateProduct = updateProduct;
