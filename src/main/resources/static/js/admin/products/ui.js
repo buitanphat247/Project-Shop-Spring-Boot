@@ -279,25 +279,42 @@ function showDeleteModal(productId) {
     // Store product ID for deletion
     document.getElementById('deleteModal').setAttribute('data-product-id', productId);
 
-    // Show modal with animation
-    const modal = document.getElementById('deleteModal');
-    modal.classList.remove('hidden');
+    // Show modal with jQuery smooth animation
+    const $modal = $('#deleteModal');
+    const $content = $modal.find('.transform');
     
-    // Trigger animation
-    requestAnimationFrame(() => {
-        modal.classList.add('show');
+    // Show modal immediately
+    $modal.removeClass('hidden').show();
+    
+    // Smooth zoom in animation
+    $content.css({
+        'transform': 'scale(0.7)',
+        'opacity': '0'
+    });
+    
+    // Animate zoom in
+    $content.animate({
+        'opacity': '1'
+    }, 200, function() {
+        $content.css('transform', 'scale(1)');
     });
 }
 
 // Hide delete confirmation modal
 function hideDeleteModal() {
-    const modal = document.getElementById('deleteModal');
-    modal.classList.remove('show');
+    const $modal = $('#deleteModal');
+    const $content = $modal.find('.transform');
     
-    // Hide modal after animation
-    setTimeout(() => {
-        modal.classList.add('hidden');
-    }, 300);
+    // Smooth zoom out animation
+    $content.css({
+        'transform': 'scale(0.7)',
+        'opacity': '0'
+    });
+    
+    // Hide modal after zoom out
+    setTimeout(function() {
+        $modal.addClass('hidden').hide();
+    }, 200);
 }
 
 // Delete product function (called from modal)

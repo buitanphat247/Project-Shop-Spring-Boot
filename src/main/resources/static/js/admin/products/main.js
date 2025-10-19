@@ -60,6 +60,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Close modal button
+    const closeDeleteModalBtn = document.getElementById('closeDeleteModal');
+    if (closeDeleteModalBtn) {
+        closeDeleteModalBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            hideDeleteModal();
+        });
+    }
+
     const confirmDeleteBtn = document.getElementById('confirmDelete');
     if (confirmDeleteBtn) {
         confirmDeleteBtn.addEventListener('click', function (e) {
@@ -89,6 +98,20 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!modal.classList.contains('hidden')) {
                 hideDeleteModal();
             }
+        }
+    });
+
+    // jQuery click outside to close modal
+    $(document).on('click', '#deleteModal', function(e) {
+        if (e.target === this) {
+            hideDeleteModal();
+        }
+    });
+
+    // jQuery escape key to close modal
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && $('#deleteModal').is(':visible')) {
+            hideDeleteModal();
         }
     });
 });
