@@ -34,12 +34,11 @@ public class ProductService {
     /** Tạo product mới: reset id, set createdAt, lưu DB. */
     public Product create(Product product) {
         try {
-            // Validate categoryId tồn tại
-            if (product.getCategoryId() == null) {
-                throw new RuntimeException("Category ID is required");
-            }
-            if (!categoryRepository.existsById(product.getCategoryId().toHexString())) {
-                throw new RuntimeException("Category not found");
+            // Validate categoryId nếu có (cho phép bỏ trống)
+            if (product.getCategoryId() != null) {
+                if (!categoryRepository.existsById(product.getCategoryId().toHexString())) {
+                    throw new RuntimeException("Category not found");
+                }
             }
 
             product.setId(null); // Reset id để luôn tạo mới
@@ -47,10 +46,11 @@ public class ProductService {
             Product savedProduct = productRepository.save(product); // Lưu và nhận entity đã lưu
 
             // Populate category nếu DocumentReference không tự động load
-            if (savedProduct.getCategory() == null && savedProduct.getCategoryId() != null) {
-                categoryRepository.findById(savedProduct.getCategoryId().toHexString())
-                        .ifPresent(savedProduct::setCategory);
-            }
+            // if (savedProduct.getCategory() == null && savedProduct.getCategoryId() !=
+            // null) {
+            // categoryRepository.findById(savedProduct.getCategoryId().toHexString())
+            // .ifPresent(savedProduct::setCategory);
+            // }
 
             return savedProduct; // Trả về entity đã lưu
         } catch (Exception e) {
@@ -138,18 +138,19 @@ public class ProductService {
     public List<Product> getAllActive() {
         long startTime = System.currentTimeMillis();
         log.info("🚀 [PERFORMANCE] Getting all active products with batch optimization");
-        
+
         try {
             // Sử dụng MongoTemplate với projection để chỉ lấy fields cần thiết
             Query query = new Query(Criteria.where("deletedAt").isNull());
             query.fields().include("name", "description", "price", "stock", "categoryId", "createdAt", "updatedAt");
-            
+
             List<Product> products = mongoTemplate.find(query, Product.class);
-            log.info("📊 [PERFORMANCE] Found {} products in {}ms", products.size(), System.currentTimeMillis() - startTime);
+            log.info("📊 [PERFORMANCE] Found {} products in {}ms", products.size(),
+                    System.currentTimeMillis() - startTime);
 
             // BATCH LOADING: Load tất cả categories trong 1 query thay vì N+1 queries
             batchPopulateCategories(products);
-            
+
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Completed in {}ms", endTime - startTime);
             return products; // Trả về danh sách đã populate
@@ -164,30 +165,30 @@ public class ProductService {
     public List<Product> searchByName(String name) {
         long startTime = System.currentTimeMillis();
         log.info("🔍 [PERFORMANCE] Searching products by name: {}", name);
-        
+
         try {
             // Sử dụng MongoTemplate với compound query tối ưu
             Query query = new Query();
-            
+
             if (name == null || name.trim().isEmpty()) {
                 // Nếu search term rỗng, lấy tất cả active products
                 query.addCriteria(Criteria.where("deletedAt").isNull());
             } else {
                 // Compound query: name search + soft delete filter
                 query.addCriteria(Criteria.where("deletedAt").isNull())
-                     .addCriteria(Criteria.where("name").regex(name, "i")); // Case-insensitive regex
+                        .addCriteria(Criteria.where("name").regex(name, "i")); // Case-insensitive regex
             }
-            
+
             // Projection để chỉ lấy fields cần thiết
             query.fields().include("name", "description", "price", "stock", "categoryId", "createdAt");
-            
+
             List<Product> products = mongoTemplate.find(query, Product.class);
-            log.info("📊 [PERFORMANCE] Found {} products matching '{}' in {}ms", 
+            log.info("📊 [PERFORMANCE] Found {} products matching '{}' in {}ms",
                     products.size(), name, System.currentTimeMillis() - startTime);
 
             // BATCH LOADING: Load tất cả categories trong 1 query
             batchPopulateCategories(products);
-            
+
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Search completed in {}ms", endTime - startTime);
             return products; // Trả về danh sách đã populate
@@ -202,22 +203,22 @@ public class ProductService {
     public List<Product> getByCategoryId(String categoryId) {
         long startTime = System.currentTimeMillis();
         log.info("📂 [PERFORMANCE] Getting products by category: {}", categoryId);
-        
+
         try {
             // Sử dụng compound query tối ưu cho category + soft delete
             Query query = new Query(Criteria.where("categoryId").is(categoryId)
                     .and("deletedAt").isNull());
-            
+
             // Projection để chỉ lấy fields cần thiết
             query.fields().include("name", "description", "price", "stock", "categoryId", "createdAt");
-            
+
             List<Product> products = mongoTemplate.find(query, Product.class);
-            log.info("📊 [PERFORMANCE] Found {} products in category {} in {}ms", 
+            log.info("📊 [PERFORMANCE] Found {} products in category {} in {}ms",
                     products.size(), categoryId, System.currentTimeMillis() - startTime);
 
             // BATCH LOADING: Load tất cả categories trong 1 query
             batchPopulateCategories(products);
-            
+
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Category query completed in {}ms", endTime - startTime);
             return products; // Trả về danh sách đã populate
@@ -231,47 +232,47 @@ public class ProductService {
     /** Phân trang sản phẩm active - TỐI ƯU HÓA với skip/limit. */
     public Page<Product> getPaged(Pageable pageable) {
         long startTime = System.currentTimeMillis();
-        log.info("📄 [PERFORMANCE] Getting paged products: page={}, size={}", 
+        log.info("📄 [PERFORMANCE] Getting paged products: page={}, size={}",
                 pageable.getPageNumber(), pageable.getPageSize());
-        
+
         try {
             // Sử dụng skip/limit thay vì load tất cả rồi slice
             Query query = new Query(Criteria.where("deletedAt").isNull());
-            
+
             // Projection để chỉ lấy fields cần thiết
             query.fields().include("name", "description", "price", "stock", "categoryId", "createdAt", "updatedAt");
-            
+
             // Apply pagination
             query.skip(pageable.getOffset());
             query.limit(pageable.getPageSize());
-            
+
             // Apply sorting
             if (pageable.getSort().isSorted()) {
                 pageable.getSort().forEach(order -> {
                     query.with(org.springframework.data.domain.Sort.by(
-                        order.getDirection(), order.getProperty()));
+                            order.getDirection(), order.getProperty()));
                 });
             } else {
                 // Default sort by creation time descending
                 query.with(org.springframework.data.domain.Sort.by("createdAt").descending());
             }
-            
+
             List<Product> products = mongoTemplate.find(query, Product.class);
-            log.info("📊 [PERFORMANCE] Retrieved {} products for page {} in {}ms", 
+            log.info("📊 [PERFORMANCE] Retrieved {} products for page {} in {}ms",
                     products.size(), pageable.getPageNumber(), System.currentTimeMillis() - startTime);
 
             // Count total records (separate query for efficiency)
             long totalCount = getTotalActiveCount();
-            
+
             // BATCH LOADING: Load tất cả categories trong 1 query
             batchPopulateCategories(products);
-            
+
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Pagination completed in {}ms", endTime - startTime);
-            
+
             return new PageImpl<>(products, pageable, totalCount); // Trả về Page
         } catch (Exception e) {
-            log.error("❌ [PERFORMANCE] Get paged products failed, page={}, size={}", 
+            log.error("❌ [PERFORMANCE] Get paged products failed, page={}, size={}",
                     pageable.getPageNumber(), pageable.getPageSize(), e); // Log lỗi
             throw new RuntimeException("Failed to paginate products: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
         }
@@ -286,10 +287,11 @@ public class ProductService {
      * Tối ưu: Single query để load tất cả categories cần thiết
      */
     private void batchPopulateCategories(List<Product> products) {
-        if (products.isEmpty()) return;
+        if (products.isEmpty())
+            return;
 
         long startTime = System.currentTimeMillis();
-        
+
         // Collect unique category IDs
         List<String> categoryIds = products.stream()
                 .map(Product::getCategoryId)
@@ -298,12 +300,13 @@ public class ProductService {
                 .distinct()
                 .collect(Collectors.toList());
 
-        if (categoryIds.isEmpty()) return;
+        if (categoryIds.isEmpty())
+            return;
 
         // Batch load all categories in single query
         Query categoryQuery = new Query(Criteria.where("_id").in(categoryIds));
         List<Category> categories = mongoTemplate.find(categoryQuery, Category.class);
-        
+
         // Create lookup map
         Map<String, Category> categoryMap = categories.stream()
                 .collect(Collectors.toMap(Category::getId, cat -> cat));
@@ -318,9 +321,9 @@ public class ProductService {
                 }
             }
         });
-        
+
         long endTime = System.currentTimeMillis();
-        log.debug("🔄 [PERFORMANCE] Batch populated {} categories in {}ms", 
+        log.debug("🔄 [PERFORMANCE] Batch populated {} categories in {}ms",
                 categories.size(), endTime - startTime);
     }
 
@@ -344,45 +347,43 @@ public class ProductService {
 
         try {
             // Sử dụng aggregation để tính toán statistics trong 1 query
-            org.springframework.data.mongodb.core.aggregation.Aggregation aggregation = 
-                org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation(
-                    // Match active products only
-                    org.springframework.data.mongodb.core.aggregation.Aggregation.match(
-                        Criteria.where("deletedAt").isNull()),
-                    
-                    // Group and calculate statistics
-                    org.springframework.data.mongodb.core.aggregation.Aggregation.group()
-                        .count().as("totalProducts")
-                        .avg("price").as("averagePrice")
-                        .sum("stock").as("totalStock")
-                        .min("price").as("minPrice")
-                        .max("price").as("maxPrice"),
-                    
-                    // Project results
-                    org.springframework.data.mongodb.core.aggregation.Aggregation.project()
-                        .and("totalProducts").as("totalProducts")
-                        .and("averagePrice").as("averagePrice")
-                        .and("totalStock").as("totalStock")
-                        .and("minPrice").as("minPrice")
-                        .and("maxPrice").as("maxPrice")
-                );
+            org.springframework.data.mongodb.core.aggregation.Aggregation aggregation = org.springframework.data.mongodb.core.aggregation.Aggregation
+                    .newAggregation(
+                            // Match active products only
+                            org.springframework.data.mongodb.core.aggregation.Aggregation.match(
+                                    Criteria.where("deletedAt").isNull()),
+
+                            // Group and calculate statistics
+                            org.springframework.data.mongodb.core.aggregation.Aggregation.group()
+                                    .count().as("totalProducts")
+                                    .avg("price").as("averagePrice")
+                                    .sum("stock").as("totalStock")
+                                    .min("price").as("minPrice")
+                                    .max("price").as("maxPrice"),
+
+                            // Project results
+                            org.springframework.data.mongodb.core.aggregation.Aggregation.project()
+                                    .and("totalProducts").as("totalProducts")
+                                    .and("averagePrice").as("averagePrice")
+                                    .and("totalStock").as("totalStock")
+                                    .and("minPrice").as("minPrice")
+                                    .and("maxPrice").as("maxPrice"));
 
             @SuppressWarnings("rawtypes")
-            org.springframework.data.mongodb.core.aggregation.AggregationResults<Map> results = 
-                mongoTemplate.aggregate(aggregation, "products", Map.class);
-            
+            org.springframework.data.mongodb.core.aggregation.AggregationResults<Map> results = mongoTemplate
+                    .aggregate(aggregation, "products", Map.class);
+
             @SuppressWarnings("unchecked")
             Map<String, Object> stats = (Map<String, Object>) results.getUniqueMappedResult();
             if (stats == null) {
                 stats = Map.of(
-                    "totalProducts", 0L,
-                    "averagePrice", 0.0,
-                    "totalStock", 0L,
-                    "minPrice", 0.0,
-                    "maxPrice", 0.0
-                );
+                        "totalProducts", 0L,
+                        "averagePrice", 0.0,
+                        "totalStock", 0L,
+                        "minPrice", 0.0,
+                        "maxPrice", 0.0);
             }
-            
+
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Statistics completed in {}ms: {}", endTime - startTime, stats);
             return stats;
