@@ -2,11 +2,13 @@ package com.example.spring_boot.services;
 
 import com.example.spring_boot.domains.Role;
 import com.example.spring_boot.domains.User;
+import com.example.spring_boot.dto.PageResponse;
 import com.example.spring_boot.repository.RoleRepository;
 import com.example.spring_boot.repository.UserRepository;
 import com.example.spring_boot.utils.HashPassword;
 import com.example.spring_boot.utils.ValidationUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -120,6 +122,69 @@ public class UserService {
 
         } catch (Exception e) {
             log.error("❌ [PERFORMANCE] Error retrieving users", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to retrieve users");
+        }
+    }
+
+    /** Lấy danh sách user với phân trang - TỐI ƯU HÓA với MongoDB pagination. */
+    public PageResponse<User> listWithPagination(String name, int page, int size) {
+        long startTime = System.currentTimeMillis();
+        log.info("👥 [PERFORMANCE] Getting users with pagination, name filter: {}, page: {}, size: {}", name, page, size);
+        
+        try {
+            // Validate pagination parameters
+            if (page < 0) page = 0;
+            if (size <= 0) size = 10;
+            if (size > 100) size = 100; // Limit max page size
+            
+            Query query = new Query();
+            
+            // Add name filter if provided
+            if (name != null && !name.trim().isEmpty()) {
+                String keyword = ValidationUtils.normalize(name);
+                query.addCriteria(Criteria.where("name").regex(keyword, "i"));
+            }
+            
+            // Count total items (create separate query for count)
+            Query countQuery = new Query();
+            if (name != null && !name.trim().isEmpty()) {
+                String keyword = ValidationUtils.normalize(name);
+                countQuery.addCriteria(Criteria.where("name").regex(keyword, "i"));
+            }
+            long totalItems = mongoTemplate.count(countQuery, User.class);
+            
+            // Projection để chỉ lấy fields cần thiết (for find query)
+            query.fields().include("name", "email", "phone", "address", "roleId", "createdAt", "updatedAt");
+            
+            // Calculate pagination
+            int totalPages = (int) Math.ceil((double) totalItems / size);
+            
+            // Add sorting for consistent results (before pagination)
+            query.with(Sort.by(Sort.Direction.ASC, "name"));
+            
+            // Add pagination to query (MongoDB style) - AFTER sorting
+            query.skip(page * size).limit(size);
+            
+            // Debug logging
+            log.info("🔍 [DEBUG] Query: skip={}, limit={}, totalItems={}", page * size, size, totalItems);
+            
+            // Execute query
+            List<User> users = mongoTemplate.find(query, User.class);
+            
+            // Debug logging
+            log.info("🔍 [DEBUG] Found {} users for page {}", users.size(), page);
+            
+            // Batch loading roles để tránh N+1 query problem
+            batchPopulateRoles(users);
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Retrieved {} users (page {}/{}) in {}ms", 
+                users.size(), page + 1, totalPages, endTime - startTime);
+            
+            return new PageResponse<>(users, totalItems, page, size);
+            
+        } catch (Exception e) {
+            log.error("❌ [PERFORMANCE] Error retrieving users with pagination", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to retrieve users");
         }
     }

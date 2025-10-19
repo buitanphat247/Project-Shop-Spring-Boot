@@ -21,6 +21,7 @@ public class PageResponse<T> {
         this.total = total;
         this.currentPage = currentPage;
         this.size = size;
-        this.totalPages = (int) Math.ceil((double) total / size);
+        // Fix: totalPages should be at least 1 if there are items, 0 if no items
+        this.totalPages = total > 0 ? (int) Math.ceil((double) total / size) : 0;
     }
 }

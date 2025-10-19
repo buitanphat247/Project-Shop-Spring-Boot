@@ -35,14 +35,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(user, "User created successfully"));
     }
 
-    /** Danh sách user; GET /api/users?name=... */
+    /** Danh sách user với phân trang; GET /api/users?name=...&page=0&size=10 */
     @GetMapping
-    @Operation(summary = "Danh sách user (PageResponse)")
+    @Operation(summary = "Danh sách user với phân trang (PageResponse)")
     public ApiResponse<PageResponse<User>> list(@RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "1000") int size) {
-        var items = service.list(name);
-        return ApiResponse.success(new PageResponse<>(items, items.size(), page, size), "Users retrieved successfully");
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        var pageResponse = service.listWithPagination(name, page, size);
+        return ApiResponse.success(pageResponse, "Users retrieved successfully");
     }
 
     /** GET /api/users/{id} */

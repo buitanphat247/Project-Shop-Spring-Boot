@@ -74,7 +74,7 @@ function preloadUserData() {
     lastRequestTime = Date.now();
     
     // Fetch data in background with pagination
-    fetch(`${API_BASE_URL}?basic=true&page=0&size=10&sort=createdAt&order=desc`, {
+    fetch(`${API_BASE_URL}?basic=true&page=0&size=10`, {
         method: 'GET',
         headers: {
             'Cache-Control': 'no-cache',
@@ -231,7 +231,7 @@ function loadUsersOptimized(startTime) {
     console.log('🌐 [FETCH] Starting optimized API request...');
     
     // Use fetch with advanced options for better performance
-    fetch(`${API_BASE_URL}?basic=true&page=${currentPage}&size=${pageSize}&sort=createdAt&order=desc`, {
+    fetch(`${API_BASE_URL}?basic=true&page=${currentPage}&size=${pageSize}`, {
         method: 'GET',
         headers: {
             'Cache-Control': 'no-cache',
@@ -953,12 +953,6 @@ function showUserProfileModal(user, isDetailed = true) {
                                 </div>
                             `}
                         </div>
-                    </div>
-
-                    <div class="mt-6 flex justify-end">
-                        <button id="closeUserModalBtn" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
-                            <i class="fas fa-times mr-2"></i>Đóng
-                        </button>
                     </div>
                 </div>
             </div>

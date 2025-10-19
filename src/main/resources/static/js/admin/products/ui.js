@@ -73,7 +73,7 @@ function displayProducts(products) {
                     <button class="text-blue-600 hover:text-blue-900 mr-3" onclick="editProduct('${product.id}')">
                         <i class="fas fa-edit mr-1"></i>Sửa
                     </button>
-                    <button class="text-red-600 hover:text-red-900" onclick="deleteProduct('${product.id}')">
+                    <button class="text-red-600 hover:text-red-900" onclick="showDeleteModal('${product.id}')">
                         <i class="fas fa-trash mr-1"></i>Xóa
                     </button>
                 </td>
@@ -259,4 +259,92 @@ function repositionToasts() {
         const newTop = 16 + (index * 80);
         toast.style.top = newTop + 'px';
     });
+}
+
+// Show delete confirmation modal
+function showDeleteModal(productId) {
+    console.log('Show delete modal for product:', productId);
+
+    // Find product data
+    const product = findProductById(productId);
+    if (!product) {
+        showToast('Không tìm thấy sản phẩm', 'error');
+        return;
+    }
+
+    // Update modal content with product info
+    document.getElementById('deleteProductName').textContent = product.name;
+    document.getElementById('deleteProductCategory').textContent = product.category ? product.category.name : 'Không có danh mục';
+    
+    // Store product ID for deletion
+    document.getElementById('deleteModal').setAttribute('data-product-id', productId);
+
+    // Show modal with animation
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('hidden');
+    
+    // Trigger animation
+    requestAnimationFrame(() => {
+        modal.classList.add('show');
+    });
+}
+
+// Hide delete confirmation modal
+function hideDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('show');
+    
+    // Hide modal after animation
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
+}
+
+// Delete product function (called from modal)
+function deleteProduct(productId) {
+    console.log('Delete product:', productId);
+
+    // Find product data
+    const product = findProductById(productId);
+    if (!product) {
+        showToast('Không tìm thấy sản phẩm', 'error');
+        return;
+    }
+
+    // Hide modal first
+    hideDeleteModal();
+
+    // Show loading state on the product row
+    const productRow = document.querySelector(`.product-row[data-product-id="${productId}"]`);
+    if (productRow) {
+        productRow.classList.add('opacity-50');
+    }
+
+    // Call delete API
+    fetch(`${API_BASE_URL}/${productId}`, {
+        method: 'DELETE'
+    })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Product deleted:', result);
+            showToast('Xóa sản phẩm thành công!', 'success');
+
+            // Remove the row with ultra-fast animation
+            if (productRow) {
+                productRow.style.transition = 'opacity 0.08s ease';
+                productRow.style.opacity = '0';
+                setTimeout(() => {
+                    productRow.remove();
+                    // Reload products to ensure data is fresh
+                    loadProducts();
+                }, 80);
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting product:', error);
+            if (productRow) {
+                productRow.classList.remove('opacity-50');
+            }
+            showToast('Lỗi khi xóa sản phẩm: ' + error, 'error');
+        });
 }

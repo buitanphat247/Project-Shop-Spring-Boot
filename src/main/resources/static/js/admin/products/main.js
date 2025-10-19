@@ -50,6 +50,47 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = '/admin/products/create';
         });
     }
+
+    // Delete modal event listeners
+    const cancelDeleteBtn = document.getElementById('cancelDelete');
+    if (cancelDeleteBtn) {
+        cancelDeleteBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            hideDeleteModal();
+        });
+    }
+
+    const confirmDeleteBtn = document.getElementById('confirmDelete');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const modal = document.getElementById('deleteModal');
+            const productId = modal.getAttribute('data-product-id');
+            if (productId) {
+                deleteProduct(productId);
+            }
+        });
+    }
+
+    // Close modal when clicking backdrop
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('click', function (e) {
+            if (e.target === this) {
+                hideDeleteModal();
+            }
+        });
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('deleteModal');
+            if (!modal.classList.contains('hidden')) {
+                hideDeleteModal();
+            }
+        }
+    });
 });
 
 // Export functions for global access
@@ -64,3 +105,5 @@ window.firstPage = firstPage;
 window.lastPage = lastPage;
 window.showToast = showToast;
 window.closeToast = closeToast;
+window.showDeleteModal = showDeleteModal;
+window.hideDeleteModal = hideDeleteModal;
