@@ -72,97 +72,141 @@
 </div>
 
 <!-- User Profile Modal -->
-<div id="userProfileModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center hidden">
-    <div class="relative p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white transform">
-        <div class="mt-3">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-bold text-gray-900">Thông tin người dùng</h3>
-                <button id="closeUserModal" class="text-gray-400 hover:text-gray-600 text-2xl">
-                    <i class="fas fa-times"></i>
+<div id="userProfileModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full z-50 flex items-center justify-center hidden">
+    <div class="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl transform border border-gray-100">
+        <!-- Modal Header -->
+        <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user text-white text-lg"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800">Thông tin người dùng</h3>
+                </div>
+                <button id="closeUserModal" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-all duration-200 group">
+                    <i class="fas fa-times text-gray-500 group-hover:text-gray-700 text-sm"></i>
                 </button>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Modal Body -->
+        <div class="p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Avatar và thông tin cơ bản -->
-                <div class="space-y-4">
-                    <div class="text-center">
-                        <div id="userAvatar" class="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span id="userInitials" class="text-white font-bold text-2xl">U</span>
+                <div class="space-y-6">
+                    <!-- User Avatar Section -->
+                    <div class="text-center bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-6">
+                        <div id="userAvatar" class="w-28 h-28 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <span id="userInitials" class="text-white font-bold text-3xl">U</span>
                         </div>
-                        <h4 id="userDisplayName" class="text-xl font-semibold text-gray-900">Tên người dùng</h4>
-                        <p id="userDisplayId" class="text-sm text-gray-500">ID: N/A</p>
+                        <h4 id="userDisplayName" class="text-2xl font-bold text-gray-900 mb-2">Tên người dùng</h4>
+                        <p id="userDisplayId" class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full inline-block">ID: N/A</p>
                     </div>
 
-                    <div class="space-y-3">
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-envelope text-gray-400 w-5"></i>
-                            <span id="userDisplayEmail" class="text-gray-700">Email</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-phone text-gray-400 w-5"></i>
-                            <span id="userDisplayPhone" class="text-gray-700">Số điện thoại</span>
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <i class="fas fa-map-marker-alt text-gray-400 w-5"></i>
-                            <span id="userDisplayAddress" class="text-gray-700">Địa chỉ</span>
+                    <!-- Contact Information -->
+                    <div class="space-y-4">
+                        <h5 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-address-card text-blue-500 mr-2"></i>
+                            Thông tin liên hệ
+                        </h5>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-envelope text-blue-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-xs text-gray-500 uppercase tracking-wide">Email</p>
+                                    <p id="userDisplayEmail" class="text-gray-900 font-medium">Email</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-phone text-green-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-xs text-gray-500 uppercase tracking-wide">Số điện thoại</p>
+                                    <p id="userDisplayPhone" class="text-gray-900 font-medium">Số điện thoại</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-purple-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-xs text-gray-500 uppercase tracking-wide">Địa chỉ</p>
+                                    <p id="userDisplayAddress" class="text-gray-900 font-medium">Địa chỉ</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Thông tin chi tiết -->
-                <div class="space-y-4">
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h5 class="font-semibold text-gray-900 mb-3">Trạng thái tài khoản</h5>
-                        <div class="space-y-2">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Trạng thái:</span>
-                                <span id="userStatus" class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                <div class="space-y-6">
+                    <!-- Account Status -->
+                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
+                        <h5 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-shield-alt text-green-500 mr-2"></i>
+                            Trạng thái tài khoản
+                        </h5>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Trạng thái:</span>
+                                <span id="userStatus" class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">
                                     Hoạt động
                                 </span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Vai trò:</span>
-                                <span id="userRole" class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Vai trò:</span>
+                                <span id="userRole" class="inline-flex px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">
                                     User
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <h5 class="font-semibold text-gray-900 mb-3">Thông tin thời gian</h5>
-                        <div class="space-y-2">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Ngày tạo:</span>
-                                <span id="userCreatedAt" class="text-gray-900">01/01/2024</span>
+                    <!-- Time Information -->
+                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200">
+                        <h5 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-clock text-indigo-500 mr-2"></i>
+                            Thông tin thời gian
+                        </h5>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Ngày tạo:</span>
+                                <span id="userCreatedAt" class="text-gray-900 font-semibold bg-white px-3 py-1 rounded-lg">01/01/2024</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Cập nhật cuối:</span>
-                                <span id="userUpdatedAt" class="text-gray-900">01/01/2024</span>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Cập nhật cuối:</span>
+                                <span id="userUpdatedAt" class="text-gray-900 font-semibold bg-white px-3 py-1 rounded-lg">01/01/2024</span>
                             </div>
                             <div id="userDeletedAtContainer" class="hidden">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Ngày chặn:</span>
-                                    <span id="userDeletedAt" class="text-red-600">01/01/2024</span>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 font-medium">Ngày chặn:</span>
+                                    <span id="userDeletedAt" class="text-red-600 font-semibold bg-red-50 px-3 py-1 rounded-lg">01/01/2024</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div id="userRoleInfo" class="bg-gray-50 rounded-lg p-4 hidden">
-                        <h5 class="font-semibold text-gray-900 mb-3">Thông tin vai trò</h5>
-                        <div class="space-y-2">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Tên vai trò:</span>
-                                <span id="userRoleName" class="text-gray-900">N/A</span>
+                    <!-- Role Information -->
+                    <div id="userRoleInfo" class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 border border-gray-200 hidden">
+                        <h5 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-user-tag text-purple-500 mr-2"></i>
+                            Thông tin vai trò
+                        </h5>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Tên vai trò:</span>
+                                <span id="userRoleName" class="text-gray-900 font-semibold bg-white px-3 py-1 rounded-lg">N/A</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Mô tả:</span>
-                                <span id="userRoleDescription" class="text-gray-900">N/A</span>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Mô tả:</span>
+                                <span id="userRoleDescription" class="text-gray-900 font-semibold bg-white px-3 py-1 rounded-lg">N/A</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Ngày tạo vai trò:</span>
-                                <span id="userRoleCreatedAt" class="text-gray-900">N/A</span>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Ngày tạo vai trò:</span>
+                                <span id="userRoleCreatedAt" class="text-gray-900 font-semibold bg-white px-3 py-1 rounded-lg">N/A</span>
                             </div>
                         </div>
                     </div>
