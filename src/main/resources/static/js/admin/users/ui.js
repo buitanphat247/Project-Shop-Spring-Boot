@@ -372,26 +372,25 @@ function showUserProfileModal(user, isDetailed = true) {
         }
     }
 
-    // Show modal with smooth zoom in
+    // Show modal with jQuery smooth animation
     const $modal = $('#userProfileModal');
     const $content = $modal.find('.transform');
     
     // Show modal immediately
     $modal.removeClass('hidden').show();
     
-    // Start from small and transparent
+    // Smooth zoom in animation
     $content.css({
-        'transform': 'scale(0.5)',
+        'transform': 'scale(0.7)',
         'opacity': '0'
     });
     
-    // Smooth zoom in with CSS transition
-    setTimeout(function() {
-        $content.css({
-            'transform': 'scale(1)',
-            'opacity': '1'
-        });
-    }, 10);
+    // Animate zoom in
+    $content.animate({
+        'opacity': '1'
+    }, 200, function() {
+        $content.css('transform', 'scale(1)');
+    });
 }
 
 // Hide user profile modal
@@ -399,16 +398,16 @@ function hideUserViewModal() {
     const $modal = $('#userProfileModal');
     const $content = $modal.find('.transform');
     
-    // Smooth zoom out
+    // Smooth zoom out animation
     $content.css({
-        'transform': 'scale(0.5)',
+        'transform': 'scale(0.7)',
         'opacity': '0'
     });
     
     // Hide modal after zoom out
     setTimeout(function() {
         $modal.addClass('hidden').hide();
-    }, 300);
+    }, 200);
 }
 
 // Delete user function (called from modal)
