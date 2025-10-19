@@ -9,16 +9,18 @@ import java.util.List;
 public class PageResponse<T> {
     public List<T> items;
     public long total;
-    public int page;
+    public int currentPage;
+    public int totalPages;
     public int size;
 
     public PageResponse() {
     }
 
-    public PageResponse(List<T> items, long total, int page, int size) {
+    public PageResponse(List<T> items, long total, int currentPage, int size) {
         this.items = items;
         this.total = total;
-        this.page = page;
+        this.currentPage = currentPage;
         this.size = size;
+        this.totalPages = (int) Math.ceil((double) total / size);
     }
 }

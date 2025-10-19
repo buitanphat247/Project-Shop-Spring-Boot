@@ -1,6 +1,7 @@
 package com.example.spring_boot.services.products; // Package service quản lý sản phẩm
 
 import com.example.spring_boot.domains.products.Product; // Entity sản phẩm
+import com.example.spring_boot.dto.PageResponse;
 import com.example.spring_boot.domains.products.Category; // Entity danh mục
 import com.example.spring_boot.repository.products.ProductRepository; // Repository Mongo cho sản phẩm
 import com.example.spring_boot.repository.products.CategoryRepository; // Repository danh mục
@@ -116,9 +117,11 @@ public class ProductService {
     public Product getById(String id) {
         try {
             Product p = productRepository.findById(id) // Tìm theo id
-                    .orElseThrow(() -> new RuntimeException("Product not found with ID: " + id)); // Không thấy -> 404
+                    .orElseThrow(() -> new RuntimeException("Product not found with ID: " + id));
+            // Không thấy -> 404
             if (p.getDeletedAt() != null)
-                throw new RuntimeException("Product has been deleted"); // Đã xóa mềm -> không trả về
+                throw new RuntimeException("Product has been deleted"); // Đã xóa mềm ->
+            // không trả về
 
             // Populate category nếu DocumentReference không tự động load
             if (p.getCategory() == null && p.getCategoryId() != null) {
@@ -129,34 +132,39 @@ public class ProductService {
             return p; // Trả về entity
         } catch (Exception e) {
             log.error("Get product by id failed, id={}", id, e); // Log lỗi
-            throw new RuntimeException("Failed to get product: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
+            throw new RuntimeException("Failed to get product: " + e.getMessage(), e); //
+            // Bao lỗi nghiệp vụ
         }
     }
 
     @Transactional(readOnly = true)
-    /** Lấy toàn bộ sản phẩm đang hoạt động - TỐI ƯU HÓA với batch loading. */
-    public List<Product> getAllActive() {
+    /** Lấy sản phẩm đang hoạt động theo trang - TỐI ƯU HÓA với batch loading. */
+    public PageResponse<Product> getAllActive(int page, int size) {
         long startTime = System.currentTimeMillis();
-        log.info("🚀 [PERFORMANCE] Getting all active products with batch optimization");
+        log.info("🚀 [PERFORMANCE] Getting active products with pagination: page={}, size={}", page, size);
 
         try {
-            // Sử dụng MongoTemplate với projection để chỉ lấy fields cần thiết
             Query query = new Query(Criteria.where("deletedAt").isNull());
             query.fields().include("name", "description", "price", "stock", "categoryId", "createdAt", "updatedAt");
 
-            List<Product> products = mongoTemplate.find(query, Product.class);
-            log.info("📊 [PERFORMANCE] Found {} products in {}ms", products.size(),
-                    System.currentTimeMillis() - startTime);
+            // Pagination
+            query.skip((long) page * size).limit(size);
 
-            // BATCH LOADING: Load tất cả categories trong 1 query thay vì N+1 queries
+            List<Product> products = mongoTemplate.find(query, Product.class);
+
+            // Batch load categories
             batchPopulateCategories(products);
 
+            // Count total products for pagination metadata
+            long total = mongoTemplate.count(new Query(Criteria.where("deletedAt").isNull()), Product.class);
+
             long endTime = System.currentTimeMillis();
-            log.info("✅ [PERFORMANCE] Completed in {}ms", endTime - startTime);
-            return products; // Trả về danh sách đã populate
+            log.info("✅ [PERFORMANCE] Completed in {}ms, retrieved {} products", endTime - startTime, products.size());
+
+            return new PageResponse<>(products, total, page, size);
         } catch (Exception e) {
-            log.error("❌ [PERFORMANCE] Get all active products failed", e); // Log lỗi
-            throw new RuntimeException("Failed to list products: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
+            log.error("❌ [PERFORMANCE] Get active products failed", e);
+            throw new RuntimeException("Failed to list products: " + e.getMessage(), e);
         }
     }
 

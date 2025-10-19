@@ -70,22 +70,44 @@ public class ProductController {
     }
 
     /** Danh sách products; GET /api/products?name=...&categoryId=... */
+    // @GetMapping
+    // @Operation(summary = "Danh sách products (PageResponse)")
+    // public ApiResponse<PageResponse<Product>> list(@RequestParam(value = "name",
+    // required = false) String name,
+    // @RequestParam(value = "categoryId", required = false) String categoryId,
+    // @RequestParam(value = "page", defaultValue = "0") int page,
+    // @RequestParam(value = "size", defaultValue = "1000") int size) {
+    // List<Product> items;
+    // if (categoryId != null) {
+    // items = productService.getByCategoryId(categoryId);
+    // } else if (name != null) {
+    // items = productService.searchByName(name);
+    // } else {
+    // items = productService.getAllActive();
+    // }
+    // return ApiResponse.success(new PageResponse<>(items, items.size(), page,
+    // size),
+    // "Products retrieved successfully");
+    // }
     @GetMapping
     @Operation(summary = "Danh sách products (PageResponse)")
-    public ApiResponse<PageResponse<Product>> list(@RequestParam(value = "name", required = false) String name,
+    public ApiResponse<PageResponse<Product>> list(
+            @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "categoryId", required = false) String categoryId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "1000") int size) {
-        List<Product> items;
+
+        PageResponse<Product> response;
         if (categoryId != null) {
-            items = productService.getByCategoryId(categoryId);
+            List<Product> items = productService.getByCategoryId(categoryId);
+            response = new PageResponse<>(items, items.size(), page, size);
         } else if (name != null) {
-            items = productService.searchByName(name);
+            List<Product> items = productService.searchByName(name);
+            response = new PageResponse<>(items, items.size(), page, size);
         } else {
-            items = productService.getAllActive();
+            response = productService.getAllActive(page, size);
         }
-        return ApiResponse.success(new PageResponse<>(items, items.size(), page, size),
-                "Products retrieved successfully");
+        return ApiResponse.success(response, "Products retrieved successfully");
     }
 
     /** Tìm kiếm products theo tên; GET /api/products/search?name=... */
