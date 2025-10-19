@@ -67,31 +67,38 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
-    <div class="modal-content relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3 text-center">
-            <!-- Icon -->
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+<div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center hidden">
+    <div class="modal-content relative mx-auto p-0 w-full max-w-md shadow-2xl rounded-xl bg-white transform">
+        <div class="p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-900">Xác nhận xóa sản phẩm</h3>
+                <button id="closeDeleteModal" class="text-gray-400 hover:text-gray-600 text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             
-            <!-- Title -->
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Xác nhận xóa sản phẩm</h3>
+            <!-- Icon -->
+            <div class="flex justify-center mb-6">
+                <div class="h-16 w-16 rounded-full bg-red-100 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
+                </div>
+            </div>
             
             <!-- Message -->
-            <div class="mt-2 px-7 py-3">
-                <p class="text-sm text-gray-500 mb-4">
+            <div class="text-center mb-6">
+                <p class="text-gray-600 mb-4">
                     Bạn có chắc chắn muốn xóa sản phẩm này không? Hành động này không thể hoàn tác.
                 </p>
                 
                 <!-- Product Info -->
-                <div id="deleteProductInfo" class="bg-gray-50 rounded-lg p-3 mb-4 text-left">
-                    <div class="flex items-center space-x-3">
-                        <div class="h-10 w-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-box text-gray-400"></i>
+                <div id="deleteProductInfo" class="bg-gray-50 rounded-lg p-4 text-left">
+                    <div class="flex items-center space-x-4">
+                        <div class="h-12 w-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-box text-gray-500 text-lg"></i>
                         </div>
-                        <div>
-                            <div id="deleteProductName" class="font-medium text-gray-900">Tên sản phẩm</div>
+                        <div class="flex-1">
+                            <div id="deleteProductName" class="font-semibold text-gray-900 text-lg">Tên sản phẩm</div>
                             <div id="deleteProductCategory" class="text-sm text-gray-500">Danh mục</div>
                         </div>
                     </div>
@@ -99,16 +106,16 @@
             </div>
             
             <!-- Buttons -->
-            <div class="flex items-center justify-center space-x-4 px-4 py-3">
+            <div class="flex space-x-3">
                 <button 
                     id="cancelDelete" 
-                    class="px-4 py-2 bg-gray-300 text-gray-700 text-base font-medium rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-colors"
+                    class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-all duration-200"
                 >
                     Hủy
                 </button>
                 <button 
                     id="confirmDelete" 
-                    class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
+                    class="flex-1 px-4 py-3 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 transition-all duration-200"
                 >
                     <i class="fas fa-trash mr-2"></i>Xóa sản phẩm
                 </button>
@@ -149,24 +156,44 @@
   /* Modal animations */
   #deleteModal {
     transition: opacity 0.3s ease;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
   }
   
-  #deleteModal.show {
-    opacity: 1;
-  }
-  
-  #deleteModal .modal-content {
-    transform: scale(0.7);
-    transition: transform 0.3s ease;
-  }
-  
-  #deleteModal.show .modal-content {
-    transform: scale(1);
+  #deleteModal .transform {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+    will-change: transform, opacity;
   }
   
   /* Modal backdrop blur effect */
   #deleteModal {
     backdrop-filter: blur(4px);
+  }
+  
+  /* Ensure modal is centered */
+  #deleteModal.hidden {
+    display: none !important;
+  }
+  
+  /* Smooth hover effects */
+  #deleteModal .bg-gray-50 {
+    transition: background-color 0.2s ease;
+  }
+  
+  #deleteModal .bg-gray-50:hover {
+    background-color: #f9fafb;
+  }
+  
+  /* Button hover effects */
+  #closeDeleteModal {
+    transition: all 0.2s ease;
+  }
+  
+  #closeDeleteModal:hover {
+    transform: scale(1.1);
+    color: #374151;
   }
 </style>
 

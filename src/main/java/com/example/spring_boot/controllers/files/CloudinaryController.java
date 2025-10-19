@@ -59,7 +59,7 @@ public class CloudinaryController {
                     .body(ApiResponse.fail("Chỉ chấp nhận file ảnh"));
             }
             
-            Map<String, Object> data = this.cloudinaryService.upload(file);
+        Map<String, Object> data = this.cloudinaryService.upload(file);
             
             long endTime = System.currentTimeMillis();
             log.info("✅ [UPLOAD] Upload completed in {}ms for file: {}", 

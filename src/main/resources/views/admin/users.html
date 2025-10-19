@@ -14,34 +14,56 @@
               class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors no-scale"
             />
           </div>
-          <!-- <select
-            class="px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-blue-500 focus:border-transparent no-scale"
-          >
-            <option>Tất cả trạng thái</option>
-            <option>Hoạt động</option>
-            <option>Bị chặn</option>
-            <option>Chờ xác nhận</option>
-          </select> -->
-          <!-- <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-            <i class="fas fa-filter mr-2"></i>Lọc
-          </button> -->
         </div>
       </div>
 
-      <div class="overflow-x-auto">
+      <!-- Loading State -->
+      <div id="userLoadingState" class="hidden text-center py-12">
+        <div class="text-center">
+          <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
+          <p class="text-gray-600">Đang tải người dùng...</p>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div id="userErrorState" class="hidden text-center py-12">
+        <div class="text-red-500 mb-4">
+          <i class="fas fa-exclamation-triangle text-6xl"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Không thể tải dữ liệu</h3>
+        <p class="text-gray-500 mb-4 error-message">Đã xảy ra lỗi khi tải danh sách người dùng</p>
+        <button id="retryUserLoad" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+          <i class="fas fa-redo mr-2"></i>Thử lại
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <div id="userEmptyState" class="hidden text-center py-12">
+        <div class="text-gray-400 mb-4">
+          <i class="fas fa-users text-6xl"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Chưa có người dùng nào</h3>
+        <p class="text-gray-500 mb-4">Hãy thêm người dùng đầu tiên để bắt đầu quản lý</p>
+        <button id="addFirstUser" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+          <i class="fas fa-plus mr-2"></i>Thêm người dùng đầu tiên
+        </button>
+      </div>
+
+      <!-- Users Table -->
+      <div id="usersTable" class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Người dùng</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số điện thoại</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày tham gia</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vai trò</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày tạo</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lần cuối</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <!-- Dynamic content will be loaded here -->
+          <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
+            <!-- Users will be loaded here -->
           </tbody>
         </table>
       </div>
@@ -49,12 +71,309 @@
   </div>
 </div>
 
+<!-- User Profile Modal -->
+<div id="userProfileModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center hidden">
+    <div class="relative p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white transform">
+        <div class="mt-3">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">Thông tin người dùng</h3>
+                <button id="closeUserModal" class="text-gray-400 hover:text-gray-600 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Avatar và thông tin cơ bản -->
+                <div class="space-y-4">
+                    <div class="text-center">
+                        <div id="userAvatar" class="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span id="userInitials" class="text-white font-bold text-2xl">U</span>
+                        </div>
+                        <h4 id="userDisplayName" class="text-xl font-semibold text-gray-900">Tên người dùng</h4>
+                        <p id="userDisplayId" class="text-sm text-gray-500">ID: N/A</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-envelope text-gray-400 w-5"></i>
+                            <span id="userDisplayEmail" class="text-gray-700">Email</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-phone text-gray-400 w-5"></i>
+                            <span id="userDisplayPhone" class="text-gray-700">Số điện thoại</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-map-marker-alt text-gray-400 w-5"></i>
+                            <span id="userDisplayAddress" class="text-gray-700">Địa chỉ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin chi tiết -->
+                <div class="space-y-4">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h5 class="font-semibold text-gray-900 mb-3">Trạng thái tài khoản</h5>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Trạng thái:</span>
+                                <span id="userStatus" class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                    Hoạt động
+                                </span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Vai trò:</span>
+                                <span id="userRole" class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    User
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h5 class="font-semibold text-gray-900 mb-3">Thông tin thời gian</h5>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Ngày tạo:</span>
+                                <span id="userCreatedAt" class="text-gray-900">01/01/2024</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Cập nhật cuối:</span>
+                                <span id="userUpdatedAt" class="text-gray-900">01/01/2024</span>
+                            </div>
+                            <div id="userDeletedAtContainer" class="hidden">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Ngày chặn:</span>
+                                    <span id="userDeletedAt" class="text-red-600">01/01/2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="userRoleInfo" class="bg-gray-50 rounded-lg p-4 hidden">
+                        <h5 class="font-semibold text-gray-900 mb-3">Thông tin vai trò</h5>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Tên vai trò:</span>
+                                <span id="userRoleName" class="text-gray-900">N/A</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Mô tả:</span>
+                                <span id="userRoleDescription" class="text-gray-900">N/A</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Ngày tạo vai trò:</span>
+                                <span id="userRoleCreatedAt" class="text-gray-900">N/A</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CSS for animations and no-scale effect -->
+<style>
+  /* Custom animations */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  
+  @keyframes zoomIn {
+    from { transform: scale(0.3); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  
+  @keyframes zoomOut {
+    from { transform: scale(1); opacity: 1; }
+    to { transform: scale(0.3); opacity: 0; }
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  /* Override global input focus scale for no-scale class */
+  input.no-scale:focus {
+    transform: none !important;
+  }
+  
+  /* Modal animations */
+  #userProfileModal {
+    transition: opacity 0.3s ease;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #userProfileModal .transform {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+  }
+  
+  /* Modal backdrop blur effect */
+  #userProfileModal {
+    backdrop-filter: blur(4px);
+  }
+  
+  /* Ensure modal is centered */
+  #userProfileModal.hidden {
+    display: none !important;
+  }
+  
+  /* Smooth hover effects */
+  #userProfileModal .bg-gray-50 {
+    transition: background-color 0.2s ease;
+  }
+  
+  #userProfileModal .bg-gray-50:hover {
+    background-color: #f9fafb;
+  }
+  
+  /* Button hover effects */
+  #closeUserModal {
+    transition: all 0.2s ease;
+  }
+  
+  #closeUserModal:hover {
+    transform: scale(1.1);
+    color: #374151;
+  }
+  
+  /* Dots Loading Animation */
+  .dots-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #3b82f6;
+    animation: dots-bounce 1.4s ease-in-out infinite both;
+  }
+  
+  .dot:nth-child(1) { animation-delay: -0.32s; }
+  .dot:nth-child(2) { animation-delay: -0.16s; }
+  .dot:nth-child(3) { animation-delay: 0s; }
+  .dot:nth-child(4) { animation-delay: 0.16s; }
+  .dot:nth-child(5) { animation-delay: 0.32s; }
+  .dot:nth-child(6) { animation-delay: 0.48s; }
+  .dot:nth-child(7) { animation-delay: 0.64s; }
+  .dot:nth-child(8) { animation-delay: 0.80s; }
+  .dot:nth-child(9) { animation-delay: 0.96s; }
+  .dot:nth-child(10) { animation-delay: 1.12s; }
+  
+  @keyframes dots-bounce {
+    0%, 80%, 100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    40% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }
+  
+  /* Alternative circular dots animation */
+  .dots-loading.circular {
+    position: relative;
+    width: 60px;
+    height: 60px;
+  }
+  
+  .dots-loading.circular .dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: #3b82f6;
+    border-radius: 50%;
+    animation: circular-dots 1.2s linear infinite;
+  }
+  
+  .dots-loading.circular .dot:nth-child(1) { 
+    top: 0; 
+    left: 50%; 
+    transform: translateX(-50%);
+    animation-delay: 0s;
+  }
+  .dots-loading.circular .dot:nth-child(2) { 
+    top: 8px; 
+    right: 8px; 
+    animation-delay: 0.1s;
+  }
+  .dots-loading.circular .dot:nth-child(3) { 
+    top: 20px; 
+    right: 0; 
+    animation-delay: 0.2s;
+  }
+  .dots-loading.circular .dot:nth-child(4) { 
+    top: 32px; 
+    right: 8px; 
+    animation-delay: 0.3s;
+  }
+  .dots-loading.circular .dot:nth-child(5) { 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%);
+    animation-delay: 0.4s;
+  }
+  .dots-loading.circular .dot:nth-child(6) { 
+    bottom: 8px; 
+    left: 8px; 
+    animation-delay: 0.5s;
+  }
+  .dots-loading.circular .dot:nth-child(7) { 
+    bottom: 20px; 
+    left: 0; 
+    animation-delay: 0.6s;
+  }
+  .dots-loading.circular .dot:nth-child(8) { 
+    bottom: 32px; 
+    left: 8px; 
+    animation-delay: 0.7s;
+  }
+  .dots-loading.circular .dot:nth-child(9) { 
+    top: 20px; 
+    left: 0; 
+    animation-delay: 0.8s;
+  }
+  .dots-loading.circular .dot:nth-child(10) { 
+    top: 8px; 
+    left: 8px; 
+    animation-delay: 0.9s;
+  }
+  
+  @keyframes circular-dots {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+</style>
+
+<!-- User JavaScript Modules -->
+<script defer src="/js/admin/users/ui.js"></script>
+<script defer src="/js/admin/users/pagination.js"></script>
+<script defer src="/js/admin/users/api.js"></script>
+<script defer src="/js/admin/users/main.js"></script>
+
 <!-- jQuery CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 
 <!-- Users CSS -->
 <link rel="stylesheet" href="/css/admin/users.css" />
-
-<!-- External JavaScript -->
-<script src="/js/admin/users.js" defer></script>
-<script src="/js/admin/users-performance.js" defer></script>
