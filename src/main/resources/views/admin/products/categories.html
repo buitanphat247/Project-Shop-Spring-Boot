@@ -25,99 +25,134 @@
         <!-- Categories will be loaded here via AJAX -->
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Add Category Modal -->
-    <div
-      id="addCategoryModal"
-      class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50 flex items-center justify-center"
-    >
-      <div id="modalContent" class="relative p-5 border w-96 shadow-lg rounded-md bg-white transform">
-        <div class="mt-3">
-          <div class="flex items-center justify-between mb-4">
-            <h3 id="modalTitle" class="text-lg font-medium text-gray-900">Thêm danh mục mới</h3>
-            <button id="closeModal" class="text-gray-400 hover:text-gray-600">
-              <i class="fas fa-times"></i>
-            </button>
+<!-- Add Category Modal -->
+<div id="addCategoryModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50">
+  <div class="flex items-center justify-center min-h-full p-4">
+    <div id="modalContent" class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl transform border border-gray-100">
+      <!-- Modal Header -->
+      <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-t-2xl">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
+              <i class="fas fa-plus text-white text-lg"></i>
+            </div>
+            <h3 id="modalTitle" class="text-xl font-bold text-gray-800">Thêm danh mục mới</h3>
           </div>
+          <button id="closeModal" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-all duration-200 group">
+            <i class="fas fa-times text-gray-500 group-hover:text-gray-700 text-sm"></i>
+          </button>
+        </div>
+      </div>
 
-          <form id="addCategoryForm">
-            <input type="hidden" id="categoryId" name="id" />
-            <div class="mb-4">
-              <label for="categoryName" class="block text-sm font-medium text-gray-700 mb-2">
-                Tên danh mục <span class="text-red-500">*</span>
-              </label>
+      <!-- Modal Body -->
+      <div class="px-8 py-6">
+        <form id="addCategoryForm">
+          <input type="hidden" id="categoryId" name="id" />
+          <div class="mb-6">
+            <label for="categoryName" class="block text-sm font-semibold text-gray-700 mb-3">
+              Tên danh mục <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
               <input
                 type="text"
                 id="categoryName"
                 name="name"
                 required
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all duration-200 bg-gray-50 focus:bg-white"
                 placeholder="Nhập tên danh mục..."
               />
-              <div id="slugPreview" class="mt-2 text-sm text-gray-500 hidden">
-                <span class="font-medium">Slug sẽ là:</span> <span id="slugText" class="text-blue-600"></span>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                <i class="fas fa-tag text-gray-400"></i>
               </div>
             </div>
-
-            <div class="flex justify-end space-x-3">
-              <button type="button" id="cancelAdd" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
-                Hủy
-              </button>
-              <button type="button" id="submitAdd" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                <i class="fas fa-plus mr-2"></i>Thêm danh mục
-              </button>
+            <div id="slugPreview" class="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200 hidden">
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-link text-blue-500 text-sm"></i>
+                <span class="text-sm font-medium text-gray-600">Slug sẽ là:</span>
+                <span id="slugText" class="text-sm font-mono text-blue-600 bg-blue-100 px-2 py-1 rounded"></span>
+              </div>
             </div>
-          </form>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-8 py-6 bg-gray-50 rounded-b-2xl border-t border-gray-100">
+        <div class="flex justify-end space-x-3">
+          <button
+            type="button"
+            id="cancelAdd"
+            class="px-6 py-3 bg-white text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-200 font-semibold border-2 border-gray-200 hover:border-gray-300 shadow-sm"
+          >
+            <i class="fas fa-times mr-2"></i>Hủy
+          </button>
+          <button type="button" id="submitAdd" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+            <i class="fas fa-plus mr-2"></i>Thêm danh mục
+          </button>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Delete Confirmation Modal -->
-    <div
-      id="deleteConfirmModal"
-      class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50 flex items-center justify-center"
-    >
-      <div id="deleteModalContent" class="relative p-5 border w-96 shadow-lg rounded-md bg-white transform">
-        <div class="mt-3">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-medium text-gray-900">Xác nhận xóa</h3>
-            <button id="closeDeleteModal" class="text-gray-400 hover:text-gray-600">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-
-          <div class="mb-6">
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
-                <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
-              </div>
-              <div>
-                <h4 class="text-lg font-semibold text-gray-900">Bạn có chắc chắn muốn xóa?</h4>
-                <p class="text-sm text-gray-600">Hành động này không thể hoàn tác!</p>
-              </div>
+<!-- Delete Confirmation Modal -->
+<div id="deleteConfirmModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50">
+  <div class="flex items-center justify-center min-h-full p-4">
+    <div id="deleteModalContent" class="relative w-full max-w-md bg-white rounded-2xl shadow-2xl transform border border-gray-100">
+      <!-- Modal Header -->
+      <div class="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-red-50 to-pink-50 rounded-t-2xl">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center">
+              <i class="fas fa-exclamation-triangle text-white text-lg"></i>
             </div>
+            <h3 class="text-xl font-bold text-gray-800">Xác nhận xóa</h3>
+          </div>
+          <button id="closeDeleteModal" class="w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-all duration-200 group">
+            <i class="fas fa-times text-gray-500 group-hover:text-gray-700 text-sm"></i>
+          </button>
+        </div>
+      </div>
 
-            <div class="bg-gray-50 rounded-lg p-4">
-              <div class="flex items-center">
-                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
-                  <i class="fas fa-folder text-white text-sm"></i>
-                </div>
-                <div>
-                  <h5 id="deleteCategoryName" class="font-semibold text-gray-900">Tên danh mục</h5>
-                  <p id="deleteCategorySlug" class="text-sm text-gray-600">Slug</p>
-                </div>
-              </div>
+      <!-- Modal Body -->
+      <div class="px-8 py-6">
+        <div class="text-center mb-6">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
+          </div>
+          <h4 class="text-lg font-bold text-gray-900 mb-2">Bạn có chắc chắn muốn xóa?</h4>
+          <p class="text-sm text-gray-600">Hành động này không thể hoàn tác!</p>
+        </div>
+
+        <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-4 border border-gray-200">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+              <i class="fas fa-folder text-white"></i>
+            </div>
+            <div class="flex-1">
+              <h5 id="deleteCategoryName" class="font-bold text-gray-900 text-sm">Tên danh mục</h5>
+              <p id="deleteCategorySlug" class="text-xs text-gray-600 font-mono bg-gray-200 px-2 py-1 rounded mt-1 inline-block">Slug</p>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div class="flex justify-end space-x-3">
-            <button type="button" id="cancelDelete" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
-              <i class="fas fa-times mr-2"></i>Hủy
-            </button>
-            <button type="button" id="confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
-              <i class="fas fa-trash mr-2"></i>Xóa danh mục
-            </button>
-          </div>
+      <!-- Modal Footer -->
+      <div class="px-8 py-6 bg-gray-50 rounded-b-2xl border-t border-gray-100">
+        <div class="flex justify-end space-x-3">
+          <button
+            type="button"
+            id="cancelDelete"
+            class="px-6 py-3 bg-white text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-200 font-semibold border-2 border-gray-200 hover:border-gray-300 shadow-sm"
+          >
+            <i class="fas fa-times mr-2"></i>Hủy
+          </button>
+          <button type="button" id="confirmDelete" class="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+            <i class="fas fa-trash mr-2"></i>Xóa danh mục
+          </button>
         </div>
       </div>
     </div>
@@ -132,5 +167,102 @@
 <!-- Categories CSS -->
 <link rel="stylesheet" href="/css/admin/categories.css" />
 
+<!-- Modal Animation CSS -->
+<style>
+  /* Modal animations */
+  #modalContent,
+  #deleteModalContent {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+  }
+
+  /* Modal backdrop blur effect */
+  #addCategoryModal,
+  #deleteConfirmModal {
+    backdrop-filter: blur(8px);
+  }
+
+  /* Ensure modal is centered */
+  #addCategoryModal {
+    display: block !important;
+  }
+  
+  #addCategoryModal.hidden,
+  #deleteConfirmModal.hidden {
+    display: none !important;
+  }
+  
+  #deleteConfirmModal {
+    display: block !important;
+  }
+
+  /* Enhanced hover effects */
+  #addCategoryModal button,
+  #deleteConfirmModal button {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Input focus effects */
+  #categoryName:focus {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  }
+
+  /* Shake animation for validation */
+  @keyframes shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+      transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+      transform: translateX(5px);
+    }
+  }
+
+  /* Custom scrollbar for modal */
+  #addCategoryModal::-webkit-scrollbar,
+  #deleteConfirmModal::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #addCategoryModal::-webkit-scrollbar-track,
+  #deleteConfirmModal::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  #addCategoryModal::-webkit-scrollbar-thumb,
+  #deleteConfirmModal::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+
+  /* Loading state for buttons */
+  .loading {
+    position: relative;
+    color: transparent !important;
+  }
+
+  .loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
 <!-- External JavaScript -->
-<script src="/js/admin/category.js" defer></script>
+<script src="/js/admin/categories/ui.js"></script>
+<script src="/js/admin/categories/main.js"></script>
