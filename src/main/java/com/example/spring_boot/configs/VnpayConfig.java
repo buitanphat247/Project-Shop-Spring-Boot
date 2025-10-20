@@ -12,11 +12,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @Component
-public class VnpayConfig {
+public class VNPayConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     public static String vnp_Returnurl = "/vnpay-payment";
-    public static String vnp_TmnCode = "";
-    public static String vnp_HashSecret = "";
+    public static String vnp_TmnCode = "SAM5T48G";
+    public static String vnp_HashSecret = "WIN3P426CX2P74KYADT5MFTE1UI0MKK4";
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
     public static String md5(String message) {
@@ -55,22 +55,22 @@ public class VnpayConfig {
         return digest;
     }
 
-    // Util for VNPAY
-    public static String hashAllFields(Map fields) {
-        List fieldNames = new ArrayList(fields.keySet());
+    //Util for VNPAY
+    public static String hashAllFields(Map<String, String> fields) {
+        List<String> fieldNames = new ArrayList<>(fields.keySet());
         Collections.sort(fieldNames);
         StringBuilder sb = new StringBuilder();
-        Iterator itr = fieldNames.iterator();
+        Iterator<String> itr = fieldNames.iterator();
         while (itr.hasNext()) {
-            String fieldName = (String) itr.next();
-            String fieldValue = (String) fields.get(fieldName);
+            String fieldName = itr.next();
+            String fieldValue = fields.get(fieldName);
             if ((fieldValue != null) && (fieldValue.length() > 0)) {
                 sb.append(fieldName);
                 sb.append("=");
                 sb.append(fieldValue);
-            }
-            if (itr.hasNext()) {
-                sb.append("&");
+                if (itr.hasNext()) {
+                    sb.append("&");
+                }
             }
         }
         return hmacSHA512(vnp_HashSecret, sb.toString());
@@ -118,6 +118,29 @@ public class VnpayConfig {
         StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++) {
             sb.append(chars.charAt(rnd.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * Sắp xếp các tham số theo thứ tự alphabet và tạo chuỗi hash data
+     * Tương tự như hàm sortObject trong JavaScript SDK của VNPay
+     */
+    public static String sortObject(Map<String, String> obj) {
+        List<String> fieldNames = new ArrayList<>(obj.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder sb = new StringBuilder();
+        
+        Iterator<String> itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = itr.next();
+            String fieldValue = obj.get(fieldName);
+            if (fieldValue != null && !fieldValue.isEmpty()) {
+                sb.append(fieldName).append("=").append(fieldValue);
+                if (itr.hasNext()) {
+                    sb.append("&");
+                }
+            }
         }
         return sb.toString();
     }
