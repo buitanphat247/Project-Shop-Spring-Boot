@@ -338,7 +338,8 @@ public class ProductService {
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Pagination completed in {}ms", endTime - startTime);
 
-            return new PageImpl<>(products, pageable, totalCount); // Trả về Page
+            // Tạo custom PageImpl với totalPages làm tròn xuống
+            return createCustomPageImpl(products, pageable, totalCount);
         } catch (Exception e) {
             log.error("❌ [PERFORMANCE] Get paged products failed, page={}, size={}",
                     pageable.getPageNumber(), pageable.getPageSize(), e); // Log lỗi
@@ -660,6 +661,19 @@ public class ProductService {
 
         log.debug("🔄 [PERFORMANCE] Fallback sequential populated attributes={} images={} for {} products in {}ms",
                 allAttributes.size(), allImages.size(), products.size(), System.currentTimeMillis() - start);
+    }
+
+    /**
+     * Tạo custom PageImpl với totalPages làm tròn xuống
+     */
+    private Page<Product> createCustomPageImpl(List<Product> content, Pageable pageable, long total) {
+        return new PageImpl<>(content, pageable, total) {
+            @Override
+            public int getTotalPages() {
+                // Sử dụng Math.floor để làm tròn xuống thay vì Math.ceil
+                return getTotalElements() == 0 ? 0 : Math.max(1, (int) Math.floor((double) getTotalElements() / getSize()));
+            }
+        };
     }
 
     /**

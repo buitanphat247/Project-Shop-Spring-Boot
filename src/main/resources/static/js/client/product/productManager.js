@@ -4,7 +4,7 @@ class ProductManager {
         this.api = new ProductApi();
         this.ui = new ProductUI();
         this.gallery = new ProductGallery();
-        this.currentPage = 1;
+        this.currentPage = this.ui.currentPage; // Lấy trang từ URL
         this.pageSize = 12;
     }
 
@@ -24,6 +24,9 @@ class ProductManager {
     async loadProducts(page = 1) {
         try {
             this.ui.showLoading();
+            
+            // Cập nhật currentPage trong ProductManager
+            this.currentPage = page;
             
             const data = await this.api.getProducts(page, this.pageSize);
             

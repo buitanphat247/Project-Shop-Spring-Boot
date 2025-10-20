@@ -156,8 +156,8 @@ public class UserService {
             // Projection để chỉ lấy fields cần thiết (for find query)
             query.fields().include("name", "email", "phone", "address", "roleId", "createdAt", "updatedAt");
             
-            // Calculate pagination
-            int totalPages = (int) Math.ceil((double) totalItems / size);
+            // Calculate pagination - sử dụng Math.floor để làm tròn xuống
+            int totalPages = Math.max(1, (int) Math.floor((double) totalItems / size));
             
             // Add sorting for consistent results (before pagination)
             query.with(Sort.by(Sort.Direction.ASC, "name"));

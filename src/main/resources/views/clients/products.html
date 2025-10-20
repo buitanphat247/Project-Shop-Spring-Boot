@@ -17,14 +17,84 @@
     box-shadow: 0 8px 25px rgba(47, 96, 74, 0.3);
   }
 
-  /* Loading animation */
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  /* Ant Design Spinner Styles */
+  .ant-spin-container {
+    position: relative;
+    transition: opacity 0.3s;
   }
-
-  .animate-spin {
-    animation: spin 1s linear infinite;
+  
+  .ant-spin {
+    position: relative;
+    display: inline-block;
+    color: #1890ff;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .ant-spin-spinning {
+    position: static;
+    display: inline-block;
+  }
+  
+  .ant-spin-dot {
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+    width: 1em;
+    height: 1em;
+  }
+  
+  .ant-spin-dot-spin {
+    transform: rotate(45deg);
+    animation: antRotate 1.2s infinite linear;
+  }
+  
+  .ant-spin-dot-item {
+    position: absolute;
+    display: block;
+    width: 9px;
+    height: 9px;
+    background-color: #1890ff;
+    border-radius: 100%;
+    transform: scale(0.75);
+    transform-origin: 50% 50%;
+    opacity: 0.3;
+    animation: antSpinMove 1s infinite linear alternate;
+  }
+  
+  .ant-spin-dot-item:nth-child(1) {
+    top: 0;
+    left: 0;
+  }
+  
+  .ant-spin-dot-item:nth-child(2) {
+    top: 0;
+    right: 0;
+    animation-delay: 0.4s;
+  }
+  
+  .ant-spin-dot-item:nth-child(3) {
+    right: 0;
+    bottom: 0;
+    animation-delay: 0.8s;
+  }
+  
+  .ant-spin-dot-item:nth-child(4) {
+    bottom: 0;
+    left: 0;
+    animation-delay: 1.2s;
+  }
+  
+  @keyframes antRotate {
+    to {
+      transform: rotate(405deg);
+    }
+  }
+  
+  @keyframes antSpinMove {
+    to {
+      opacity: 1;
+    }
   }
 
   /* Line clamp utility */

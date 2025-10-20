@@ -22,6 +22,7 @@ public class PageResponse<T> {
         this.currentPage = currentPage;
         this.size = size;
         // Fix: totalPages should be at least 1 if there are items, 0 if no items
-        this.totalPages = total > 0 ? (int) Math.ceil((double) total / size) : 0;
+        // Sử dụng Math.floor để làm tròn xuống, nhưng đảm bảo ít nhất 1 trang
+        this.totalPages = total > 0 ? Math.max(1, (int) Math.floor((double) total / size)) : 0;
     }
 }

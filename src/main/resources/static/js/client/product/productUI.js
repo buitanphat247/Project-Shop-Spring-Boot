@@ -1,7 +1,7 @@
 // Product UI Module
 class ProductUI {
     constructor() {
-        this.currentPage = 1;
+        this.currentPage = this.getPageFromURL();
         this.totalPages = 1;
         this.totalItems = 0;
         this.pageSize = 12;
@@ -13,13 +13,15 @@ class ProductUI {
     showLoading() {
         const productGrid = document.getElementById('product-grid');
         if (!productGrid) return;
-        
+
         productGrid.innerHTML = `
             <div class="col-span-full flex justify-center items-center py-12">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2f604a]"></div>
-            </div>
+           <div class="text-center">
+          <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
+          <p class="text-gray-600">Đang tải sản phẩm...</p>
+        </div>
         `;
-        
+
         // Ẩn pagination khi đang loading
         this.setPaginationVisibility(false);
     }
@@ -38,10 +40,10 @@ class ProductUI {
     displayProducts(products) {
         const productGrid = document.getElementById('product-grid');
         if (!productGrid) return;
-        
+
         // Lưu danh sách sản phẩm vào global variable để sử dụng trong gallery
         window.currentProducts = products;
-        
+
         if (!products || products.length === 0) {
             productGrid.innerHTML = `
                 <div class="col-span-full text-center py-12">
@@ -52,7 +54,7 @@ class ProductUI {
             `;
             return;
         }
-        
+
         productGrid.innerHTML = products.map(product => this.createProductCard(product)).join('');
     }
 
@@ -64,7 +66,7 @@ class ProductUI {
     createProductCard(product) {
         const price = ProductUtils.formatPrice(product.price);
         const imageUrl = ProductUtils.getProductImage(product);
-        
+
         return `
             <a href="/products/detail/${product.id}" class="block" id="product-${product.id}">
                 <div class="product-card bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
@@ -128,7 +130,7 @@ class ProductUI {
         this.currentPage = data.currentPage;
         this.totalPages = data.totalPages;
         this.totalItems = data.total;
-        
+
         this.updatePaginationUI();
     }
 
@@ -137,7 +139,7 @@ class ProductUI {
      */
     updatePaginationUI() {
         let paginationContainer = document.querySelector('.mt-8.flex.items-center.justify-center.gap-2');
-        
+
         // Nếu pagination container không tồn tại, tạo mới
         if (!paginationContainer) {
             const contentSection = document.querySelector('section.lg\\:col-span-9');
@@ -150,45 +152,126 @@ class ProductUI {
                 return;
             }
         }
-        
+
         if (this.totalPages <= 1) {
             paginationContainer.innerHTML = '';
             return;
         }
-        
+
         let paginationHTML = '';
-        
-        // Nút Previous
-        paginationHTML += `
-            <button onclick="goToPage(${this.currentPage - 1})" 
-                    ${this.currentPage === 1 ? 'disabled' : ''}
-                    class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                &laquo;
-            </button>
-        `;
-        
-        // Số trang
-        const startPage = Math.max(1, this.currentPage - 2);
-        const endPage = Math.min(this.totalPages, this.currentPage + 2);
-        
+
+        // Nút First Page (<<) - chỉ hiển thị khi không ở trang 1
+        if (this.currentPage > 1) {
+            paginationHTML += `
+                <button onclick="goToPage(1)" 
+                        class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                    &laquo;&laquo;
+                </button>
+            `;
+        }
+
+        // Nút Previous Page (<) - chỉ hiển thị khi không ở trang 1
+        if (this.currentPage > 1) {
+            paginationHTML += `
+                <button onclick="goToPage(${this.currentPage - 1})" 
+                        class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                    &laquo;
+                </button>
+            `;
+        }
+
+        // Logic hiển thị số trang với ellipsis
+        const showEllipsis = this.totalPages > 7;
+        let startPage, endPage;
+
+        if (showEllipsis) {
+            if (this.currentPage <= 4) {
+                startPage = 1;
+                endPage = 5;
+            } else if (this.currentPage >= this.totalPages - 3) {
+                startPage = this.totalPages - 4;
+                endPage = this.totalPages;
+            } else {
+                startPage = this.currentPage - 2;
+                endPage = this.currentPage + 2;
+            }
+        } else {
+            startPage = 1;
+            endPage = this.totalPages;
+        }
+
+        // Hiển thị trang đầu nếu cần (chỉ khi không phải trang 1)
+        if (showEllipsis && startPage > 1) {
+            paginationHTML += `
+                <button onclick="goToPage(1)" 
+                        class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                    1
+                </button>
+            `;
+            if (startPage > 2) {
+                paginationHTML += `
+                    <button disabled class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 opacity-50 cursor-not-allowed">
+                        ...
+                    </button>
+                `;
+            }
+        }
+
+        // Hiển thị các trang chính
         for (let i = startPage; i <= endPage; i++) {
+            // Bỏ qua trang 1 nếu đã hiển thị ở nút First Page
+            if (showEllipsis && startPage > 1 && i === 1) {
+                continue;
+            }
+            
             paginationHTML += `
                 <button onclick="goToPage(${i})" 
-                        class="min-w-9 h-9 px-3 rounded-md border border-gray-300 ${i === this.currentPage ? 'bg-[#cb5439] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'}">
+                        class="min-w-9 h-9 px-3 rounded-md border border-gray-300 ${i === this.currentPage ? 'bg-[#cb5439] text-white border-[#cb5439]' : 'bg-white text-gray-700 hover:bg-gray-50'}">
                     ${i}
                 </button>
             `;
         }
-        
-        // Nút Next
-        paginationHTML += `
-            <button onclick="goToPage(${this.currentPage + 1})" 
-                    ${this.currentPage === this.totalPages ? 'disabled' : ''}
-                    class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-                &raquo;
-            </button>
-        `;
-        
+
+        // Hiển thị trang cuối nếu cần (chỉ khi không phải trang cuối)
+        if (showEllipsis && endPage < this.totalPages) {
+            if (endPage < this.totalPages - 1) {
+                paginationHTML += `
+                    <button disabled class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 opacity-50 cursor-not-allowed">
+                        ...
+                    </button>
+                `;
+            }
+            // Chỉ hiển thị trang cuối nếu chưa được hiển thị trong vòng lặp
+            if (endPage < this.totalPages) {
+                paginationHTML += `
+                    <button onclick="goToPage(${this.totalPages})" 
+                            class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                        ${this.totalPages}
+                    </button>
+                `;
+            }
+        }
+
+        // Nút Next Page (>) - chỉ hiển thị khi không ở trang cuối
+        if (this.currentPage < this.totalPages) {
+            paginationHTML += `
+                <button onclick="goToPage(${this.currentPage + 1})" 
+                        class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                    &raquo;
+                </button>
+            `;
+        }
+
+        // Nút Last Page (>>) - chỉ hiển thị khi không ở trang cuối
+        if (this.currentPage < this.totalPages) {
+            paginationHTML += `
+                <button onclick="goToPage(${this.totalPages})" 
+                        class="min-w-9 h-9 px-3 rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                    &raquo;&raquo;
+                </button>
+            `;
+        }
+
         paginationContainer.innerHTML = paginationHTML;
     }
 
@@ -199,10 +282,10 @@ class ProductUI {
     updateProductCount(data) {
         const countElement = document.querySelector('.text-sm.text-gray-700');
         if (!countElement) return;
-        
+
         const startItem = (data.currentPage - 1) * data.size + 1;
         const endItem = Math.min(data.currentPage * data.size, data.total);
-        
+
         countElement.textContent = `Hiển thị ${startItem}–${endItem} của ${data.total} kết quả`;
     }
 
@@ -214,21 +297,24 @@ class ProductUI {
         if (page < 1 || page > this.totalPages || page === this.currentPage) {
             return;
         }
-        
+
         // Cập nhật currentPage ngay lập tức
         this.currentPage = page;
-        
+
+        // Cập nhật URL với page parameter
+        this.updateURL(page);
+
         // Cập nhật UI pagination ngay lập tức
         this.updatePaginationUI();
-        
+
         // Hiển thị loading state
         this.showPaginationLoading();
-        
+
         // Load sản phẩm mới
         if (window.productManager) {
             window.productManager.loadProducts(this.currentPage);
         }
-        
+
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -239,7 +325,7 @@ class ProductUI {
     showPaginationLoading() {
         const paginationContainer = document.querySelector('.mt-8.flex.items-center.justify-center.gap-2');
         if (!paginationContainer) return;
-        
+
         // Thêm loading class cho nút hiện tại
         const currentButton = paginationContainer.querySelector(`button[onclick="goToPage(${this.currentPage})"]`);
         if (currentButton) {
@@ -249,7 +335,7 @@ class ProductUI {
             currentButton.disabled = true;
             currentButton.classList.add('opacity-75');
         }
-        
+
         // Disable tất cả nút pagination
         const allButtons = paginationContainer.querySelectorAll('button');
         allButtons.forEach(button => {
@@ -266,14 +352,14 @@ class ProductUI {
     hidePaginationLoading() {
         const paginationContainer = document.querySelector('.mt-8.flex.items-center.justify-center.gap-2');
         if (!paginationContainer) return;
-        
+
         // Enable lại tất cả nút pagination
         const allButtons = paginationContainer.querySelectorAll('button');
         allButtons.forEach(button => {
             button.disabled = false;
             button.classList.remove('opacity-50', 'opacity-75');
         });
-        
+
         // Restore nút hiện tại
         const currentButton = paginationContainer.querySelector(`button[onclick="goToPage(${this.currentPage})"]`);
         if (currentButton) {
@@ -293,22 +379,46 @@ class ProductUI {
     }
 
     /**
-     * Setup event listeners
+     * Lấy số trang từ URL parameters
+     * @returns {number} - Số trang hiện tại
      */
+    getPageFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = parseInt(urlParams.get('page')) || 1;
+        return Math.max(1, page);
+    }
+
+    /**
+     * Cập nhật URL với page parameter
+     * @param {number} page - Số trang
+     */
+    updateURL(page) {
+        const url = new URL(window.location);
+        
+        if (page > 1) {
+            url.searchParams.set('page', page.toString());
+        } else {
+            url.searchParams.delete('page');
+        }
+        
+        // Cập nhật URL mà không reload trang
+        window.history.pushState({}, '', url);
+    }
+
     setupEventListeners() {
         // Sort dropdown
         const sortSelect = document.querySelector('select');
         if (sortSelect) {
-            sortSelect.addEventListener('change', function() {
+            sortSelect.addEventListener('change', function () {
                 // TODO: Implement sorting
                 console.log('Sort by:', this.value);
             });
         }
-        
+
         // Category filters
         const categoryLinks = document.querySelectorAll('aside ul li a');
         categoryLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
+            link.addEventListener('click', function (e) {
                 e.preventDefault();
                 // TODO: Implement category filtering
                 console.log('Filter by category:', this.textContent);
