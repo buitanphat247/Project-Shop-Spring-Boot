@@ -7,11 +7,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -35,6 +37,12 @@ public class Product {
 
     @DocumentReference(lookup = "{ '_id' : ?#{#target.categoryId} }")
     private Category category;
+
+    @Transient
+    private List<ProductAttribute> attributes;
+
+    @Transient
+    private List<ProductImage> images;
 
     @Builder.Default
     private Instant createdAt = Instant.now();

@@ -16,6 +16,62 @@
     transform: scale(1.1);
     box-shadow: 0 8px 25px rgba(47, 96, 74, 0.3);
   }
+
+  /* Loading animation */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  /* Line clamp utility */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Smooth transitions */
+  .transition-all {
+    transition: all 0.3s ease;
+  }
+
+  /* Focus states */
+  .focus\:ring-2:focus {
+    box-shadow: 0 0 0 2px rgba(47, 96, 74, 0.2);
+  }
+
+  /* Disabled states */
+  .disabled\:opacity-50:disabled {
+    opacity: 0.5;
+  }
+
+  .disabled\:cursor-not-allowed:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Toast notification */
+  .toast-enter {
+    transform: translateX(100%);
+  }
+
+  .toast-enter-active {
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .toast-exit {
+    transform: translateX(0);
+  }
+
+  .toast-exit-active {
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
 </style>
 
 <div th:replace="~{layouts/main-layout :: layout('Sản phẩm - THE MONA', ~{::content})}">
@@ -97,14 +153,20 @@
           <!-- Toolbar -->
           <div
             class="flex flex-wrap items-center justify-between gap-3 bg-white rounded-xl shadow-sm border border-gray-200 px-4 py-3">
-            <div class="text-sm text-gray-700">Hiển thị 1–12 của 16 kết quả</div>
+            <div class="text-sm text-gray-700">Danh Mục Sản Phẩm.</div>
             <div class="flex items-center gap-2">
-              <select class="border border-gray-300 rounded-md px-3 py-2 text-sm">
-                <option>Thứ tự mặc định</option>
-                <option>Giá thấp đến cao</option>
-                <option>Giá cao đến thấp</option>
+              <select class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2f604a] focus:border-transparent">
+                <option value="default">Thứ tự mặc định</option>
+                <option value="price-asc">Giá thấp đến cao</option>
+                <option value="price-desc">Giá cao đến thấp</option>
+                <option value="name-asc">Tên A-Z</option>
+                <option value="name-desc">Tên Z-A</option>
+                <option value="newest">Mới nhất</option>
+                <option value="oldest">Cũ nhất</option>
               </select>
-              <button class="p-2 rounded-md border border-gray-300 text-gray-500"><i class="fas fa-th"></i></button>
+              <button class="p-2 rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50 transition-colors" title="Thay đổi layout">
+                <i class="fas fa-th"></i>
+              </button>
             </div>
           </div>
 
@@ -129,4 +191,10 @@
 </div>
 
 <!-- JavaScript for products page -->
-<script src="/js/products.js"></script>
+<!-- Load modules in order -->
+<script src="/js/client/product/productUtils.js"></script>
+<script src="/js/client/product/productApi.js"></script>
+<script src="/js/client/product/productUI.js"></script>
+<script src="/js/client/product/productGallery.js"></script>
+<script src="/js/client/product/productManager.js"></script>
+<script src="/js/client/product/products.js"></script>
