@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 /** Module API cho Category (quản lý danh mục sản phẩm) */
 @RestController
@@ -88,10 +90,31 @@ public class CategoryController {
     /** Danh sách categories; GET /api/categories?name=... */
     @GetMapping
     @Operation(summary = "Danh sách categories (PageResponse)")
-    public ApiResponse<PageResponse<Category>> list(@RequestParam(value = "name", required = false) String name,
+    public ApiResponse<PageResponse<Map<String, Object>>> list(@RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "1000") int size) {
-        var items = name != null ? categoryService.searchCategoriesByName(name) : categoryService.getAllActiveCategories();
+        
+        List<Map<String, Object>> items;
+        if (name != null) {
+            // Tìm kiếm theo tên - trả về Category thuần
+            List<Category> categories = categoryService.searchCategoriesByName(name);
+            items = new ArrayList<>();
+            for (Category category : categories) {
+                Map<String, Object> categoryWithCount = new HashMap<>();
+                categoryWithCount.put("id", category.getId());
+                categoryWithCount.put("name", category.getName());
+                categoryWithCount.put("description", category.getDescription());
+                categoryWithCount.put("createdAt", category.getCreatedAt());
+                categoryWithCount.put("updatedAt", category.getUpdatedAt());
+                categoryWithCount.put("deletedAt", category.getDeletedAt());
+                categoryWithCount.put("count", categoryService.getProductCountForCategory(category.getId()));
+                items.add(categoryWithCount);
+            }
+        } else {
+            // Lấy tất cả với product count
+            items = categoryService.getAllActiveCategoriesWithProductCount();
+        }
+        
         return ApiResponse.success(new PageResponse<>(items, items.size(), page, size), "Categories retrieved successfully");
     }
 

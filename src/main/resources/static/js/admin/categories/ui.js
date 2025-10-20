@@ -186,8 +186,8 @@ const CategoriesUI = {
                             </div>
                             <div class="ml-4">
                                 <h3 class="text-lg font-semibold text-gray-900">${category.name}</h3>
-                                <p class="text-sm text-gray-600">
-                                    <i class="fas fa-spinner fa-spin mr-1"></i>Đang đếm sản phẩm...
+                                <p class="text-sm text-gray-600 mt-1">
+                                    <i class="fas fa-box text-blue-500 mr-1"></i>${category.count || 0} sản phẩm
                                 </p>
                             </div>
                         </div>
@@ -227,63 +227,7 @@ const CategoriesUI = {
             });
         });
 
-        // Load product count for each category
-        this.loadProductCountsForCategories(categories);
-    },
-
-    // Load product counts for all categories
-    loadProductCountsForCategories: function(categories) {
-        console.log('Loading product counts for categories...');
-
-        categories.forEach(function (category, index) {
-            // Add delay to avoid overwhelming the server
-            setTimeout(function () {
-                CategoriesUI.loadProductCountForCategory(category.id, index);
-            }, index * 1); // 1ms delay between each request
-        });
-    },
-
-    // Load product count for a specific category
-    loadProductCountForCategory: function(categoryId, index) {
-        console.log(`Loading product count for category ${categoryId}...`);
-
-        try {
-            $.ajax({
-                url: `/api/products?categoryId=${categoryId}`,
-                method: 'GET',
-                success: function (result) {
-                    console.log(`Product count for category ${categoryId}:`, result);
-
-                    let productCount = 0;
-                    if (result.success && result.data && result.data.items) {
-                        productCount = result.data.items.length;
-                    }
-
-                    // Update the product count in the UI
-                    CategoriesUI.updateProductCountInUI(categoryId, productCount);
-                },
-                error: function (xhr, status, error) {
-                    console.error(`Error loading product count for category ${categoryId}:`, error);
-                    // Show error state
-                    CategoriesUI.updateProductCountInUI(categoryId, 'Lỗi');
-                }
-            });
-        } catch (error) {
-            console.error(`Error in loadProductCountForCategory for ${categoryId}:`, error);
-            CategoriesUI.updateProductCountInUI(categoryId, 'Lỗi');
-        }
-    },
-
-    // Update product count in the UI
-    updateProductCountInUI: function(categoryId, count) {
-        const $categoryCard = $(`.category-card[data-category-id="${categoryId}"]`);
-        const $productCountElement = $categoryCard.find('p.text-sm.text-gray-600');
-
-        if (count === 'Lỗi') {
-            $productCountElement.html('<i class="fas fa-exclamation-triangle text-red-500 mr-1"></i>Lỗi đếm sản phẩm');
-        } else {
-            $productCountElement.html(`<i class="fas fa-box text-blue-500 mr-1"></i>${count} sản phẩm`);
-        }
+        // Product count is now included in API response - no need for additional loading
     },
 
     // Show empty state

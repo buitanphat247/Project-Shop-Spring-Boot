@@ -16,6 +16,11 @@ import org.springframework.transaction.annotation.Transactional; // Transaction 
 
 import java.time.Instant; // Thời điểm UTC
 import java.util.List; // Danh sách kết quả
+import java.util.Map; // Map cho kết quả
+import java.util.HashMap; // HashMap implementation
+import java.util.ArrayList; // ArrayList implementation
+import org.bson.types.ObjectId; // ObjectId cho query
+import com.example.spring_boot.domains.products.Product; // Entity sản phẩm
 
 @Service // Đăng ký bean service
 @RequiredArgsConstructor // Tạo constructor cho field final
@@ -251,5 +256,63 @@ public class CategoryService {
     private long getTotalActiveCount() {
         Query countQuery = new Query(Criteria.where("deletedAt").isNull());
         return mongoTemplate.count(countQuery, Category.class);
+    }
+
+    /**
+     * Lấy danh sách categories với số lượng sản phẩm
+     */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getAllActiveCategoriesWithProductCount() {
+        long startTime = System.currentTimeMillis();
+        log.info("📊 [PERFORMANCE] Getting categories with product counts");
+
+        try {
+            // Lấy tất cả categories active
+            List<Category> categories = getAllActiveCategories();
+            
+            // Tạo danh sách kết quả với product count
+            List<Map<String, Object>> result = new ArrayList<>();
+            
+            for (Category category : categories) {
+                Map<String, Object> categoryWithCount = new HashMap<>();
+                categoryWithCount.put("id", category.getId());
+                categoryWithCount.put("name", category.getName());
+                categoryWithCount.put("description", category.getDescription());
+                categoryWithCount.put("createdAt", category.getCreatedAt());
+                categoryWithCount.put("updatedAt", category.getUpdatedAt());
+                categoryWithCount.put("deletedAt", category.getDeletedAt());
+                
+                // Đếm số sản phẩm cho category này
+                long productCount = getProductCountForCategory(category.getId());
+                categoryWithCount.put("count", productCount);
+                
+                result.add(categoryWithCount);
+            }
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Retrieved {} categories with product counts in {}ms", 
+                    result.size(), endTime - startTime);
+            
+            return result;
+        } catch (Exception e) {
+            log.error("❌ [PERFORMANCE] Failed to get categories with product counts", e);
+            throw new RuntimeException("Failed to get categories with product counts: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Đếm số sản phẩm cho một category
+     */
+    @Transactional(readOnly = true)
+    public long getProductCountForCategory(String categoryId) {
+        try {
+            ObjectId categoryObjectId = new ObjectId(categoryId);
+            Query query = new Query(Criteria.where("categoryId").is(categoryObjectId)
+                    .and("deletedAt").isNull());
+            return mongoTemplate.count(query, Product.class);
+        } catch (Exception e) {
+            log.warn("🔄 [DEBUG] Invalid categoryId format: {}", categoryId);
+            return 0;
+        }
     }
 }

@@ -22,6 +22,11 @@ import org.springframework.transaction.annotation.Transactional; // Transaction 
 import java.time.Instant; // Thời điểm UTC
 import java.util.List; // Danh sách kết quả
 import java.util.Map; // Map cho batch operations
+import java.util.Set; // Set cho unique values
+import java.util.HashSet; // HashSet implementation
+import java.util.ArrayList; // ArrayList implementation
+import java.util.HashMap; // HashMap implementation
+import java.util.Objects; // Objects utility
 import java.util.concurrent.CompletableFuture; // Async processing
 import java.util.concurrent.ConcurrentHashMap; // Thread-safe cache
 import java.util.stream.Collectors; // Stream operations
@@ -254,8 +259,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    /** Phân trang sản phẩm active - TỐI ƯU HÓA với skip/limit. */
-    public Page<Product> getPaged(Pageable pageable) {
+    /** Phân trang sản phẩm active với filtering - TỐI ƯU HÓA với skip/limit. */
+    public Page<Product> getPaged(Pageable pageable, String name, String categoryId) {
         long startTime = System.currentTimeMillis();
         log.info("📄 [PERFORMANCE] Getting paged products: page={}, size={}",
                 pageable.getPageNumber(), pageable.getPageSize());
@@ -263,9 +268,27 @@ public class ProductService {
         try {
             // Sử dụng skip/limit thay vì load tất cả rồi slice
             Query query = new Query(Criteria.where("deletedAt").isNull());
-
+            
+            // Apply filters
+            if (name != null && !name.trim().isEmpty()) {
+                query.addCriteria(Criteria.where("name").regex(name, "i"));
+                log.debug("🔄 [DEBUG] Filtering by name: {}", name);
+            }
+            
+            if (categoryId != null && !categoryId.trim().isEmpty()) {
+                try {
+                    ObjectId categoryObjectId = new ObjectId(categoryId);
+                    query.addCriteria(Criteria.where("categoryId").is(categoryObjectId));
+                    log.debug("🔄 [DEBUG] Filtering by categoryId: {}", categoryId);
+                } catch (Exception e) {
+                    log.warn("🔄 [DEBUG] Invalid categoryId format: {}", categoryId);
+                }
+            }
+            
+            // Debug: Log query
+            log.debug("🔄 [DEBUG] Query: {}", query.toString());
             // Projection để chỉ lấy fields cần thiết
-            query.fields().include("name", "description", "price", "stock", "categoryId", "createdAt", "updatedAt");
+            // query.fields().include("name", "description", "price", "stock", "categoryId", "createdAt", "updatedAt");
 
             // Apply pagination
             query.skip(pageable.getOffset());
@@ -285,6 +308,24 @@ public class ProductService {
             List<Product> products = mongoTemplate.find(query, Product.class);
             log.info("📊 [PERFORMANCE] Retrieved {} products for page {} in {}ms",
                     products.size(), pageable.getPageNumber(), System.currentTimeMillis() - startTime);
+            
+            // Debug: Kiểm tra categoryId của products
+            log.debug("🔄 [DEBUG] Checking categoryIds in retrieved products:");
+            for (Product product : products) {
+                log.debug("🔄 [DEBUG] Product ID: {}, categoryId: {}", 
+                        product.getId(), product.getCategoryId());
+            }
+            
+            // Debug: Kiểm tra trực tiếp database
+            Query debugQuery = new Query(Criteria.where("deletedAt").isNull());
+            debugQuery.limit(1);
+            debugQuery.fields().include("id", "categoryId");
+            List<Product> debugProducts = mongoTemplate.find(debugQuery, Product.class);
+            if (!debugProducts.isEmpty()) {
+                Product debugProduct = debugProducts.get(0);
+                log.debug("🔄 [DEBUG] Direct DB query - Product ID: {}, categoryId: {}", 
+                        debugProduct.getId(), debugProduct.getCategoryId());
+            }
 
             // Count total records (separate query for efficiency)
             long totalCount = getTotalActiveCount();
@@ -305,6 +346,12 @@ public class ProductService {
         }
     }
 
+    @Transactional(readOnly = true)
+    /** Phân trang sản phẩm active - TỐI ƯU HÓA với skip/limit (backward compatibility). */
+    public Page<Product> getPaged(Pageable pageable) {
+        return getPaged(pageable, null, null);
+    }
+
     // =====================================================
     // HELPER METHODS - Các phương thức hỗ trợ tối ưu hóa
     // =====================================================
@@ -314,61 +361,113 @@ public class ProductService {
      * Tối ưu: Single query + in-memory cache để load tất cả categories cần thiết
      */
     private void batchPopulateCategories(List<Product> products) {
-        if (products.isEmpty()) return;
+        if (products == null || products.isEmpty()) {
+            log.debug("🔄 [DEBUG] No products to populate categories");
+            return;
+        }
 
         long startTime = System.currentTimeMillis();
+        log.debug("🔄 [DEBUG] Starting batchPopulateCategories for {} products", products.size());
 
-        // Collect unique category IDs
-        List<String> categoryIds = products.stream()
-                .map(Product::getCategoryId)
-                .filter(id -> id != null)
-                .map(Object::toString)
-                .distinct()
-                .collect(Collectors.toList());
+        // Step 1: Collect unique category IDs from products
+        Set<String> categoryIdSet = new HashSet<>();
+        for (Product product : products) {
+            if (product.getCategoryId() != null) {
+                String categoryIdStr = product.getCategoryId().toString();
+                categoryIdSet.add(categoryIdStr);
+                log.debug("🔄 [DEBUG] Found categoryId: {} for product: {}", categoryIdStr, product.getId());
+            } else {
+                log.debug("🔄 [DEBUG] Product {} has null categoryId", product.getId());
+            }
+        }
 
-        if (categoryIds.isEmpty()) return;
+        if (categoryIdSet.isEmpty()) {
+            log.debug("🔄 [DEBUG] No categoryIds found, skipping populate");
+            return;
+        }
 
-        // Check cache first
-        Map<String, Category> categoryMap = new ConcurrentHashMap<>();
-        List<String> missingCategoryIds = new java.util.ArrayList<>();
+        List<String> categoryIds = new ArrayList<>(categoryIdSet);
+        log.debug("🔄 [DEBUG] Unique categoryIds to load: {}", categoryIds);
+
+        // Step 2: Check cache and collect missing IDs
+        Map<String, Category> categoryMap = new HashMap<>();
+        List<String> missingCategoryIds = new ArrayList<>();
         long currentTime = System.currentTimeMillis();
 
         for (String categoryId : categoryIds) {
             Category cached = categoryCache.get(categoryId);
             if (cached != null && (currentTime - categoryCacheTimestamp) < CACHE_TTL) {
                 categoryMap.put(categoryId, cached);
+                log.debug("🔄 [DEBUG] Using cached category: {} - {}", categoryId, cached.getName());
             } else {
                 missingCategoryIds.add(categoryId);
+                log.debug("🔄 [DEBUG] Category {} not in cache or expired", categoryId);
             }
         }
 
-        // Load missing categories from DB
+        // Step 3: Load missing categories from database
         if (!missingCategoryIds.isEmpty()) {
-            Query categoryQuery = new Query(Criteria.where("_id").in(missingCategoryIds));
-            categoryQuery.fields().include("id", "name", "description", "createdAt");
-            List<Category> categories = mongoTemplate.find(categoryQuery, Category.class);
+            log.debug("🔄 [DEBUG] Loading {} missing categories from DB: {}", missingCategoryIds.size(), missingCategoryIds);
+            
+            try {
+                // Convert String IDs to ObjectIds for MongoDB query
+                List<ObjectId> objectIds = missingCategoryIds.stream()
+                        .map(id -> {
+                            try {
+                                return new ObjectId(id);
+                            } catch (Exception e) {
+                                log.warn("🔄 [DEBUG] Invalid ObjectId format: {}", id);
+                                return null;
+                            }
+                        })
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
 
-            // Update cache and map
-            for (Category category : categories) {
-                categoryCache.put(category.getId(), category);
-                categoryMap.put(category.getId(), category);
+                if (!objectIds.isEmpty()) {
+                    Query categoryQuery = new Query(Criteria.where("_id").in(objectIds));
+                    categoryQuery.fields().include("id", "name", "description", "createdAt");
+                    List<Category> categories = mongoTemplate.find(categoryQuery, Category.class);
+                    
+                    log.debug("🔄 [DEBUG] Found {} categories in DB", categories.size());
+
+                    // Update cache and map
+                    for (Category category : categories) {
+                        String categoryIdStr = category.getId();
+                        categoryCache.put(categoryIdStr, category);
+                        categoryMap.put(categoryIdStr, category);
+                        log.debug("🔄 [DEBUG] Loaded and cached category: {} - {}", categoryIdStr, category.getName());
+                    }
+                }
+                
+                // Update cache timestamp
+                categoryCacheTimestamp = System.currentTimeMillis();
+                
+            } catch (Exception e) {
+                log.error("🔄 [DEBUG] Error loading categories from DB", e);
             }
         }
 
-        // Populate categories
-        products.parallelStream().forEach(product -> {
+        // Step 4: Populate categories into products
+        int populatedCount = 0;
+        for (Product product : products) {
             if (product.getCategoryId() != null) {
                 String categoryIdStr = product.getCategoryId().toString();
                 Category category = categoryMap.get(categoryIdStr);
                 if (category != null) {
                     product.setCategory(category);
+                    populatedCount++;
+                    log.debug("🔄 [DEBUG] Populated category for product {}: {} - {}", 
+                            product.getId(), category.getId(), category.getName());
+                } else {
+                    log.warn("🔄 [DEBUG] Category not found for product {} with categoryId: {}", 
+                            product.getId(), categoryIdStr);
                 }
             }
-        });
+        }
 
         long endTime = System.currentTimeMillis();
-        log.debug("🔄 [PERFORMANCE] Batch populated {} categories ({} from cache, {} from DB) in {}ms",
-                categoryMap.size(), categoryIds.size() - missingCategoryIds.size(), missingCategoryIds.size(), endTime - startTime);
+        log.debug("🔄 [PERFORMANCE] Batch populated {} categories ({} from cache, {} from DB) in {}ms. Successfully populated {} products.",
+                categoryMap.size(), categoryIds.size() - missingCategoryIds.size(), missingCategoryIds.size(), endTime - startTime, populatedCount);
     }
 
     /**

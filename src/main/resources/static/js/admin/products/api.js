@@ -33,7 +33,7 @@ function loadProducts(page = 0) {
     };
 
     // Thêm pagination parameters
-    const url = `${API_BASE_URL}?page=${page}&size=${ITEMS_PER_PAGE}`;
+    const url = `${API_BASE_URL}/paged?page=${page}&size=${ITEMS_PER_PAGE}`;
 
     // Sử dụng Promise.race để timeout
     Promise.race([
