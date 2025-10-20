@@ -10,8 +10,20 @@ let currentSearchTerm = '';
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM ready, initializing products app');
 
-    // Load products on page load
-    loadProducts();
+    // Get page from URL parameters only
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageFromUrl = urlParams.get('page');
+    
+    // Determine which page to load
+    let initialPage = 0;
+    if (pageFromUrl !== null) {
+        initialPage = parseInt(pageFromUrl) || 0;
+    }
+    
+    console.log(`🔢 [PAGINATION] Loading page ${initialPage} (from URL: ${pageFromUrl})`);
+
+    // Load products on page load with specific page
+    loadProducts(initialPage);
 
     // Initialize pagination
     initializePagination();
@@ -24,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Searching for:', searchTerm);
             currentSearchTerm = searchTerm;
             currentPage = 0; // Reset to first page when searching
+            // Update URL to page 0 when searching
+            updateURL(0);
             searchProducts(searchTerm);
         });
     }
@@ -182,6 +196,7 @@ window.nextPage = nextPage;
 window.prevPage = prevPage;
 window.firstPage = firstPage;
 window.lastPage = lastPage;
+window.updateURL = updateURL;
 window.showToast = showToast;
 window.closeToast = closeToast;
 window.showDeleteModal = showDeleteModal;

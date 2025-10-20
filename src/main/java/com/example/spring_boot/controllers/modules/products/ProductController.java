@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -119,7 +118,7 @@ public class ProductController {
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "categoryId", required = false) String categoryId,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "1") int size) {
+            @RequestParam(value = "size", defaultValue = "10000") int size) {
 
         PageResponse<Product> response;
         if (categoryId != null) {
@@ -157,7 +156,8 @@ public class ProductController {
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir) {
 
-        // Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        // Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() :
+        // Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> pageResult = productService.getPaged(pageable);
         PageResponse<Product> response = new PageResponse<>(pageResult.getContent(), pageResult.getTotalElements(),

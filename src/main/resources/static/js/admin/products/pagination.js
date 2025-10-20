@@ -180,6 +180,9 @@ function goToPage(page) {
     currentPage = page;
     updatePaginationUI();
     
+    // Cập nhật URL với tham số page
+    updateURL(page);
+    
     // Hiển thị loading state ngay lập tức
     showLoadingState();
     
@@ -230,4 +233,20 @@ function resetPagination() {
     currentPage = 0;
     totalItems = 0;
     totalPages = 1;
+    // Update URL to page 0 when resetting
+    updateURL(0);
+}
+
+// Update URL with page parameter
+function updateURL(page) {
+    const url = new URL(window.location);
+    if (page > 0) {
+        url.searchParams.set('page', page);
+    } else {
+        url.searchParams.delete('page');
+    }
+    
+    // Update URL without reloading page
+    window.history.replaceState({}, '', url);
+    console.log(`🔢 [PAGINATION] Updated URL to: ${url.toString()}`);
 }
