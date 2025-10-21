@@ -111,7 +111,7 @@ class ProductUI {
                         
                         <div>
                             <button class="add-to-cart-btn w-full bg-[#2f604a] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#1e4a3a] transition-all duration-300"
-                                    onclick="event.preventDefault(); event.stopPropagation(); this.addToCart('${product.id}', '${product.name}', ${product.price})">
+                                    onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', '${product.name}', ${product.price})">
                                 <i class="fas fa-shopping-cart mr-2"></i>
                                 Thêm vào giỏ
                             </button>

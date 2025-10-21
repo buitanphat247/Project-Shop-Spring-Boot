@@ -3,12 +3,17 @@ let productManager;
 
 // Load products khi trang được tải
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Products page DOM loaded, initializing...');
+    
     // Khởi tạo Product Manager
     productManager = new ProductManager();
     productManager.init();
     
     // Expose productManager ra global để các modules khác có thể sử dụng
     window.productManager = productManager;
+    
+    console.log('ProductManager initialized:', productManager);
+    console.log('Global addToCart function:', typeof window.addToCart);
 });
 
 // Legacy functions - kept for backward compatibility

@@ -120,15 +120,17 @@ class ProductManager {
      * @param {number} price - Giá sản phẩm
      */
     addToCart(productId, productName, price) {
-        console.log('Add to cart:', { productId, productName, price });
+        console.log('Add to cart called:', { productId, productName, price });
         
         // Sử dụng cart count manager nếu có
         if (window.cartCountManager) {
             console.log('Using cart count manager...');
             const success = window.cartCountManager.addToCart(productId, productName, price, 1);
             if (success) {
+                console.log('Cart count manager success');
                 ProductUtils.showSuccess(`Đã thêm "${productName}" vào giỏ hàng!`);
             } else {
+                console.log('Cart count manager failed');
                 ProductUtils.showError("Lỗi khi thêm vào giỏ hàng!");
             }
             return;
@@ -138,6 +140,7 @@ class ProductManager {
         console.log('Using fallback cart handling...');
         try {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            console.log('Current cart:', cart);
             
             // Kiểm tra sản phẩm đã có trong giỏ chưa
             const existingItem = cart.find(item => item.id === productId);
@@ -145,28 +148,35 @@ class ProductManager {
             if (existingItem) {
                 // Nếu đã có, cộng thêm số lượng
                 existingItem.quantity += 1;
+                console.log('Updated existing item:', existingItem);
             } else {
                 // Nếu chưa có, thêm mới
-                cart.push({
+                const newItem = {
                     id: productId,
                     name: productName,
                     price: parseFloat(price),
                     quantity: 1
-                });
+                };
+                cart.push(newItem);
+                console.log('Added new item:', newItem);
             }
             
             // Lưu vào localStorage
             localStorage.setItem('cart', JSON.stringify(cart));
+            console.log('Cart saved to localStorage');
             
             // Cập nhật cart count trong header
             this.updateCartCount(cart.length);
+            console.log('Cart count updated:', cart.length);
             
             // Dispatch event
             window.dispatchEvent(new CustomEvent('productAddedToCart', {
                 detail: { productId, productName, price, quantity: 1 }
             }));
+            console.log('ProductAddedToCart event dispatched');
             
             ProductUtils.showSuccess(`Đã thêm "${productName}" vào giỏ hàng!`);
+            console.log('Success notification shown');
             
         } catch (error) {
             console.error('Error adding to cart:', error);
@@ -209,6 +219,8 @@ class ProductManager {
      * Setup global functions để có thể gọi từ HTML
      */
     setupGlobalFunctions() {
+        console.log('Setting up global functions...');
+        
         // Global functions cho HTML onclick
         window.addToCart = this.addToCart.bind(this);
         window.addToWishlist = this.addToWishlist.bind(this);
@@ -223,6 +235,8 @@ class ProductManager {
         window.nextImage = this.gallery.nextImage.bind(this.gallery);
         window.selectImage = this.gallery.selectImage.bind(this.gallery);
         window.downloadImage = this.gallery.downloadImage.bind(this.gallery);
+        
+        console.log('Global functions setup complete. addToCart available:', typeof window.addToCart);
     }
 }
 
