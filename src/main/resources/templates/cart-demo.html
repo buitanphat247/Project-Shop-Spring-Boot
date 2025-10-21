@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Giỏ Hàng</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .quantity-input {
+            -moz-appearance: textfield;
+        }
+        .quantity-input::-webkit-outer-spin-button,
+        .quantity-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header với giỏ hàng -->
+        <header class="bg-white shadow-sm rounded-lg p-4 mb-6">
+            <div class="flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-800">Demo Giỏ Hàng</h1>
+                <a href="/cart" class="text-gray-600 hover:text-green-600 transition-colors relative">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Sản phẩm demo -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Sản phẩm 1 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/300x200" alt="Sản phẩm 1" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">iPhone 15 Pro</h3>
+                    <p class="text-gray-600 mb-2">Điện thoại thông minh cao cấp</p>
+                    <p class="text-2xl font-bold text-green-600 mb-4">25.000.000 VNĐ</p>
+                    
+                    <!-- Quantity selector -->
+                    <div class="flex items-center mb-4">
+                        <label class="text-sm font-medium text-gray-700 mr-2">Số lượng:</label>
+                        <div class="flex items-center border border-gray-300 rounded">
+                            <button class="quantity-btn px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors" data-action="decrease">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <input id="qty" class="quantity-input w-12 h-10 text-center border-x border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#cb5439]" value="1" min="1">
+                            <button class="quantity-btn px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors" data-action="increase">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Add to cart button -->
+                    <button class="w-full bg-[#1f553f] hover:bg-[#164232] text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105 text-sm" 
+                            id="add-to-cart-btn"
+                            data-product-id="1"
+                            data-product-name="iPhone 15 Pro"
+                            data-product-price="25000000"
+                            data-product-image="https://via.placeholder.com/300x200">
+                        <i class="fas fa-shopping-cart mr-2"></i>THÊM VÀO GIỎ HÀNG
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sản phẩm 2 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/300x200" alt="Sản phẩm 2" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Samsung Galaxy S24</h3>
+                    <p class="text-gray-600 mb-2">Điện thoại Android cao cấp</p>
+                    <p class="text-2xl font-bold text-green-600 mb-4">22.000.000 VNĐ</p>
+                    
+                    <!-- Quantity selector -->
+                    <div class="flex items-center mb-4">
+                        <label class="text-sm font-medium text-gray-700 mr-2">Số lượng:</label>
+                        <div class="flex items-center border border-gray-300 rounded">
+                            <button class="quantity-btn px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors" data-action="decrease">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <input id="qty2" class="quantity-input w-12 h-10 text-center border-x border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#cb5439]" value="1" min="1">
+                            <button class="quantity-btn px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors" data-action="increase">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Add to cart button -->
+                    <button class="w-full bg-[#1f553f] hover:bg-[#164232] text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105 text-sm" 
+                            id="add-to-cart-btn2"
+                            data-product-id="2"
+                            data-product-name="Samsung Galaxy S24"
+                            data-product-price="22000000"
+                            data-product-image="https://via.placeholder.com/300x200">
+                        <i class="fas fa-shopping-cart mr-2"></i>THÊM VÀO GIỎ HÀNG
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sản phẩm 3 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <img src="https://via.placeholder.com/300x200" alt="Sản phẩm 3" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">MacBook Pro M3</h3>
+                    <p class="text-gray-600 mb-2">Laptop cao cấp cho công việc</p>
+                    <p class="text-2xl font-bold text-green-600 mb-4">45.000.000 VNĐ</p>
+                    
+                    <!-- Quantity selector -->
+                    <div class="flex items-center mb-4">
+                        <label class="text-sm font-medium text-gray-700 mr-2">Số lượng:</label>
+                        <div class="flex items-center border border-gray-300 rounded">
+                            <button class="quantity-btn px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors" data-action="decrease">
+                                <i class="fas fa-minus text-xs"></i>
+                            </button>
+                            <input id="qty3" class="quantity-input w-12 h-10 text-center border-x border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#cb5439]" value="1" min="1">
+                            <button class="quantity-btn px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors" data-action="increase">
+                                <i class="fas fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Add to cart button -->
+                    <button class="w-full bg-[#1f553f] hover:bg-[#164232] text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105 text-sm" 
+                            id="add-to-cart-btn3"
+                            data-product-id="3"
+                            data-product-name="MacBook Pro M3"
+                            data-product-price="45000000"
+                            data-product-image="https://via.placeholder.com/300x200">
+                        <i class="fas fa-shopping-cart mr-2"></i>THÊM VÀO GIỎ HÀNG
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug info -->
+        <div class="mt-8 bg-white rounded-lg shadow-md p-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Debug Info</h3>
+            <button id="show-cart" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2">Xem Giỏ Hàng</button>
+            <button id="clear-cart" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">Xóa Giỏ Hàng</button>
+            <div id="cart-content" class="mt-4 p-4 bg-gray-100 rounded"></div>
+        </div>
+    </div>
+
+    <!-- Include cart.js -->
+    <script src="/js/cart.js"></script>
+    
+    <!-- Debug script -->
+    <script>
+        $(document).ready(function() {
+            // Xem giỏ hàng
+            $('#show-cart').click(function() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                $('#cart-content').html(`
+                    <h4 class="font-semibold mb-2">Giỏ hàng hiện tại:</h4>
+                    <pre class="text-sm">${JSON.stringify(cart, null, 2)}</pre>
+                `);
+            });
+            
+            // Xóa giỏ hàng
+            $('#clear-cart').click(function() {
+                localStorage.removeItem('cart');
+                $('.fa-shopping-cart').next('span').text('0');
+                $('#cart-content').html('<p class="text-gray-500">Giỏ hàng đã được xóa</p>');
+            });
+        });
+    </script>
+</body>
+</html>

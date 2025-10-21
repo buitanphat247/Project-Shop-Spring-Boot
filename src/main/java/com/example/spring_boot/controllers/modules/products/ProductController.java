@@ -118,7 +118,7 @@ public class ProductController {
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "categoryId", required = false) String categoryId,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "1") int size) {
+            @RequestParam(value = "size", defaultValue = "1000") int size) {
 
         PageResponse<Product> response;
         if (categoryId != null) {

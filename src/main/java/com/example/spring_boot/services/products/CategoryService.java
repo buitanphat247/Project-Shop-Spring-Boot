@@ -55,29 +55,33 @@ public class CategoryService {
 
     /** Cập nhật category. */
     public Category updateCategory(String id, String name, String description) {
-        log.info("Updating category with ID: {}", id); // Log thao tác cập nhật
-        try {
-            Category existingCategory = categoryRepository.findById(id) // Tìm theo id
-                    .orElseThrow(() -> new RuntimeException("Category not found with ID: " + id)); // Không thấy -> lỗi
-            // Kiểm tra nếu category đã bị xóa
-            if (existingCategory.getDeletedAt() != null) {
-                throw new RuntimeException("Category has been deleted"); // Đã xóa mềm -> chặn thao tác
-            }
-            // Kiểm tra tên mới có trùng với category khác không
-            if (!existingCategory.getName().equalsIgnoreCase(name) &&
-                    categoryRepository.existsByNameIgnoreCaseAndDeletedAtIsNull(name)) { // Xung đột tên
-                throw new RuntimeException("Category with name '" + name + "' already exists");
-            }
-            existingCategory.setName(name); // Cập nhật tên
-            existingCategory.setDescription(description); // Cập nhật mô tả
-            existingCategory.setUpdatedAt(Instant.now()); // Gán thời điểm cập nhật
-            Category updatedCategory = categoryRepository.save(existingCategory); // Lưu thay đổi
-            log.info("Category updated successfully"); // Log thành công
-            return updatedCategory; // Trả về kết quả
-        } catch (Exception e) {
-            log.error("updateCategory failed, id={}", id, e); // Log lỗi
-            throw new RuntimeException("Failed to update category: " + e.getMessage(), e); // Bao lỗi nghiệp vụ
+        log.info("🔄 Updating category - ID: {}, Name: '{}'", id, name);
+
+        // Tìm category theo ID (chưa bị xóa)
+        Category existingCategory = categoryRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new RuntimeException("Category not found with ID: " + id));
+
+        // Kiểm tra duplicate name (trừ chính nó)
+        if (categoryRepository.existsByNameIgnoreCaseAndDeletedAtIsNull(name) && 
+            !existingCategory.getName().equalsIgnoreCase(name)) {
+            throw new RuntimeException("Category with name '" + name + "' already exists");
         }
+
+        // Cập nhật thông tin
+        existingCategory.setName(name);
+        existingCategory.setDescription(description);
+        existingCategory.setUpdatedAt(Instant.now());
+
+        // Lưu vào database
+        try {
+            categoryRepository.save(existingCategory);
+        } catch (org.springframework.dao.DuplicateKeyException e) {
+            log.error("❌ Duplicate key error: {}", e.getMessage());
+            throw new RuntimeException("Category with name '" + name + "' already exists");
+        }
+
+        log.info("✅ Category updated successfully - ID: {}, Name: '{}'", id, name);
+        return existingCategory;
     }
 
     /** Xóa mềm category. */
@@ -137,14 +141,14 @@ public class CategoryService {
     public List<Category> getAllActiveCategories() {
         long startTime = System.currentTimeMillis();
         log.info("🚀 [PERFORMANCE] Getting all active categories with optimization");
-        
+
         try {
             // Sử dụng MongoTemplate với projection để chỉ lấy fields cần thiết
             Query query = new Query(Criteria.where("deletedAt").isNull());
             query.fields().include("name", "description", "createdAt", "updatedAt");
-            
+
             List<Category> categories = mongoTemplate.find(query, Category.class);
-            
+
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Retrieved {} categories in {}ms", categories.size(), endTime - startTime);
             return categories;
@@ -159,23 +163,23 @@ public class CategoryService {
     public List<Category> searchCategoriesByName(String name) {
         long startTime = System.currentTimeMillis();
         log.info("🔍 [PERFORMANCE] Searching categories by name: {}", name);
-        
+
         try {
             Query query = new Query();
-            
+
             if (name == null || name.trim().isEmpty()) {
                 query.addCriteria(Criteria.where("deletedAt").isNull());
             } else {
                 query.addCriteria(Criteria.where("deletedAt").isNull())
-                     .addCriteria(Criteria.where("name").regex(name, "i"));
+                        .addCriteria(Criteria.where("name").regex(name, "i"));
             }
-            
+
             query.fields().include("name", "description", "createdAt", "updatedAt");
-            
+
             List<Category> categories = mongoTemplate.find(query, Category.class);
-            
+
             long endTime = System.currentTimeMillis();
-            log.info("✅ [PERFORMANCE] Found {} categories matching '{}' in {}ms", 
+            log.info("✅ [PERFORMANCE] Found {} categories matching '{}' in {}ms",
                     categories.size(), name, endTime - startTime);
             return categories;
         } catch (Exception e) {
@@ -190,37 +194,37 @@ public class CategoryService {
         long startTime = System.currentTimeMillis();
         log.info("📄 [PERFORMANCE] Getting categories with pagination: page={}, size={}",
                 pageable.getPageNumber(), pageable.getPageSize());
-        
+
         try {
             Query query = new Query(Criteria.where("deletedAt").isNull());
             query.fields().include("name", "description", "createdAt", "updatedAt");
-            
+
             // Apply pagination
             query.skip(pageable.getOffset());
             query.limit(pageable.getPageSize());
-            
+
             // Apply sorting
             if (pageable.getSort().isSorted()) {
                 pageable.getSort().forEach(order -> {
                     query.with(org.springframework.data.domain.Sort.by(
-                        order.getDirection(), order.getProperty()));
+                            order.getDirection(), order.getProperty()));
                 });
             } else {
                 query.with(org.springframework.data.domain.Sort.by("createdAt").descending());
             }
-            
+
             List<Category> categories = mongoTemplate.find(query, Category.class);
-            
+
             // Count total records
             long totalCount = getTotalActiveCount();
-            
+
             long endTime = System.currentTimeMillis();
-            log.info("✅ [PERFORMANCE] Retrieved {} categories for page {} in {}ms", 
+            log.info("✅ [PERFORMANCE] Retrieved {} categories for page {} in {}ms",
                     categories.size(), pageable.getPageNumber(), endTime - startTime);
-            
+
             return new PageImpl<>(categories, pageable, totalCount);
         } catch (Exception e) {
-            log.error("❌ [PERFORMANCE] getCategoriesWithPagination failed, page={}, size={}", 
+            log.error("❌ [PERFORMANCE] getCategoriesWithPagination failed, page={}, size={}",
                     pageable.getPageNumber(), pageable.getPageSize(), e);
             throw new RuntimeException("Failed to paginate categories: " + e.getMessage(), e);
         }
@@ -231,11 +235,11 @@ public class CategoryService {
     public long countActiveCategories() {
         long startTime = System.currentTimeMillis();
         log.info("📊 [PERFORMANCE] Counting active categories");
-        
+
         try {
             Query countQuery = new Query(Criteria.where("deletedAt").isNull());
             long count = mongoTemplate.count(countQuery, Category.class);
-            
+
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Counted {} active categories in {}ms", count, endTime - startTime);
             return count;
@@ -269,10 +273,10 @@ public class CategoryService {
         try {
             // Lấy tất cả categories active
             List<Category> categories = getAllActiveCategories();
-            
+
             // Tạo danh sách kết quả với product count
             List<Map<String, Object>> result = new ArrayList<>();
-            
+
             for (Category category : categories) {
                 Map<String, Object> categoryWithCount = new HashMap<>();
                 categoryWithCount.put("id", category.getId());
@@ -281,18 +285,18 @@ public class CategoryService {
                 categoryWithCount.put("createdAt", category.getCreatedAt());
                 categoryWithCount.put("updatedAt", category.getUpdatedAt());
                 categoryWithCount.put("deletedAt", category.getDeletedAt());
-                
+
                 // Đếm số sản phẩm cho category này
                 long productCount = getProductCountForCategory(category.getId());
                 categoryWithCount.put("count", productCount);
-                
+
                 result.add(categoryWithCount);
             }
-            
+
             long endTime = System.currentTimeMillis();
-            log.info("✅ [PERFORMANCE] Retrieved {} categories with product counts in {}ms", 
+            log.info("✅ [PERFORMANCE] Retrieved {} categories with product counts in {}ms",
                     result.size(), endTime - startTime);
-            
+
             return result;
         } catch (Exception e) {
             log.error("❌ [PERFORMANCE] Failed to get categories with product counts", e);

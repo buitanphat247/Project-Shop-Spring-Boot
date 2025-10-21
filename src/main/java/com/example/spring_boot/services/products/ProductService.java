@@ -332,8 +332,8 @@ public class ProductService {
 
             // BATCH LOADING: Load tất cả categories trong 1 query
             batchPopulateCategories(products);
-            // BATCH LOADING: Load attributes & images
-            batchPopulateAttributesAndImages(products);
+            // // BATCH LOADING: Load attributes & images
+            // batchPopulateAttributesAndImages(products);
 
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Pagination completed in {}ms", endTime - startTime);

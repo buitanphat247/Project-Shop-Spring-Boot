@@ -20,9 +20,9 @@
                 <img th:src="${image.imageUrl}" th:alt="${product.name}" />
               </div>
               <div th:if="${product == null or product.images == null or product.images.isEmpty()}">
-              <div class="swiper-slide">
+                <div class="swiper-slide">
                   <img src="https://via.placeholder.com/600x600?text=No+Image" alt="No Image" />
-              </div>
+                </div>
               </div>
             </div>
           </div>
@@ -38,9 +38,9 @@
                 <img th:src="${image.imageUrl}" th:alt="${product.name}" />
               </div>
               <div th:if="${product == null or product.images == null or product.images.isEmpty()}">
-              <div class="swiper-slide">
+                <div class="swiper-slide">
                   <img src="https://via.placeholder.com/150x150?text=No+Image" alt="No Image" />
-              </div>
+                </div>
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@
             <!-- Action Section -->
             <div class="mb-6">
               <div class="flex items-center gap-3 mb-4">
-            <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
                   <button class="w-10 h-10 grid place-items-center hover:bg-gray-100 transition-colors" onclick="chgQty(-1)">-</button>
                   <input
                     id="qty"
@@ -87,6 +87,9 @@
                 <button
                   class="flex-1 bg-[#1f553f] hover:bg-[#164232] text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105 text-sm"
                   id="add-to-cart-btn"
+                  th:data-product-id="${product?.id}"
+                  th:data-product-name="${product?.name}"
+                  th:data-product-price="${product?.price}"
                 >
                   <i class="fas fa-shopping-cart mr-2"></i>THÊM VÀO GIỎ HÀNG
                 </button>
@@ -178,6 +181,10 @@
                 <button
                   class="flex-1 bg-[#1f553f] hover:bg-[#164232] text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105 text-sm"
                   id="add-to-cart-btn"
+                  th:data-product-id="${product?.id}"
+                  th:data-product-name="${product?.name}"
+                  th:data-product-price="${product?.price}"
+                  th:data-product-image="${product?.images != null and !product.images.isEmpty() ? product.images[0].imageUrl : ''}"
                 >
                   <i class="fas fa-shopping-cart mr-2"></i>THÊM VÀO GIỎ HÀNG
                 </button>
@@ -370,7 +377,7 @@
 <script>
   // Quantity change function
   function chgQty(delta) {
-    const qtyInput = document.getElementById('qty');
+    const qtyInput = document.getElementById("qty");
     let currentQty = parseInt(qtyInput.value) || 1;
     let newQty = currentQty + delta;
 
@@ -383,23 +390,23 @@
   // Tab switching function
   function showTab(tabName) {
     // Hide all tabs
-    document.querySelectorAll('[id^="tab-"]').forEach(tab => {
-      tab.classList.add('hidden');
+    document.querySelectorAll('[id^="tab-"]').forEach((tab) => {
+      tab.classList.add("hidden");
     });
 
     // Remove active state from all buttons
-    document.querySelectorAll('button[onclick^="showTab"]').forEach(btn => {
-      btn.classList.remove('text-[#cb5439]', 'border-[#cb5439]');
-      btn.classList.add('text-gray-600', 'border-transparent');
+    document.querySelectorAll('button[onclick^="showTab"]').forEach((btn) => {
+      btn.classList.remove("text-[#cb5439]", "border-[#cb5439]");
+      btn.classList.add("text-gray-600", "border-transparent");
     });
 
     // Show selected tab
-    document.getElementById('tab-' + tabName).classList.remove('hidden');
+    document.getElementById("tab-" + tabName).classList.remove("hidden");
 
     // Add active state to clicked button
     const activeBtn = document.querySelector(`button[onclick="showTab('${tabName}')"]`);
-    activeBtn.classList.remove('text-gray-600', 'border-transparent');
-    activeBtn.classList.add('text-[#cb5439]', 'border-[#cb5439]');
+    activeBtn.classList.remove("text-gray-600", "border-transparent");
+    activeBtn.classList.add("text-[#cb5439]", "border-[#cb5439]");
   }
 
   // Load related products
@@ -407,7 +414,7 @@
     return new Promise(async (resolve, reject) => {
       try {
         // Load only 10 products from API for faster response
-        const response = await fetch('/api/products/paged?page=3&size=5');
+        const response = await fetch("/api/products/paged?page=3&size=5");
         const data = await response.json();
 
         if (data.success && data.data && data.data.items) {
@@ -421,10 +428,10 @@
           resolve(relatedProducts);
         } else {
           showRelatedProductsError();
-          reject(new Error('No products found'));
+          reject(new Error("No products found"));
         }
       } catch (error) {
-        console.error('Error loading related products:', error);
+        console.error("Error loading related products:", error);
         showRelatedProductsError();
         reject(error);
       }
@@ -443,7 +450,7 @@
 
   // Render related products
   function renderRelatedProducts(products) {
-    const container = document.getElementById('relatedProducts');
+    const container = document.getElementById("relatedProducts");
 
     if (products.length === 0) {
       container.innerHTML = `
@@ -454,13 +461,13 @@
       return;
     }
 
-    const productsHTML = products.map(product => {
-      const price = formatPrice(product.price);
-      const imageUrl = product.images && product.images.length > 0
-        ? product.images[0].imageUrl
-        : 'https://via.placeholder.com/300x300?text=No+Image';
+    const productsHTML = products
+      .map((product) => {
+        const price = formatPrice(product.price);
+        const imageUrl =
+          product.images && product.images.length > 0 ? product.images[0].imageUrl : "https://via.placeholder.com/300x300?text=No+Image";
 
-      return `
+        return `
         <a href="/products/detail/${product.id}" class="block" id="related-product-${product.id}">
           <div class="product-card bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
             <div class="relative overflow-hidden">
@@ -474,12 +481,16 @@
                   <i class="fas fa-heart text-sm"></i>
                 </button>
               </div>
-              ${product.images && product.images.length > 1 ? `
+              ${
+                product.images && product.images.length > 1
+                  ? `
                 <div class="absolute bottom-3 right-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
                   <i class="fas fa-images mr-1"></i>
                   ${product.images.length}
                 </div>
-              ` : ''}
+              `
+                  : ""
+              }
             </div>
 
             <div class="p-4 flex flex-col justify-between">
@@ -512,14 +523,15 @@
           </div>
         </a>
       `;
-    }).join('');
+      })
+      .join("");
 
     container.innerHTML = productsHTML;
   }
 
   // Show error state
   function showRelatedProductsError() {
-    const container = document.getElementById('relatedProducts');
+    const container = document.getElementById("relatedProducts");
     container.innerHTML = `
       <div class="col-span-full text-center py-8">
         <div class="text-red-500 mb-2">
@@ -535,14 +547,14 @@
 
   // Format price
   function formatPrice(price) {
-    return new Intl.NumberFormat('vi-VN').format(price);
+    return new Intl.NumberFormat("vi-VN").format(price);
   }
 
   // Generate stars for rating
   function generateStars(rating) {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
-    let stars = '';
+    let stars = "";
 
     for (let i = 0; i < fullStars; i++) {
       stars += '<i class="fas fa-star text-sm"></i>';
@@ -563,19 +575,172 @@
   // Add to cart function
   function addToCart(productId, productName, price) {
     // TODO: Implement add to cart functionality
-    console.log('Add to cart:', { productId, productName, price });
+    console.log("Add to cart:", { productId, productName, price });
     alert(`Đã thêm "${productName}" vào giỏ hàng!`);
+  }
+
+  // ===========================================
+  // CART FUNCTIONALITY
+  // ===========================================
+
+  // Lấy giá trị quantity từ input
+  function getQuantity() {
+    return parseInt(document.getElementById("qty").value) || 1;
+  }
+
+  // Cập nhật số lượng trong giỏ hàng (số loại sản phẩm - không trùng lặp)
+  function updateCartCount(uniqueProductCount) {
+    const cartSpan = document.querySelector(".fa-shopping-cart").nextElementSibling;
+    if (cartSpan) {
+      cartSpan.textContent = uniqueProductCount;
+    }
+  }
+
+  // Lấy số lượng hiện tại trong giỏ hàng
+  function getCurrentCartCount() {
+    const cartSpan = document.querySelector(".fa-shopping-cart").nextElementSibling;
+    return parseInt(cartSpan?.textContent) || 0;
+  }
+
+  // Hiển thị thông báo
+  function showNotification(message, type = "success") {
+    // Tạo toast notification
+    const bgColor = type === "success" ? "bg-green-500" : "bg-red-500";
+    const icon = type === "success" ? "fa-check-circle" : "fa-exclamation-circle";
+
+    const toast = document.createElement("div");
+    toast.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
+    toast.innerHTML = `<i class="fas ${icon} mr-2"></i>${message}`;
+
+    document.body.appendChild(toast);
+
+    // Hiển thị animation
+    setTimeout(() => {
+      toast.classList.remove("translate-x-full");
+    }, 100);
+
+    // Tự động ẩn sau 3 giây
+    setTimeout(() => {
+      toast.classList.add("translate-x-full");
+      setTimeout(() => {
+        toast.remove();
+      }, 300);
+    }, 3000);
+  }
+
+  // Hàm thêm vào giỏ hàng
+  function addToCartFromDetail(productId, productName, productPrice, productQuantity) {
+    // Lấy giỏ hàng hiện tại từ localStorage
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Kiểm tra sản phẩm đã có trong giỏ chưa
+    const existingItem = cart.find((item) => item.id === productId);
+
+    if (existingItem) {
+      // Nếu đã có, cộng thêm số lượng của sản phẩm này
+      existingItem.quantity += productQuantity;
+      console.log(`Cộng thêm ${productQuantity} vào sản phẩm "${productName}". Tổng: ${existingItem.quantity}`);
+    } else {
+      // Nếu chưa có, thêm mới
+      cart.push({
+        id: productId,
+        name: productName,
+        price: parseFloat(productPrice),
+        quantity: productQuantity, // Số lượng của sản phẩm này
+      });
+      console.log(`Thêm mới sản phẩm "${productName}" với số lượng: ${productQuantity}`);
+    }
+
+    // Lưu vào localStorage
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Tính số loại sản phẩm (không trùng lặp)
+    const uniqueProductCount = cart.length;
+    
+    // Cập nhật UI với số loại sản phẩm
+    updateCartCount(uniqueProductCount);
+    
+    // Tính tổng số lượng để debug
+    const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+    console.log(`Giỏ hàng hiện tại: ${uniqueProductCount} loại sản phẩm, tổng ${totalQuantity} sản phẩm`);
+
+    // Hiển thị thông báo
+    showNotification(`Đã thêm ${productQuantity} "${productName}" vào giỏ hàng!`, "success");
+  }
+
+  // Xử lý click nút "THÊM VÀO GIỎ HÀNG"
+  function handleAddToCart() {
+    const button = document.getElementById("add-to-cart-btn");
+    if (!button) return;
+
+    // Lấy thông tin sản phẩm từ data attributes
+    const productId = button.getAttribute("data-product-id");
+    const productName = button.getAttribute("data-product-name");
+    const productPrice = button.getAttribute("data-product-price");
+    const productQuantity = getQuantity(); // Số lượng của sản phẩm này
+    
+    // Debug log
+    console.log("Product data:", { productId, productName, productPrice, productQuantity });
+    console.log("Product price type:", typeof productPrice, "Value:", productPrice);
+
+    // Kiểm tra quantity hợp lệ
+    if (productQuantity < 1) {
+      showNotification("Số lượng phải lớn hơn 0!", "error");
+      return;
+    }
+
+    // Kiểm tra thông tin sản phẩm
+    if (!productId || productId === 'null' || productId === '') {
+      // Fallback: sử dụng dữ liệu từ URL hoặc hardcode
+      const urlParts = window.location.pathname.split('/');
+      const fallbackId = urlParts[urlParts.length - 1];
+      
+      if (fallbackId && fallbackId !== 'detail') {
+        console.log("Using fallback ID:", fallbackId);
+        addToCartFromDetail(fallbackId, productName || "Sản phẩm", productPrice || "0", productQuantity);
+        return;
+      }
+      
+      showNotification("Thông tin sản phẩm không hợp lệ!", "error");
+      return;
+    }
+
+    // Kiểm tra giá sản phẩm
+    if (!productPrice || productPrice === 'null' || productPrice === '' || parseFloat(productPrice) <= 0) {
+      showNotification("Giá sản phẩm không hợp lệ!", "error");
+      console.error("Invalid product price:", productPrice);
+      return;
+    }
+
+    // Thêm vào giỏ hàng
+    addToCartFromDetail(productId, productName, productPrice, productQuantity);
+  }
+
+  // Khởi tạo số lượng giỏ hàng khi load trang
+  function initCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const uniqueProductCount = cart.length; // Số loại sản phẩm (không trùng lặp)
+    updateCartCount(uniqueProductCount);
   }
 
   // Add to wishlist function
   function addToWishlist(productId, productName) {
     // TODO: Implement wishlist functionality
-    console.log('Add to wishlist:', { productId, productName });
+    console.log("Add to wishlist:", { productId, productName });
     alert(`Đã thêm "${productName}" vào danh sách yêu thích!`);
   }
 
   // Initialize everything when DOM is loaded
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener("DOMContentLoaded", function () {
+    // Khởi tạo giỏ hàng
+    initCartCount();
+
+    // Thêm event listener cho nút "THÊM VÀO GIỎ HÀNG"
+    const addToCartBtn = document.getElementById("add-to-cart-btn");
+    if (addToCartBtn) {
+      addToCartBtn.addEventListener("click", handleAddToCart);
+    }
+
     // Show loading state for everything
     showGlobalLoading();
 
@@ -583,12 +748,12 @@
     Promise.all([
       // Wait for Swiper to be available
       new Promise((resolve) => {
-        if (typeof Swiper !== 'undefined') {
+        if (typeof Swiper !== "undefined") {
           resolve();
         } else {
           // Wait for Swiper to load with timeout
           const checkSwiper = setInterval(() => {
-            if (typeof Swiper !== 'undefined') {
+            if (typeof Swiper !== "undefined") {
               clearInterval(checkSwiper);
               resolve();
             }
@@ -604,13 +769,13 @@
       // Wait for related products to load with timeout
       Promise.race([
         loadRelatedProducts(),
-        new Promise((resolve) => setTimeout(resolve, 2000)) // 2 second timeout
-      ])
+        new Promise((resolve) => setTimeout(resolve, 2000)), // 2 second timeout
+      ]),
     ]).then(() => {
       // Initialize Swiper after everything is loaded
-      if (typeof Swiper !== 'undefined') {
+      if (typeof Swiper !== "undefined") {
         // Initialize thumbnail swiper first
-        const thumbsSwiper = new Swiper('.pd-thumbs', {
+        const thumbsSwiper = new Swiper(".pd-thumbs", {
           spaceBetween: 10,
           slidesPerView: 4,
           freeMode: true,
@@ -624,12 +789,12 @@
             },
             1024: {
               slidesPerView: 6,
-            }
-          }
+            },
+          },
         });
 
         // Initialize main swiper with thumbs connection
-        const mainSwiper = new Swiper('.pd-main', {
+        const mainSwiper = new Swiper(".pd-main", {
           spaceBetween: 10,
           autoplay: {
             delay: 3000, // 3 seconds
@@ -638,27 +803,27 @@
           },
           loop: true, // Enable loop for continuous sliding
           navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
           },
           thumbs: {
-            swiper: thumbsSwiper
+            swiper: thumbsSwiper,
           },
           on: {
-            slideChange: function() {
+            slideChange: function () {
               // Sync thumbnail scroll when main slide changes
               const activeIndex = this.realIndex;
               const thumbIndex = activeIndex % thumbsSwiper.slides.length;
-              
+
               // Scroll thumbnail to show active slide
               thumbsSwiper.slideTo(thumbIndex, 300);
-            }
-          }
+            },
+          },
         });
 
         // Add click handlers for thumbnails
-        thumbsSwiper.on('click', function(swiper, event) {
-          const clickedSlide = event.target.closest('.swiper-slide');
+        thumbsSwiper.on("click", function (swiper, event) {
+          const clickedSlide = event.target.closest(".swiper-slide");
           if (clickedSlide) {
             const slideIndex = Array.from(clickedSlide.parentNode.children).indexOf(clickedSlide);
             mainSwiper.slideTo(slideIndex, 300);
@@ -674,7 +839,7 @@
   // Show global loading state
   function showGlobalLoading() {
     // Show loading in related products only
-    const relatedProducts = document.getElementById('relatedProducts');
+    const relatedProducts = document.getElementById("relatedProducts");
     if (relatedProducts) {
       relatedProducts.innerHTML = `
         <div class="col-span-full flex justify-center items-center py-8">
@@ -690,10 +855,10 @@
   // Hide global loading state
   function hideGlobalLoading() {
     // Just hide the loading, let Thymeleaf handle the content
-    const productInfoSection = document.getElementById('product-info');
+    const productInfoSection = document.getElementById("product-info");
     if (productInfoSection) {
       // Remove loading state
-      const loadingElement = productInfoSection.querySelector('.animate-spin');
+      const loadingElement = productInfoSection.querySelector(".animate-spin");
       if (loadingElement) {
         loadingElement.parentElement.remove();
       }
