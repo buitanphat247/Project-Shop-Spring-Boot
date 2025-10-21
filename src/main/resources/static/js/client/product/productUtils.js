@@ -35,7 +35,7 @@ class ProductUtils {
         if (product.primaryImage) {
             return product.primaryImage;
         }
-        
+
         // Fallback images dựa trên tên sản phẩm
         return this.getFallbackImage(product);
     }
@@ -47,7 +47,7 @@ class ProductUtils {
      */
     static getFallbackImage(product) {
         const productName = product.name.toLowerCase();
-        
+
         if (productName.includes('áo') || productName.includes('shirt')) {
             return 'https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg';
         } else if (productName.includes('quần') || productName.includes('pants')) {
@@ -55,9 +55,9 @@ class ProductUtils {
         } else if (productName.includes('hoodie') || productName.includes('sweater')) {
             return 'https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-4.jpg';
         }
-        
+
         // Default image
-        return 'https://via.placeholder.com/300x300?text=No+Image';
+        return 'https://spencil.vn/wp-content/uploads/2024/11/chup-anh-san-pham-SPencil-Agency-1.jpg';
     }
 
     /**
@@ -81,20 +81,20 @@ class ProductUtils {
         const fullStars = Math.floor(rating);
         const hasHalfStar = rating % 1 !== 0;
         let stars = '';
-        
+
         for (let i = 0; i < fullStars; i++) {
             stars += '<i class="fas fa-star"></i>';
         }
-        
+
         if (hasHalfStar) {
             stars += '<i class="fas fa-star-half-alt"></i>';
         }
-        
+
         const emptyStars = 5 - Math.ceil(rating);
         for (let i = 0; i < emptyStars; i++) {
             stars += '<i class="far fa-star"></i>';
         }
-        
+
         return stars;
     }
 
@@ -105,7 +105,7 @@ class ProductUtils {
     static showError(message) {
         const productGrid = document.getElementById('product-grid');
         if (!productGrid) return;
-        
+
         productGrid.innerHTML = `
             <div class="col-span-full text-center py-12">
                 <i class="fas fa-exclamation-triangle text-6xl text-red-300 mb-4"></i>
@@ -133,14 +133,14 @@ class ProductUtils {
                 <span>${message}</span>
             </div>
         `;
-        
+
         document.body.appendChild(toast);
-        
+
         // Animate in
         setTimeout(() => {
             toast.classList.remove('translate-x-full');
         }, 100);
-        
+
         // Auto remove
         setTimeout(() => {
             toast.classList.add('translate-x-full');

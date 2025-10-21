@@ -410,9 +410,51 @@
       background-color: #a03d2a !important;
       color: white !important;
     }
+
+    /* Cart and Wishlist Count Styling */
+    .fa-shopping-cart + span,
+    .fa-heart + span {
+      display: none;
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: #ef4444;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .fa-shopping-cart + span:hover,
+    .fa-heart + span:hover {
+      transform: scale(1.1);
+      background-color: #dc2626;
+    }
+
+    /* Animation for count updates */
+    @keyframes countUpdate {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .fa-shopping-cart + span.updated,
+    .fa-heart + span.updated {
+      animation: countUpdate 0.3s ease;
+    }
   </style>
 
   <!-- Modal JavaScript -->
   <script defer src="/js/main-modal.js"></script>
   <script defer src="/js/header-menu.js"></script>
+  <script defer src="/js/client/cart/cart-count.js"></script>
+  <script defer src="/js/client/cart/wishlist-count.js"></script>
+  <script defer src="/js/client/cart/cart-wishlist-manager.js"></script>
+  <!-- Demo script (chỉ trong development) -->
+  <script defer src="/js/client/cart/cart-demo.js"></script>
 </header>

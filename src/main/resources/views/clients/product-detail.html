@@ -9,38 +9,24 @@
         >
           <span class="badge-sale z-10">SALE!</span>
 
-          <!-- Swiper Main -->
+          <!-- Swiper Main - Sẽ được render bằng JavaScript -->
           <div class="swiper pd-main">
             <div class="swiper-wrapper" id="pdMainWrapper">
-              <div
-                th:if="${product != null and product.images != null and !product.images.isEmpty()}"
-                th:each="image, iterStat : ${product.images}"
-                class="swiper-slide"
-              >
-                <img th:src="${image.imageUrl}" th:alt="${product.name}" />
-              </div>
-              <div th:if="${product == null or product.images == null or product.images.isEmpty()}">
+              <!-- Loading state -->
                 <div class="swiper-slide">
-                  <img src="https://via.placeholder.com/600x600?text=No+Image" alt="No Image" />
+                <div class="w-full h-96 bg-gray-200 animate-pulse flex items-center justify-center">
+                  <i class="fas fa-spinner fa-spin text-4xl text-gray-400"></i>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Swiper Thumbs -->
+          <!-- Swiper Thumbs - Sẽ được render bằng JavaScript -->
           <div class="swiper pd-thumbs">
             <div class="swiper-wrapper" id="pdThumbsWrapper">
-              <div
-                th:if="${product != null and product.images != null and !product.images.isEmpty()}"
-                th:each="image, iterStat : ${product.images}"
-                class="swiper-slide"
-              >
-                <img th:src="${image.imageUrl}" th:alt="${product.name}" />
-              </div>
-              <div th:if="${product == null or product.images == null or product.images.isEmpty()}">
+              <!-- Loading state -->
                 <div class="swiper-slide">
-                  <img src="https://via.placeholder.com/150x150?text=No+Image" alt="No Image" />
-                </div>
+                <div class="w-full h-20 bg-gray-200 animate-pulse rounded"></div>
               </div>
             </div>
           </div>
@@ -56,198 +42,41 @@
             <span th:text="${error}"></span>
           </div>
 
-          <!-- Product Data -->
-          <div th:if="${product != null}" class="flex flex-col h-full">
-            <!-- Header Section -->
+          <!-- Product Data - Sẽ được render bằng JavaScript -->
+          <div id="product-data" class="flex flex-col h-full">
+            <!-- Loading state -->
+            <div id="product-loading" class="flex flex-col h-full">
             <div class="mb-6">
-              <h1 th:text="${product.name}" class="text-2xl font-bold text-[#1f2d3d] mb-3">Tên sản phẩm</h1>
+                <div class="animate-pulse">
+                  <div class="h-8 bg-gray-200 rounded mb-3"></div>
               <div class="flex items-center gap-3 mb-4">
-                <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'" class="text-[#cb5439] text-2xl font-extrabold"
-                  >0₫</span
-                >
-                <span th:text="'Còn ' + ${product.stock} + ' sản phẩm'" class="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full"
-                  >Còn 0 sản phẩm</span
-                >
+                    <div class="h-8 w-32 bg-gray-200 rounded"></div>
+                    <div class="h-6 w-24 bg-gray-200 rounded-full"></div>
+              </div>
               </div>
             </div>
-
-            <!-- Action Section -->
             <div class="mb-6">
+                <div class="animate-pulse">
               <div class="flex items-center gap-3 mb-4">
-                <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-                  <button class="w-10 h-10 grid place-items-center hover:bg-gray-100 transition-colors" onclick="chgQty(-1)">-</button>
-                  <input
-                    id="qty"
-                    class="w-12 h-10 text-center border-x border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#cb5439]"
-                    value="1"
-                    min="1"
-                  />
-                  <button class="w-10 h-10 grid place-items-center hover:bg-gray-100 transition-colors" onclick="chgQty(1)">+</button>
+                    <div class="h-10 w-32 bg-gray-200 rounded-lg"></div>
+                    <div class="h-10 flex-1 bg-gray-200 rounded-full"></div>
+                    <div class="h-10 w-10 bg-gray-200 rounded-full"></div>
                 </div>
-                <button
-                  class="flex-1 bg-[#1f553f] hover:bg-[#164232] text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105 text-sm"
-                  id="add-to-cart-btn"
-                  th:data-product-id="${product?.id}"
-                  th:data-product-name="${product?.name}"
-                  th:data-product-price="${product?.price}"
-                >
-                  <i class="fas fa-shopping-cart mr-2"></i>THÊM VÀO GIỎ HÀNG
-                </button>
-                <button
-                  class="w-10 h-10 rounded-full border-2 border-gray-300 text-gray-600 hover:text-[#cb5439] hover:border-[#cb5439] transition-all duration-200 hover:scale-110"
-                  id="wishlist-btn"
-                >
-                  <i class="fas fa-heart text-sm"></i>
-                </button>
               </div>
             </div>
-
-            <!-- Product Details Section -->
             <div class="mt-auto">
               <div class="bg-gray-50 rounded-lg p-4 space-y-3">
-                <div class="flex items-center justify-between py-1.5 border-b border-gray-200">
-                  <span class="font-semibold text-gray-700 text-sm">SKU:</span>
-                  <span th:text="${product.id}" class="text-gray-600 font-mono text-sm">SKU</span>
-                </div>
-                <div class="flex items-center justify-between py-1.5 border-b border-gray-200">
-                  <span class="font-semibold text-gray-700 text-sm">DANH MỤC:</span>
-                  <span th:text="${product.category != null ? product.category.name : 'N/A'}" class="text-gray-600 text-sm">Danh mục</span>
-                </div>
-                <div class="flex items-center justify-between py-1.5 border-b border-gray-200">
-                  <span class="font-semibold text-gray-700 text-sm">TỪ KHÓA:</span>
-                  <span class="text-gray-600 text-sm">Fashion, Cotton</span>
-                </div>
-                <div class="flex items-center justify-between py-1.5">
-                  <span class="font-semibold text-gray-700 text-sm">CHIA SẺ:</span>
-                  <div class="flex items-center gap-2">
-                    <a
-                      href="#"
-                      class="w-7 h-7 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                      title="Facebook"
-                    >
-                      <i class="fab fa-facebook-f text-xs"></i>
-                    </a>
-                    <a
-                      href="#"
-                      class="w-7 h-7 bg-sky-500 hover:bg-sky-600 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                      title="Twitter"
-                    >
-                      <i class="fab fa-twitter text-xs"></i>
-                    </a>
-                    <a
-                      href="#"
-                      class="w-7 h-7 bg-blue-700 hover:bg-blue-800 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                      title="LinkedIn"
-                    >
-                      <i class="fab fa-linkedin-in text-xs"></i>
-                    </a>
-                    <a
-                      href="#"
-                      class="w-7 h-7 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                      title="Pinterest"
-                    >
-                      <i class="fab fa-pinterest text-xs"></i>
-                    </a>
+                  <div class="animate-pulse space-y-3">
+                    <div class="h-4 bg-gray-200 rounded"></div>
+                    <div class="h-4 bg-gray-200 rounded"></div>
+                    <div class="h-4 bg-gray-200 rounded"></div>
+                    <div class="h-4 bg-gray-200 rounded"></div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Loading State -->
-          <div th:if="${product == null and error == null}" class="flex flex-col h-full">
-            <!-- Header Section -->
-            <div class="mb-6">
-              <h1 class="text-2xl font-bold text-[#1f2d3d] mb-3">Đang tải...</h1>
-              <div class="flex items-center gap-3 mb-4">
-                <span class="text-[#cb5439] text-2xl font-extrabold">0₫</span>
-                <span class="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full">Đang tải...</span>
-              </div>
-            </div>
-
-            <!-- Action Section -->
-            <div class="mb-6">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-                  <button class="w-10 h-10 grid place-items-center hover:bg-gray-100 transition-colors" onclick="chgQty(-1)">-</button>
-                  <input
-                    id="qty"
-                    class="w-12 h-10 text-center border-x border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#cb5439]"
-                    value="1"
-                    min="1"
-                  />
-                  <button class="w-10 h-10 grid place-items-center hover:bg-gray-100 transition-colors" onclick="chgQty(1)">+</button>
-                </div>
-                <button
-                  class="flex-1 bg-[#1f553f] hover:bg-[#164232] text-white px-6 py-3 rounded-full font-semibold transition-all duration-200 hover:scale-105 text-sm"
-                  id="add-to-cart-btn"
-                  th:data-product-id="${product?.id}"
-                  th:data-product-name="${product?.name}"
-                  th:data-product-price="${product?.price}"
-                  th:data-product-image="${product?.images != null and !product.images.isEmpty() ? product.images[0].imageUrl : ''}"
-                >
-                  <i class="fas fa-shopping-cart mr-2"></i>THÊM VÀO GIỎ HÀNG
-                </button>
-                <button
-                  class="w-10 h-10 rounded-full border-2 border-gray-300 text-gray-600 hover:text-[#cb5439] hover:border-[#cb5439] transition-all duration-200 hover:scale-110"
-                  id="wishlist-btn"
-                >
-                  <i class="fas fa-heart text-sm"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Product Details Section -->
-            <div class="mt-auto">
-              <div class="bg-gray-50 rounded-lg p-4 space-y-3">
-                <div class="flex items-center justify-between py-1.5 border-b border-gray-200">
-                  <span class="font-semibold text-gray-700 text-sm">SKU:</span>
-                  <span class="text-gray-600 font-mono text-sm">Đang tải...</span>
-                </div>
-                <div class="flex items-center justify-between py-1.5 border-b border-gray-200">
-                  <span class="font-semibold text-gray-700 text-sm">DANH MỤC:</span>
-                  <span class="text-gray-600 text-sm">Đang tải...</span>
-                </div>
-                <div class="flex items-center justify-between py-1.5 border-b border-gray-200">
-                  <span class="font-semibold text-gray-700 text-sm">TỪ KHÓA:</span>
-                  <span class="text-gray-600 text-sm">Fashion, Cotton</span>
-                </div>
-                <div class="flex items-center justify-between py-1.5">
-                  <span class="font-semibold text-gray-700 text-sm">CHIA SẺ:</span>
-                  <div class="flex items-center gap-2">
-                    <a
-                      href="#"
-                      class="w-7 h-7 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                      title="Facebook"
-                    >
-                      <i class="fab fa-facebook-f text-xs"></i>
-                    </a>
-                    <a
-                      href="#"
-                      class="w-7 h-7 bg-sky-500 hover:bg-sky-600 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                      title="Twitter"
-                    >
-                      <i class="fab fa-twitter text-xs"></i>
-                    </a>
-                    <a
-                      href="#"
-                      class="w-7 h-7 bg-blue-700 hover:bg-blue-800 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                      title="LinkedIn"
-                    >
-                      <i class="fab fa-linkedin-in text-xs"></i>
-                    </a>
-                    <a
-                      href="#"
-                      class="w-7 h-7 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110"
-                      title="Pinterest"
-                    >
-                      <i class="fab fa-pinterest text-xs"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </section>
       </div>
 
@@ -263,17 +92,7 @@
           </button>
         </div>
         <div id="tab-desc" class="text-gray-700 leading-relaxed">
-          <p class="mb-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-            minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
-            totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
-            voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-            Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora
-            incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis
-            suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
-          </p>
+          <p class="mb-4">Đang tải mô tả sản phẩm...</p>
         </div>
         <div id="tab-info" class="text-gray-700 leading-relaxed hidden">
           <div class="overflow-x-auto">
@@ -359,9 +178,9 @@
       <!-- Related products -->
       <section class="mt-10">
         <h2 class="text-2xl font-bold text-center text-[#2f604a] mb-6">SẢN PHẨM LIÊN QUAN</h2>
-        <div id="relatedProducts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+        <div id="relatedProducts" class="grid grid-cols-5 gap-4">
           <!-- Loading state -->
-          <div class="col-span-full flex justify-center items-center py-8">
+          <div class="col-span-5 flex justify-center items-center py-8">
             <div class="flex items-center space-x-2">
               <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-[#cb5439]"></div>
               <span class="text-gray-600">Đang tải sản phẩm liên quan...</span>
@@ -374,494 +193,90 @@
 </div>
 
 <!-- JavaScript for product detail page -->
-<script>
-  // Quantity change function
-  function chgQty(delta) {
-    const qtyInput = document.getElementById("qty");
-    let currentQty = parseInt(qtyInput.value) || 1;
-    let newQty = currentQty + delta;
+<script defer src="/js/client/productDetail/utils.js"></script>
+<script defer src="/js/client/productDetail/cart.js"></script>
+<script defer src="/js/client/productDetail/product-data.js"></script>
+<script defer src="/js/client/productDetail/related-products.js"></script>
+<script defer src="/js/client/productDetail/ui.js"></script>
+<script defer src="/js/client/productDetail/swiper.js"></script>
+<script defer src="/js/client/productDetail/main.js"></script>
 
-    // Ensure quantity is at least 1
-    if (newQty < 1) newQty = 1;
-
-    qtyInput.value = newQty;
+<!-- CSS cho loading states -->
+<style>
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
-
-  // Tab switching function
-  function showTab(tabName) {
-    // Hide all tabs
-    document.querySelectorAll('[id^="tab-"]').forEach((tab) => {
-      tab.classList.add("hidden");
-    });
-
-    // Remove active state from all buttons
-    document.querySelectorAll('button[onclick^="showTab"]').forEach((btn) => {
-      btn.classList.remove("text-[#cb5439]", "border-[#cb5439]");
-      btn.classList.add("text-gray-600", "border-transparent");
-    });
-
-    // Show selected tab
-    document.getElementById("tab-" + tabName).classList.remove("hidden");
-
-    // Add active state to clicked button
-    const activeBtn = document.querySelector(`button[onclick="showTab('${tabName}')"]`);
-    activeBtn.classList.remove("text-gray-600", "border-transparent");
-    activeBtn.classList.add("text-[#cb5439]", "border-[#cb5439]");
-  }
-
-  // Load related products
-  async function loadRelatedProducts() {
-    return new Promise(async (resolve, reject) => {
-      try {
-        // Load only 10 products from API for faster response
-        const response = await fetch("/api/products/paged?page=3&size=5");
-        const data = await response.json();
-
-        if (data.success && data.data && data.data.items) {
-          // Shuffle the products array
-          const shuffledProducts = shuffleArray([...data.data.items]);
-
-          // Take only first 5 products
-          const relatedProducts = shuffledProducts.slice(0, 5);
-
-          renderRelatedProducts(relatedProducts);
-          resolve(relatedProducts);
-        } else {
-          showRelatedProductsError();
-          reject(new Error("No products found"));
-        }
-      } catch (error) {
-        console.error("Error loading related products:", error);
-        showRelatedProductsError();
-        reject(error);
-      }
-    });
-  }
-
-  // Shuffle array function
-  function shuffleArray(array) {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
     }
-    return shuffled;
-  }
-
-  // Render related products
-  function renderRelatedProducts(products) {
-    const container = document.getElementById("relatedProducts");
-
-    if (products.length === 0) {
-      container.innerHTML = `
-        <div class="col-span-full text-center py-8">
-          <p class="text-gray-500">Không có sản phẩm liên quan</p>
-        </div>
-      `;
-      return;
-    }
-
-    const productsHTML = products
-      .map((product) => {
-        const price = formatPrice(product.price);
-        const imageUrl =
-          product.images && product.images.length > 0 ? product.images[0].imageUrl : "https://via.placeholder.com/300x300?text=No+Image";
-
-        return `
-        <a href="/products/detail/${product.id}" class="block" id="related-product-${product.id}">
-          <div class="product-card bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
-            <div class="relative overflow-hidden">
-              <img src="${imageUrl}"
-                   alt="${product.name}"
-                   class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer">
-              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>
-              <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button class="w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-gray-600 hover:text-red-500"
-                        onclick="event.preventDefault(); event.stopPropagation(); addToWishlist('${product.id}', '${product.name}')">
-                  <i class="fas fa-heart text-sm"></i>
-                </button>
-              </div>
-              ${
-                product.images && product.images.length > 1
-                  ? `
-                <div class="absolute bottom-3 right-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
-                  <i class="fas fa-images mr-1"></i>
-                  ${product.images.length}
-                </div>
-              `
-                  : ""
-              }
-            </div>
-
-            <div class="p-4 flex flex-col justify-between">
-              <div>
-                <h3 class="font-semibold text-gray-900 mb-2 line-clamp-1" title="${product.name}">
-                  ${product.name}
-                </h3>
-
-                <div class="flex items-center justify-between mb-3">
-                  <span class="text-lg font-bold text-[#cb5439]">${price}₫</span>
-                  <span class="text-sm text-gray-500">Còn ${product.stock} sản phẩm</span>
-                </div>
-
-                <div class="flex items-center gap-2 mb-3">
-                  <div class="flex text-yellow-400">
-                    ${generateStars(4.5)}
-                  </div>
-                  <span class="text-sm text-gray-500">(24 đánh giá)</span>
-                </div>
-              </div>
-
-              <div>
-                <button class="add-to-cart-btn w-full bg-[#2f604a] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#1e4a3a] transition-all duration-300"
-                        onclick="event.preventDefault(); event.stopPropagation(); addToCart('${product.id}', '${product.name}', ${product.price})">
-                  <i class="fas fa-shopping-cart mr-2"></i>
-                  Thêm vào giỏ
-                </button>
-              </div>
-            </div>
-          </div>
-        </a>
-      `;
-      })
-      .join("");
-
-    container.innerHTML = productsHTML;
-  }
-
-  // Show error state
-  function showRelatedProductsError() {
-    const container = document.getElementById("relatedProducts");
-    container.innerHTML = `
-      <div class="col-span-full text-center py-8">
-        <div class="text-red-500 mb-2">
-          <i class="fas fa-exclamation-triangle text-2xl"></i>
-        </div>
-        <p class="text-gray-500">Không thể tải sản phẩm liên quan</p>
-        <button onclick="loadRelatedProducts()" class="mt-2 text-[#cb5439] hover:underline text-sm">
-          Thử lại
-        </button>
-      </div>
-    `;
-  }
-
-  // Format price
-  function formatPrice(price) {
-    return new Intl.NumberFormat("vi-VN").format(price);
-  }
-
-  // Generate stars for rating
-  function generateStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-    let stars = "";
-
-    for (let i = 0; i < fullStars; i++) {
-      stars += '<i class="fas fa-star text-sm"></i>';
-    }
-
-    if (hasHalfStar) {
-      stars += '<i class="fas fa-star-half-alt text-sm"></i>';
-    }
-
-    const emptyStars = 5 - Math.ceil(rating);
-    for (let i = 0; i < emptyStars; i++) {
-      stars += '<i class="far fa-star text-sm"></i>';
-    }
-
-    return stars;
-  }
-
-  // Add to cart function
-  function addToCart(productId, productName, price) {
-    // TODO: Implement add to cart functionality
-    console.log("Add to cart:", { productId, productName, price });
-    alert(`Đã thêm "${productName}" vào giỏ hàng!`);
-  }
-
-  // ===========================================
-  // CART FUNCTIONALITY
-  // ===========================================
-
-  // Lấy giá trị quantity từ input
-  function getQuantity() {
-    return parseInt(document.getElementById("qty").value) || 1;
-  }
-
-  // Cập nhật số lượng trong giỏ hàng (số loại sản phẩm - không trùng lặp)
-  function updateCartCount(uniqueProductCount) {
-    const cartSpan = document.querySelector(".fa-shopping-cart").nextElementSibling;
-    if (cartSpan) {
-      cartSpan.textContent = uniqueProductCount;
+    50% {
+      opacity: .5;
     }
   }
-
-  // Lấy số lượng hiện tại trong giỏ hàng
-  function getCurrentCartCount() {
-    const cartSpan = document.querySelector(".fa-shopping-cart").nextElementSibling;
-    return parseInt(cartSpan?.textContent) || 0;
+  
+  /* Loading skeleton styles */
+  .loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
   }
-
-  // Hiển thị thông báo
-  function showNotification(message, type = "success") {
-    // Tạo toast notification
-    const bgColor = type === "success" ? "bg-green-500" : "bg-red-500";
-    const icon = type === "success" ? "fa-check-circle" : "fa-exclamation-circle";
-
-    const toast = document.createElement("div");
-    toast.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
-    toast.innerHTML = `<i class="fas ${icon} mr-2"></i>${message}`;
-
-    document.body.appendChild(toast);
-
-    // Hiển thị animation
-    setTimeout(() => {
-      toast.classList.remove("translate-x-full");
-    }, 100);
-
-    // Tự động ẩn sau 3 giây
-    setTimeout(() => {
-      toast.classList.add("translate-x-full");
-      setTimeout(() => {
-        toast.remove();
-      }, 300);
-    }, 3000);
-  }
-
-  // Hàm thêm vào giỏ hàng
-  function addToCartFromDetail(productId, productName, productPrice, productQuantity) {
-    // Lấy giỏ hàng hiện tại từ localStorage
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    // Kiểm tra sản phẩm đã có trong giỏ chưa
-    const existingItem = cart.find((item) => item.id === productId);
-
-    if (existingItem) {
-      // Nếu đã có, cộng thêm số lượng của sản phẩm này
-      existingItem.quantity += productQuantity;
-      console.log(`Cộng thêm ${productQuantity} vào sản phẩm "${productName}". Tổng: ${existingItem.quantity}`);
-    } else {
-      // Nếu chưa có, thêm mới
-      cart.push({
-        id: productId,
-        name: productName,
-        price: parseFloat(productPrice),
-        quantity: productQuantity, // Số lượng của sản phẩm này
-      });
-      console.log(`Thêm mới sản phẩm "${productName}" với số lượng: ${productQuantity}`);
+  
+  @keyframes loading {
+    0% {
+      background-position: 200% 0;
     }
-
-    // Lưu vào localStorage
-    localStorage.setItem("cart", JSON.stringify(cart));
-
-    // Tính số loại sản phẩm (không trùng lặp)
-    const uniqueProductCount = cart.length;
-    
-    // Cập nhật UI với số loại sản phẩm
-    updateCartCount(uniqueProductCount);
-    
-    // Tính tổng số lượng để debug
-    const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
-    console.log(`Giỏ hàng hiện tại: ${uniqueProductCount} loại sản phẩm, tổng ${totalQuantity} sản phẩm`);
-
-    // Hiển thị thông báo
-    showNotification(`Đã thêm ${productQuantity} "${productName}" vào giỏ hàng!`, "success");
-  }
-
-  // Xử lý click nút "THÊM VÀO GIỎ HÀNG"
-  function handleAddToCart() {
-    const button = document.getElementById("add-to-cart-btn");
-    if (!button) return;
-
-    // Lấy thông tin sản phẩm từ data attributes
-    const productId = button.getAttribute("data-product-id");
-    const productName = button.getAttribute("data-product-name");
-    const productPrice = button.getAttribute("data-product-price");
-    const productQuantity = getQuantity(); // Số lượng của sản phẩm này
-    
-    // Debug log
-    console.log("Product data:", { productId, productName, productPrice, productQuantity });
-    console.log("Product price type:", typeof productPrice, "Value:", productPrice);
-
-    // Kiểm tra quantity hợp lệ
-    if (productQuantity < 1) {
-      showNotification("Số lượng phải lớn hơn 0!", "error");
-      return;
-    }
-
-    // Kiểm tra thông tin sản phẩm
-    if (!productId || productId === 'null' || productId === '') {
-      // Fallback: sử dụng dữ liệu từ URL hoặc hardcode
-      const urlParts = window.location.pathname.split('/');
-      const fallbackId = urlParts[urlParts.length - 1];
-      
-      if (fallbackId && fallbackId !== 'detail') {
-        console.log("Using fallback ID:", fallbackId);
-        addToCartFromDetail(fallbackId, productName || "Sản phẩm", productPrice || "0", productQuantity);
-        return;
-      }
-      
-      showNotification("Thông tin sản phẩm không hợp lệ!", "error");
-      return;
-    }
-
-    // Kiểm tra giá sản phẩm
-    if (!productPrice || productPrice === 'null' || productPrice === '' || parseFloat(productPrice) <= 0) {
-      showNotification("Giá sản phẩm không hợp lệ!", "error");
-      console.error("Invalid product price:", productPrice);
-      return;
-    }
-
-    // Thêm vào giỏ hàng
-    addToCartFromDetail(productId, productName, productPrice, productQuantity);
-  }
-
-  // Khởi tạo số lượng giỏ hàng khi load trang
-  function initCartCount() {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const uniqueProductCount = cart.length; // Số loại sản phẩm (không trùng lặp)
-    updateCartCount(uniqueProductCount);
-  }
-
-  // Add to wishlist function
-  function addToWishlist(productId, productName) {
-    // TODO: Implement wishlist functionality
-    console.log("Add to wishlist:", { productId, productName });
-    alert(`Đã thêm "${productName}" vào danh sách yêu thích!`);
-  }
-
-  // Initialize everything when DOM is loaded
-  document.addEventListener("DOMContentLoaded", function () {
-    // Khởi tạo giỏ hàng
-    initCartCount();
-
-    // Thêm event listener cho nút "THÊM VÀO GIỎ HÀNG"
-    const addToCartBtn = document.getElementById("add-to-cart-btn");
-    if (addToCartBtn) {
-      addToCartBtn.addEventListener("click", handleAddToCart);
-    }
-
-    // Show loading state for everything
-    showGlobalLoading();
-
-    // Wait for all data to load with timeout
-    Promise.all([
-      // Wait for Swiper to be available
-      new Promise((resolve) => {
-        if (typeof Swiper !== "undefined") {
-          resolve();
-        } else {
-          // Wait for Swiper to load with timeout
-          const checkSwiper = setInterval(() => {
-            if (typeof Swiper !== "undefined") {
-              clearInterval(checkSwiper);
-              resolve();
-            }
-          }, 100);
-
-          // Timeout after 3 seconds
-          setTimeout(() => {
-            clearInterval(checkSwiper);
-            resolve();
-          }, 3000);
-        }
-      }),
-      // Wait for related products to load with timeout
-      Promise.race([
-        loadRelatedProducts(),
-        new Promise((resolve) => setTimeout(resolve, 2000)), // 2 second timeout
-      ]),
-    ]).then(() => {
-      // Initialize Swiper after everything is loaded
-      if (typeof Swiper !== "undefined") {
-        // Initialize thumbnail swiper first
-        const thumbsSwiper = new Swiper(".pd-thumbs", {
-          spaceBetween: 10,
-          slidesPerView: 4,
-          freeMode: true,
-          watchSlidesProgress: true,
-          breakpoints: {
-            640: {
-              slidesPerView: 4,
-            },
-            768: {
-              slidesPerView: 5,
-            },
-            1024: {
-              slidesPerView: 6,
-            },
-          },
-        });
-
-        // Initialize main swiper with thumbs connection
-        const mainSwiper = new Swiper(".pd-main", {
-          spaceBetween: 10,
-          autoplay: {
-            delay: 3000, // 3 seconds
-            disableOnInteraction: false, // Continue autoplay after user interaction
-            pauseOnMouseEnter: true, // Pause when mouse hover
-          },
-          loop: true, // Enable loop for continuous sliding
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          thumbs: {
-            swiper: thumbsSwiper,
-          },
-          on: {
-            slideChange: function () {
-              // Sync thumbnail scroll when main slide changes
-              const activeIndex = this.realIndex;
-              const thumbIndex = activeIndex % thumbsSwiper.slides.length;
-
-              // Scroll thumbnail to show active slide
-              thumbsSwiper.slideTo(thumbIndex, 300);
-            },
-          },
-        });
-
-        // Add click handlers for thumbnails
-        thumbsSwiper.on("click", function (swiper, event) {
-          const clickedSlide = event.target.closest(".swiper-slide");
-          if (clickedSlide) {
-            const slideIndex = Array.from(clickedSlide.parentNode.children).indexOf(clickedSlide);
-            mainSwiper.slideTo(slideIndex, 300);
-          }
-        });
-      }
-
-      // Hide loading state
-      hideGlobalLoading();
-    });
-  });
-
-  // Show global loading state
-  function showGlobalLoading() {
-    // Show loading in related products only
-    const relatedProducts = document.getElementById("relatedProducts");
-    if (relatedProducts) {
-      relatedProducts.innerHTML = `
-        <div class="col-span-full flex justify-center items-center py-8">
-          <div class="flex items-center space-x-2">
-            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-[#cb5439]"></div>
-            <span class="text-gray-600">Đang tải sản phẩm liên quan...</span>
-          </div>
-        </div>
-      `;
+    100% {
+      background-position: -200% 0;
     }
   }
-
-  // Hide global loading state
-  function hideGlobalLoading() {
-    // Just hide the loading, let Thymeleaf handle the content
-    const productInfoSection = document.getElementById("product-info");
-    if (productInfoSection) {
-      // Remove loading state
-      const loadingElement = productInfoSection.querySelector(".animate-spin");
-      if (loadingElement) {
-        loadingElement.parentElement.remove();
-      }
+  
+  /* Smooth transitions */
+  .product-transition {
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .product-transition.loading {
+    opacity: 0.7;
+  }
+  
+  .product-transition.loaded {
+    opacity: 1;
+  }
+  
+  /* Related products grid */
+  #relatedProducts {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+  }
+  
+  #relatedProducts .product-card {
+    height: auto; /* Chiều cao tự động */
+    transition: transform 0.2s ease;
+  }
+  
+  #relatedProducts .product-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Responsive cho mobile */
+  @media (max-width: 1024px) {
+    #relatedProducts {
+      grid-template-columns: repeat(3, 1fr); /* 3 cột trên tablet */
     }
   }
-</script>
+  
+  @media (max-width: 768px) {
+    #relatedProducts {
+      grid-template-columns: repeat(2, 1fr); /* 2 cột trên mobile */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    #relatedProducts {
+      grid-template-columns: 1fr; /* 1 cột trên mobile nhỏ */
+    }
+  }
+</style>
