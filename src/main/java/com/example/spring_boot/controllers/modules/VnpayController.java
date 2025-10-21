@@ -168,6 +168,38 @@ public class VnpayController {
         }
     }
     
+    private String generateRandomOrderId() {
+        // Tạo mã đơn hàng random với format: ORD + timestamp + random number
+        long timestamp = System.currentTimeMillis();
+        int randomNum = (int)(Math.random() * 10000); // 4 digits random
+        return "ORD" + timestamp + String.format("%04d", randomNum);
+    }
+    
+    // ==================== TEST METHODS ====================
+    
+    /**
+     * Test callback URL để debug
+     * GET /test-vnpay-callback
+     */
+    @GetMapping("/test-vnpay-callback")
+    public String testCallback(Model model) {
+        // Simulate VNPay callback parameters
+        model.addAttribute("orderId", generateRandomOrderId());
+        model.addAttribute("totalPrice", "380,000");
+        model.addAttribute("responseCode", "24");
+        model.addAttribute("statusText", "Thanh toán thất bại");
+        model.addAttribute("paymentTime", "2025-01-22 14:30:25");
+        model.addAttribute("transactionId", "0");
+        model.addAttribute("bankCode", "VNPAY");
+        model.addAttribute("cardType", "QRCODE");
+        model.addAttribute("transactionStatus", "02");
+        model.addAttribute("paymentStatus", 0);
+        model.addAttribute("isPaymentSuccess", false);
+        model.addAttribute("error", "Test error message");
+        
+        return "clients/orderfail";
+    }
+    
     // ==================== ORIGINAL METHODS ====================
     
     @PostMapping("/submitOrder")
@@ -180,19 +212,101 @@ public class VnpayController {
     }
 
     @GetMapping("/vnpay-payment")
-    public String GetMapping(HttpServletRequest request, Model model){
-        int paymentStatus =vnPayService.orderReturn(request);
-
-        String orderInfo = request.getParameter("vnp_OrderInfo");
-        String paymentTime = request.getParameter("vnp_PayDate");
-        String transactionId = request.getParameter("vnp_TransactionNo");
-        String totalPrice = request.getParameter("vnp_Amount");
-
-        model.addAttribute("orderId", orderInfo);
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("paymentTime", paymentTime);
-        model.addAttribute("transactionId", transactionId);
-
-        return paymentStatus == 1 ? "ordersuccess" : "orderfail";
+    public String handleVnPayCallback(HttpServletRequest request, Model model){
+        try {
+            // Xử lý kết quả thanh toán từ VNPay
+            int paymentStatus = vnPayService.orderReturn(request);
+            
+            // Lấy thông tin từ VNPay callback
+            String orderInfo = request.getParameter("vnp_OrderInfo");
+            String paymentTime = request.getParameter("vnp_PayDate");
+            String transactionId = request.getParameter("vnp_TransactionNo");
+            String totalPrice = request.getParameter("vnp_Amount");
+            String responseCode = request.getParameter("vnp_ResponseCode");
+            String bankCode = request.getParameter("vnp_BankCode");
+            String cardType = request.getParameter("vnp_CardType");
+            String transactionStatus = request.getParameter("vnp_TransactionStatus");
+            
+            // Decode URL parameters nếu cần
+            if (orderInfo != null) {
+                try {
+                    orderInfo = java.net.URLDecoder.decode(orderInfo, "UTF-8");
+                } catch (Exception e) {
+                    System.err.println("Error decoding orderInfo: " + e.getMessage());
+                }
+            }
+            
+            // Tạo mã đơn hàng random
+            String orderId = generateRandomOrderId();
+            
+            // Format số tiền từ VNPay (đơn vị là xu, cần chia 100)
+            String formattedAmount = "0";
+            if (totalPrice != null && !totalPrice.isEmpty()) {
+                try {
+                    long amount = Long.parseLong(totalPrice);
+                    formattedAmount = String.format("%,d", amount / 100);
+                } catch (NumberFormatException e) {
+                    formattedAmount = "0";
+                }
+            }
+            
+            // Log thông tin để debug
+            System.out.println("VNPay Callback - Payment Status: " + paymentStatus);
+            System.out.println("VNPay Callback - Response Code: " + responseCode);
+            System.out.println("VNPay Callback - Transaction Status: " + transactionStatus);
+            System.out.println("VNPay Callback - Order Info: " + orderInfo);
+            System.out.println("VNPay Callback - Amount: " + totalPrice);
+            
+            // Thêm thông tin vào model
+            model.addAttribute("orderId", orderId);
+            model.addAttribute("totalPrice", formattedAmount);
+            model.addAttribute("paymentTime", paymentTime);
+            model.addAttribute("transactionId", transactionId);
+            model.addAttribute("responseCode", responseCode);
+            model.addAttribute("bankCode", bankCode);
+            model.addAttribute("cardType", cardType);
+            model.addAttribute("transactionStatus", transactionStatus);
+            model.addAttribute("paymentStatus", paymentStatus);
+            model.addAttribute("statusText", getStatusText(paymentStatus));
+            
+            // Kiểm tra thanh toán thành công
+            boolean isPaymentSuccess = (paymentStatus == 1) && 
+                                    ("00".equals(responseCode)) && 
+                                    ("00".equals(transactionStatus));
+            
+            model.addAttribute("isPaymentSuccess", isPaymentSuccess);
+            
+            // Chuyển hướng đến trang tương ứng
+            if (isPaymentSuccess) {
+                System.out.println("Payment successful - redirecting to success page");
+                return "clients/ordersuccess";
+            } else {
+                System.out.println("Payment failed - redirecting to fail page");
+                return "clients/orderfail";
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error processing VNPay callback: " + e.getMessage());
+            e.printStackTrace();
+            
+            // Tạo mã đơn hàng fallback
+            String fallbackOrderId = generateRandomOrderId();
+            
+            // Thêm thông tin lỗi vào model
+            model.addAttribute("orderId", fallbackOrderId);
+            model.addAttribute("totalPrice", "0");
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("isPaymentSuccess", false);
+            model.addAttribute("statusText", "Lỗi xử lý thanh toán");
+            model.addAttribute("responseCode", "99");
+            model.addAttribute("paymentTime", "");
+            model.addAttribute("transactionId", "");
+            model.addAttribute("bankCode", "");
+            model.addAttribute("cardType", "");
+            model.addAttribute("transactionStatus", "");
+            model.addAttribute("paymentStatus", -1);
+            
+            return "clients/orderfail";
+        }
     }
 }

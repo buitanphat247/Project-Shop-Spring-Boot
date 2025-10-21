@@ -11,8 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // Preload images ngay lập tức
   preloadImages();
   
-  // Khởi tạo giỏ hàng
-  initCartCount();
+  // Khởi tạo giỏ hàng - chỉ nếu cart-count.js chưa được load
+  if (!window.cartCountManager) {
+    console.log('Cart count manager not found, initializing manually...');
+    initCartCount();
+  } else {
+    console.log('Cart count manager found, using existing instance...');
+  }
 
   // Thêm event listener cho nút "THÊM VÀO GIỎ HÀNG"
   const addToCartBtn = document.getElementById("add-to-cart-btn");

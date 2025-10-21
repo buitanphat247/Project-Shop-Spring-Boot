@@ -9,7 +9,19 @@ function updateCartCount(uniqueProductCount) {
   const cartSpan = document.querySelector(".fa-shopping-cart").nextElementSibling;
   if (cartSpan) {
     cartSpan.textContent = uniqueProductCount;
+    cartSpan.style.display = uniqueProductCount > 0 ? 'flex' : 'none';
+    
+    // Thêm animation
+    cartSpan.classList.add('updated');
+    setTimeout(() => {
+      cartSpan.classList.remove('updated');
+    }, 300);
   }
+  
+  // Dispatch custom event để cart-count.js có thể lắng nghe
+  window.dispatchEvent(new CustomEvent('cartCountUpdated', { 
+    detail: { count: uniqueProductCount } 
+  }));
 }
 
 function getCurrentCartCount() {
@@ -18,6 +30,20 @@ function getCurrentCartCount() {
 }
 
 function addToCartFromDetail(productId, productName, productPrice, productQuantity) {
+  // Sử dụng cart count manager nếu có, nếu không thì tự xử lý
+  if (window.cartCountManager) {
+    console.log('Using cart count manager...');
+    const success = window.cartCountManager.addToCart(productId, productName, productPrice, productQuantity);
+    if (success) {
+      showNotification(`Đã thêm ${productQuantity} "${productName}" vào giỏ hàng!`, "success");
+    } else {
+      showNotification("Lỗi khi thêm vào giỏ hàng!", "error");
+    }
+    return;
+  }
+
+  // Fallback: tự xử lý nếu không có cart count manager
+  console.log('Using fallback cart handling...');
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
   const existingItem = cart.find((item) => item.id === productId);
 
@@ -36,7 +62,15 @@ function addToCartFromDetail(productId, productName, productPrice, productQuanti
 
   localStorage.setItem("cart", JSON.stringify(cart));
   const uniqueProductCount = cart.length;
+  
+  // Cập nhật cart count với animation
   updateCartCount(uniqueProductCount);
+  
+  // Dispatch event để cart-count.js có thể lắng nghe
+  window.dispatchEvent(new CustomEvent('productAddedToCart', {
+    detail: { productId, productName, productPrice, quantity: productQuantity }
+  }));
+  
   const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
   console.log(`Giỏ hàng hiện tại: ${uniqueProductCount} loại sản phẩm, tổng ${totalQuantity} sản phẩm`);
   showNotification(`Đã thêm ${productQuantity} "${productName}" vào giỏ hàng!`, "success");
@@ -82,6 +116,7 @@ function handleAddToCart() {
 function initCartCount() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const uniqueProductCount = cart.length;
+  console.log('Initializing cart count:', uniqueProductCount);
   updateCartCount(uniqueProductCount);
 }
 
