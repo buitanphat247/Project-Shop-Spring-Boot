@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable; // Đầu vào phân trang
 import org.springframework.data.mongodb.core.MongoTemplate; // MongoDB template cho query tối ưu
 import org.springframework.data.mongodb.core.query.Criteria; // Criteria cho query
 import org.springframework.data.mongodb.core.query.Query; // Query builder
+import org.springframework.data.domain.Sort; // Sort cho ordering
 import org.springframework.stereotype.Service; // Bean service Spring
 import org.springframework.transaction.annotation.Transactional; // Transaction wrapper
 
@@ -27,7 +28,6 @@ import java.util.HashSet; // HashSet implementation
 import java.util.ArrayList; // ArrayList implementation
 import java.util.HashMap; // HashMap implementation
 import java.util.Objects; // Objects utility
-import java.util.concurrent.CompletableFuture; // Async processing
 import java.util.concurrent.ConcurrentHashMap; // Thread-safe cache
 import java.util.stream.Collectors; // Stream operations
 import org.bson.types.ObjectId; // ObjectId cho batch query
@@ -333,7 +333,7 @@ public class ProductService {
             // BATCH LOADING: Load tất cả categories trong 1 query
             batchPopulateCategories(products);
             // // BATCH LOADING: Load attributes & images
-            // batchPopulateAttributesAndImages(products);
+            batchPopulateAttributesAndImages(products);
 
             long endTime = System.currentTimeMillis();
             log.info("✅ [PERFORMANCE] Pagination completed in {}ms", endTime - startTime);
@@ -555,8 +555,8 @@ public class ProductService {
     }
 
     /**
-     * Batch populate attributes và images với parallel processing - TỐI ƯU HÓA
-     * Tránh N+1 bằng cách query song song và parallel processing
+     * Batch populate attributes và images - TỐI ƯU HÓA HIỆU SUẤT
+     * Sử dụng sequential processing với HashMap để tối ưu lookup
      */
     private void batchPopulateAttributesAndImages(List<Product> products) {
         if (products == null || products.isEmpty()) return;
@@ -571,42 +571,40 @@ public class ProductService {
 
         long start = System.currentTimeMillis();
 
-        // Parallel queries cho attributes và images
-        CompletableFuture<List<ProductAttribute>> attributesFuture = CompletableFuture.supplyAsync(() -> {
+        try {
+            // Query attributes - chỉ lấy fields cần thiết, loại bỏ createdAt
             Query attrQuery = new Query(Criteria.where("productId").in(productObjectIds)
                     .and("deletedAt").isNull());
-            attrQuery.fields().include("name", "value", "productId", "createdAt");
-            return mongoTemplate.find(attrQuery, ProductAttribute.class);
-        });
+            attrQuery.fields().include("name", "value", "productId");
+            List<ProductAttribute> allAttributes = mongoTemplate.find(attrQuery, ProductAttribute.class);
 
-        CompletableFuture<List<ProductImage>> imagesFuture = CompletableFuture.supplyAsync(() -> {
+            // Query images - chỉ lấy 1 ảnh đại diện cho mỗi sản phẩm
             Query imgQuery = new Query(Criteria.where("productId").in(productObjectIds)
                     .and("deletedAt").isNull());
-            imgQuery.fields().include("imageUrl", "isPrimary", "productId", "createdAt");
-            return mongoTemplate.find(imgQuery, ProductImage.class);
-        });
+            imgQuery.fields().include("imageUrl", "isPrimary", "productId");
+            imgQuery.with(Sort.by("isPrimary").descending().and(Sort.by("createdAt").ascending()));
+            List<ProductImage> allImages = mongoTemplate.find(imgQuery, ProductImage.class);
 
-        try {
-            // Đợi cả hai queries hoàn thành
-            List<ProductAttribute> allAttributes = attributesFuture.get();
-            List<ProductImage> allImages = imagesFuture.get();
+            // Group attributes by productId - sử dụng HashMap cho O(1) lookup
+            Map<String, List<ProductAttribute>> productIdToAttributes = new HashMap<>();
+            for (ProductAttribute attr : allAttributes) {
+                String productId = attr.getProductId().toHexString();
+                productIdToAttributes.computeIfAbsent(productId, k -> new ArrayList<>()).add(attr);
+            }
 
-            // Parallel grouping
-            CompletableFuture<Map<String, List<ProductAttribute>>> attributesMapFuture = CompletableFuture.supplyAsync(() ->
-                allAttributes.parallelStream()
-                    .collect(Collectors.groupingBy(a -> a.getProductId().toHexString()))
-            );
+            // Group images by productId - chỉ lấy 1 ảnh đầu tiên cho mỗi sản phẩm
+            Map<String, List<ProductImage>> productIdToImages = new HashMap<>();
+            Set<String> processedProducts = new HashSet<>();
+            for (ProductImage img : allImages) {
+                String productId = img.getProductId().toHexString();
+                if (!processedProducts.contains(productId)) {
+                    productIdToImages.computeIfAbsent(productId, k -> new ArrayList<>()).add(img);
+                    processedProducts.add(productId);
+                }
+            }
 
-            CompletableFuture<Map<String, List<ProductImage>>> imagesMapFuture = CompletableFuture.supplyAsync(() ->
-                allImages.parallelStream()
-                    .collect(Collectors.groupingBy(i -> i.getProductId().toHexString()))
-            );
-
-            Map<String, List<ProductAttribute>> productIdToAttributes = attributesMapFuture.get();
-            Map<String, List<ProductImage>> productIdToImages = imagesMapFuture.get();
-
-            // Parallel population
-            products.parallelStream().forEach(p -> {
+            // Populate products - sử dụng sequential để tránh race condition
+            for (Product p : products) {
                 String pid = p.getId();
                 if (pid != null) {
                     List<ProductAttribute> attrs = productIdToAttributes.get(pid);
@@ -614,13 +612,13 @@ public class ProductService {
                     List<ProductImage> imgs = productIdToImages.get(pid);
                     if (imgs != null) p.setImages(imgs);
                 }
-            });
+            }
 
             log.debug("🔄 [PERFORMANCE] Batch populated attributes={} images={} for {} products in {}ms",
                     allAttributes.size(), allImages.size(), products.size(), System.currentTimeMillis() - start);
 
         } catch (Exception e) {
-            log.error("❌ [PERFORMANCE] Error in parallel batch populate", e);
+            log.error("❌ [PERFORMANCE] Error in batch populate", e);
             // Fallback to sequential processing
             fallbackSequentialPopulate(products, productObjectIds);
         }
@@ -641,13 +639,21 @@ public class ProductService {
         Query imgQuery = new Query(Criteria.where("productId").in(productObjectIds)
                 .and("deletedAt").isNull());
         imgQuery.fields().include("imageUrl", "isPrimary", "productId", "createdAt");
+        imgQuery.with(Sort.by("isPrimary").descending().and(Sort.by("createdAt").ascending()));
         List<ProductImage> allImages = mongoTemplate.find(imgQuery, ProductImage.class);
 
         // Group và populate
         Map<String, List<ProductAttribute>> productIdToAttributes = allAttributes.stream()
                 .collect(Collectors.groupingBy(a -> a.getProductId().toHexString()));
         Map<String, List<ProductImage>> productIdToImages = allImages.stream()
-                .collect(Collectors.groupingBy(i -> i.getProductId().toHexString()));
+                .collect(Collectors.groupingBy(i -> i.getProductId().toHexString()))
+                .entrySet().stream()
+                .collect(Collectors.toMap(
+                    Map.Entry::getKey,
+                    entry -> entry.getValue().stream()
+                        .limit(1) // Chỉ lấy 1 ảnh đại diện
+                        .collect(Collectors.toList())
+                ));
 
         products.forEach(p -> {
             String pid = p.getId();
@@ -701,6 +707,77 @@ public class ProductService {
         } else {
             // Hint cho deletedAt index
             query.withHint("deletedAt_1");
+        }
+    }
+
+    /**
+     * Lấy sản phẩm bán chạy - TỐI ƯU HÓA
+     * Sắp xếp theo stock thấp nhất (đã bán nhiều) và createdAt gần đây
+     */
+    @Transactional(readOnly = true)
+    public List<Product> getBestSellingProducts(int limit) {
+        long startTime = System.currentTimeMillis();
+        log.info("🔥 [PERFORMANCE] Getting best selling products, limit={}", limit);
+
+        try {
+            Query query = new Query(Criteria.where("deletedAt").isNull());
+            query.fields().include("name", "description", "price", "stock", "categoryId", "createdAt", "updatedAt");
+            
+            // Sắp xếp theo stock thấp (đã bán nhiều) và createdAt gần đây
+            query.with(org.springframework.data.domain.Sort.by("stock").ascending()
+                    .and(org.springframework.data.domain.Sort.by("createdAt").descending()));
+            
+            query.limit(limit);
+            
+            List<Product> products = mongoTemplate.find(query, Product.class);
+            
+            // Batch load categories, attributes và images
+            batchPopulateCategories(products);
+            batchPopulateAttributesAndImages(products);
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Retrieved {} best selling products in {}ms", 
+                    products.size(), endTime - startTime);
+            
+            return products;
+        } catch (Exception e) {
+            log.error("❌ [PERFORMANCE] Error getting best selling products", e);
+            throw new RuntimeException("Failed to get best selling products: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Lấy sản phẩm mới - TỐI ƯU HÓA
+     * Sắp xếp theo createdAt gần đây nhất
+     */
+    @Transactional(readOnly = true)
+    public List<Product> getNewProducts(int limit) {
+        long startTime = System.currentTimeMillis();
+        log.info("🆕 [PERFORMANCE] Getting new products, limit={}", limit);
+
+        try {
+            Query query = new Query(Criteria.where("deletedAt").isNull());
+            query.fields().include("name", "description", "price", "stock", "categoryId", "createdAt", "updatedAt");
+            
+            // Sắp xếp theo createdAt gần đây nhất
+            query.with(org.springframework.data.domain.Sort.by("createdAt").descending());
+            
+            query.limit(limit);
+            
+            List<Product> products = mongoTemplate.find(query, Product.class);
+            
+            // Batch load categories, attributes và images
+            batchPopulateCategories(products);
+            batchPopulateAttributesAndImages(products);
+            
+            long endTime = System.currentTimeMillis();
+            log.info("✅ [PERFORMANCE] Retrieved {} new products in {}ms", 
+                    products.size(), endTime - startTime);
+            
+            return products;
+        } catch (Exception e) {
+            log.error("❌ [PERFORMANCE] Error getting new products", e);
+            throw new RuntimeException("Failed to get new products: " + e.getMessage(), e);
         }
     }
 

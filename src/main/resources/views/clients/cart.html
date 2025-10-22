@@ -143,16 +143,11 @@
 
             <!-- Cart Actions -->
             <div class="bg-[#f8f9fa] px-6 py-4 border-t border-gray-200">
-              <div class="flex items-center justify-between">
+              <div class="flex items-center justify-start">
                 <button onclick="continueShopping()"
                   class="text-[#2f604a] hover:text-[#1e3d2e] font-medium flex items-center space-x-2">
                   <i class="fas fa-arrow-left"></i>
                   <span>Tiếp tục mua sắm</span>
-                </button>
-                <button onclick="clearAllItems()"
-                  class="text-red-600 hover:text-red-700 font-medium flex items-center space-x-2">
-                  <i class="fas fa-trash"></i>
-                  <span>Xóa tất cả</span>
                 </button>
               </div>
             </div>
@@ -438,8 +433,8 @@ function renderCartItems() {
 
                 <!-- Remove Button -->
                 <button class="remove-btn w-8 h-8 rounded-full border border-red-300 text-red-600 flex items-center justify-center"
-                        onclick="removeItem(${index})">
-                    <i class="fas fa-trash text-xs"></i>
+                        onclick="removeItem(${index})" id="removeBtn${index}">
+                    <i class="fas fa-trash text-xs" id="removeIcon${index}"></i>
                 </button>
             </div>
         </div>
@@ -552,6 +547,18 @@ async function updateQuantityInput(index, value) {
 async function removeItem(index) {
     if (index >= 0 && index < cart.length) {
         const item = cart[index];
+        const removeBtn = document.getElementById(`removeBtn${index}`);
+        const removeIcon = document.getElementById(`removeIcon${index}`);
+        
+        // Disable all remove buttons
+        disableAllRemoveButtons();
+        
+        // Show loading state for current button
+        if (removeBtn && removeIcon) {
+            removeBtn.disabled = true;
+            removeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            removeIcon.className = 'fas fa-spinner fa-spin text-xs';
+        }
         
         try {
             // Sử dụng CartAPI nếu có
@@ -564,6 +571,13 @@ async function removeItem(index) {
                     showNotification('Đã xóa sản phẩm khỏi giỏ hàng!', 'success');
                 } else {
                     showNotification('Lỗi khi xóa sản phẩm: ' + result.message, 'error');
+                    // Reset button state on error
+                    enableAllRemoveButtons();
+                    if (removeBtn && removeIcon) {
+                        removeBtn.disabled = false;
+                        removeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        removeIcon.className = 'fas fa-trash text-xs';
+                    }
                     return;
                 }
             } else {
@@ -580,6 +594,36 @@ async function removeItem(index) {
         } catch (error) {
             console.error('Error removing item:', error);
             showNotification('Lỗi khi xóa sản phẩm: ' + error.message, 'error');
+            
+            // Reset button state on error
+            enableAllRemoveButtons();
+            if (removeBtn && removeIcon) {
+                removeBtn.disabled = false;
+                removeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                removeIcon.className = 'fas fa-trash text-xs';
+            }
+        }
+    }
+}
+
+// Disable all remove buttons
+function disableAllRemoveButtons() {
+    for (let i = 0; i < cart.length; i++) {
+        const removeBtn = document.getElementById(`removeBtn${i}`);
+        if (removeBtn) {
+            removeBtn.disabled = true;
+            removeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+    }
+}
+
+// Enable all remove buttons
+function enableAllRemoveButtons() {
+    for (let i = 0; i < cart.length; i++) {
+        const removeBtn = document.getElementById(`removeBtn${i}`);
+        if (removeBtn) {
+            removeBtn.disabled = false;
+            removeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
         }
     }
 }
@@ -629,41 +673,6 @@ function continueShopping() {
     window.location.href = '/products';
 }
 
-// Clear all items
-async function clearAllItems() {
-    if (cart.length === 0) return;
-    
-    if (confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ hàng?')) {
-        try {
-            // Sử dụng CartAPI nếu có
-            if (window.CartAPI) {
-                const cartAPI = new window.CartAPI();
-                const result = await cartAPI.clearCart();
-                
-                if (result.success) {
-                    cart = [];
-                    showNotification('Đã xóa tất cả sản phẩm khỏi giỏ hàng!', 'success');
-                } else {
-                    showNotification('Lỗi khi xóa giỏ hàng: ' + result.message, 'error');
-                    return;
-                }
-            } else {
-                // Fallback về localStorage
-        cart = [];
-        localStorage.setItem('cart', JSON.stringify(cart));
-                showNotification('Đã xóa tất cả sản phẩm khỏi giỏ hàng!', 'success');
-            }
-            
-            // Re-render
-        renderCartItems();
-        updateCartSummary();
-            
-        } catch (error) {
-            console.error('Error clearing cart:', error);
-            showNotification('Lỗi khi xóa giỏ hàng: ' + error.message, 'error');
-        }
-    }
-}
 
 // Apply discount
 function applyDiscount() {

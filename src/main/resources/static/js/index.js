@@ -1,208 +1,137 @@
-// Products data array (fashion)
-const products = [
-  {
-    id: 1,
-    name: "Áo Thun Nam Cotton",
-    price: "189.000 ₫",
-    originalPrice: "259.000 ₫",
-    discount: "-27%",
-    rating: 5,
-    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
-    buttonType: "cart",
-    colorVariants: ["bg-black", "bg-gray-400", "bg-red-500"],
-    outOfStock: false,
-  },
-  {
-    id: 2,
-    name: "Quần Jeans Nữ Lưng Cao",
-    price: "399.000 ₫",
-    originalPrice: null,
-    discount: null,
-    rating: 4,
-    image: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
-    buttonType: "cart",
-    colorVariants: ["bg-blue-800", "bg-gray-600"],
-    outOfStock: false,
-  },
-  {
-    id: 3,
-    name: "Áo Sơ Mi Trắng Classic",
-    price: "329.000 ₫",
-    originalPrice: "420.000 ₫",
-    discount: "-22%",
-    rating: 4,
-    image: "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
-    buttonType: "cart",
-    colorVariants: ["bg-white", "bg-black"],
-    outOfStock: false,
-  },
-  {
-    id: 4,
-    name: "Váy Công Sở Thanh Lịch",
-    price: "459.000 ₫",
-    originalPrice: "560.000 ₫",
-    discount: "-18%",
-    rating: 5,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5yFEEaLV5sTkXmHgAz2zbBIVfsWDRbtkW3w&s",
-    buttonType: "cart",
-    colorVariants: ["bg-pink-300", "bg-gray-200"],
-    outOfStock: false,
-  },
-  {
-    id: 5,
-    name: "Giày Sneaker Trắng",
-    price: "599.000 ₫",
-    originalPrice: null,
-    discount: null,
-    rating: 4,
-    image: "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
-    buttonType: "cart",
-    colorVariants: ["bg-white", "bg-black"],
-    outOfStock: false,
-  },
-  {
-    id: 6,
-    name: "Áo Khoác Denim",
-    price: "489.000 ₫",
-    originalPrice: "649.000 ₫",
-    discount: "-25%",
-    rating: 5,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7yDva6T0UfL4OacdxCrZqErvd8FIxZNbf0A&s",
-    buttonType: "cart",
-    colorVariants: ["bg-blue-700", "bg-gray-700"],
-    outOfStock: false,
-  },
-  {
-    id: 7,
-    name: "Quần Short Kaki",
-    price: "259.000 ₫",
-    originalPrice: null,
-    discount: null,
-    rating: 4,
-    image: "https://pos.nvncdn.com/4e732c-26/art/artCT/20210510_LQurOt2vEZXrgsRaG9WqNnyQ.jpg",
-    buttonType: "cart",
-    colorVariants: ["bg-yellow-600", "bg-gray-500"],
-    outOfStock: false,
-  },
-  {
-    id: 8,
-    name: "Set Phụ Kiện Thời Trang",
-    price: "199.000 ₫",
-    originalPrice: "249.000 ₫",
-    discount: "-20%",
-    rating: 4,
-    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-4.jpg",
-    buttonType: "cart",
-    colorVariants: ["bg-black", "bg-gray-300"],
-    outOfStock: false,
-  },
-];
+// Products data array (will be loaded from API)
+let products = [];
+let bestSellingProducts = [];
+let newProducts = [];
 
-// New Products data array (fashion)
-const newProducts = [
-  {
-    id: 1,
-    name: "Đầm Hoa Mùa Thu",
-    price: "529.000 ₫",
-    originalPrice: null,
-    discount: "MỚI",
-    rating: 0,
-    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
-    buttonType: "cart",
-    colorVariants: ["bg-pink-300", "bg-yellow-200"],
-    outOfStock: false,
-  },
-  {
-    id: 2,
-    name: "Áo Polo Nam",
-    price: "299.000 ₫",
-    originalPrice: null,
-    discount: "MỚI",
-    rating: 0,
-    image: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
-    buttonType: "cart",
-    colorVariants: ["bg-blue-700", "bg-gray-400"],
-    outOfStock: false,
-  },
-  {
-    id: 3,
-    name: "Chân Váy Chữ A",
-    price: "349.000 ₫",
-    originalPrice: null,
-    discount: "MỚI",
-    rating: 0,
-    image: "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
-    buttonType: "cart",
-    colorVariants: ["bg-black", "bg-gray-200"],
-    outOfStock: false,
-  },
-  {
-    id: 4,
-    name: "Áo Hoodie Unisex",
-    price: "459.000 ₫",
-    originalPrice: null,
-    discount: "MỚI",
-    rating: 0,
-    image: "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
-    buttonType: "cart",
-    colorVariants: ["bg-gray-700", "bg-black"],
-    outOfStock: false,
-  },
-];
+// API functions to load data
+async function loadProducts() {
+  try {
+    showLoadingState('products-grid');
+    const response = await fetch('api/products/paged?page=1&size=20');
+    const data = await response.json();
+    
+    if (data.success && data.data && data.data.items) {
+      products = data.data.items.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: formatPrice(product.price) + ' ₫',
+        originalPrice: null, // API không có originalPrice
+        discount: null, // API không có discount
+        rating: 4, // Default rating
+        image: product.images && product.images.length > 0 ? product.images[0].imageUrl : 'https://spencil.vn/wp-content/uploads/2024/11/chup-anh-san-pham-SPencil-Agency-1.jpg',
+        buttonType: "cart",
+        colorVariants: ["bg-gray-400", "bg-blue-500", "bg-red-500"], // Default color variants
+        outOfStock: product.stock <= 0,
+      }));
+      renderProducts();
+    } else {
+      throw new Error(data.message || 'Lỗi khi tải sản phẩm');
+    }
+  } catch (error) {
+    console.error('Error loading products:', error);
+    showErrorState('products-grid', 'Không thể tải sản phẩm');
+  }
+}
 
-// Best Selling Products data array (fashion)
-const bestSellingProducts = [
-  {
-    id: 1,
-    name: "Áo Thun Nam Cotton",
-    price: "189.000 ₫",
-    rating: 5,
-    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
-    available: 3,
-    sold: 12,
-    outOfStock: false,
-  },
-  {
-    id: 2,
-    name: "Quần Jeans Nữ Lưng Cao",
-    price: "399.000 ₫",
-    rating: 4,
-    image: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
-    available: 8,
-    sold: 15,
-    outOfStock: false,
-  },
-  {
-    id: 3,
-    name: "Áo Sơ Mi Trắng Classic",
-    price: "329.000 ₫",
-    rating: 4,
-    image: "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
-    available: 5,
-    sold: 10,
-    outOfStock: false,
-  },
-  {
-    id: 4,
-    name: "Váy Công Sở Thanh Lịch",
-    price: "459.000 ₫",
-    rating: 5,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5yFEEaLV5sTkXmHgAz2zbBIVfsWDRbtkW3w&s",
-    available: 6,
-    sold: 9,
-    outOfStock: false,
-  },
-  {
-    id: 5,
-    name: "Giày Sneaker Trắng",
-    price: "599.000 ₫",
-    rating: 4,
-    image: "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
-    available: 4,
-    sold: 11,
-    outOfStock: false,
-  },
-];
+async function loadBestSellingProducts() {
+  try {
+    showLoadingState('best-selling-grid');
+    const response = await fetch('api/products/best-selling?limit=5');
+    const data = await response.json();
+    
+    if (data.success && data.data) {
+      bestSellingProducts = data.data.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: formatPrice(product.price) + ' ₫',
+        rating: 4, // Default rating
+        image: product.images && product.images.length > 0 ? product.images[0].imageUrl : 'https://spencil.vn/wp-content/uploads/2024/11/chup-anh-san-pham-SPencil-Agency-1.jpg',
+        available: product.stock || 0,
+        sold: Math.floor(Math.random() * 50) + 10, // Random sold count for demo
+        outOfStock: product.stock <= 0,
+      }));
+      renderBestSellingProducts();
+    } else {
+      throw new Error(data.message || 'Lỗi khi tải sản phẩm bán chạy');
+    }
+  } catch (error) {
+    console.error('Error loading best selling products:', error);
+    showErrorState('best-selling-grid', 'Không thể tải sản phẩm bán chạy');
+  }
+}
+
+async function loadNewProducts() {
+  try {
+    showLoadingState('new-products-grid');
+    const response = await fetch('api/products/new?limit=4');
+    const data = await response.json();
+    
+    if (data.success && data.data) {
+      newProducts = data.data.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: formatPrice(product.price) + ' ₫',
+        originalPrice: null,
+        discount: "MỚI",
+        rating: 0,
+        image: product.images && product.images.length > 0 ? product.images[0].imageUrl : 'https://spencil.vn/wp-content/uploads/2024/11/chup-anh-san-pham-SPencil-Agency-1.jpg',
+        buttonType: "cart",
+        colorVariants: ["bg-pink-300", "bg-yellow-200", "bg-blue-300"], // Default color variants
+        outOfStock: product.stock <= 0,
+      }));
+      renderNewProducts();
+    } else {
+      throw new Error(data.message || 'Lỗi khi tải sản phẩm mới');
+    }
+  } catch (error) {
+    console.error('Error loading new products:', error);
+    showErrorState('new-products-grid', 'Không thể tải sản phẩm mới');
+  }
+}
+
+// Helper functions
+function formatPrice(price) {
+  return new Intl.NumberFormat('vi-VN').format(price);
+}
+
+function showLoadingState(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.innerHTML = `
+      <div class="col-span-full flex flex-col items-center justify-center py-16">
+        <div class="relative w-16 h-16 mb-4">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 border-4 border-gray-200 rounded-full"></div>
+          </div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-16 h-16 border-4 border-transparent border-t-blue-500 rounded-full animate-spin"></div>
+          </div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-12 h-12 border-4 border-transparent border-t-blue-400 rounded-full animate-spin" style="animation-direction: reverse; animation-duration: 0.8s;"></div>
+          </div>
+        </div>
+        <div class="text-gray-600 text-lg font-medium">Đang tải sản phẩm...</div>
+      </div>
+    `;
+  }
+}
+
+function showErrorState(elementId, message) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.innerHTML = `
+      <div class="col-span-full flex items-center justify-center py-8">
+        <div class="text-center">
+          <i class="fas fa-exclamation-triangle text-4xl text-gray-400 mb-4"></i>
+          <p class="text-gray-600">${message}</p>
+          <button onclick="location.reload()" class="mt-4 bg-[#2f604a] text-white px-4 py-2 rounded hover:bg-[#1e3d2e] transition-colors">
+            Thử lại
+          </button>
+        </div>
+      </div>
+    `;
+  }
+}
 
 // Function to render stars
 function renderStars(rating) {
@@ -237,7 +166,8 @@ function renderProductCard(product) {
       <div class="relative">
         <a href="products/detail/${product.id}" class="block">
           <div class="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
-            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" />
+            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" 
+                 onerror="this.src='https://spencil.vn/wp-content/uploads/2024/11/chup-anh-san-pham-SPencil-Agency-1.jpg'" />
           </div>
         </a>
         ${product.discount
@@ -285,8 +215,10 @@ function renderProductCard(product) {
     }
           ${product.buttonType
       ? `
-            <button class="${product.outOfStock ? "bg-gray-400" : "bg-[#2f604a]"
-      } text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#1e3d2e] transition-colors">
+            <button onclick="addToCart(${product.id}, '${product.name}', ${parseInt(product.price.replace(/[^\d]/g, ''))})" 
+                    class="${product.outOfStock ? "bg-gray-400 cursor-not-allowed" : "bg-[#2f604a] hover:bg-[#1e3d2e]"
+      } text-white w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                    ${product.outOfStock ? "disabled" : ""}>
               <i class="fas fa-shopping-cart text-sm"></i>
             </button>
           `
@@ -320,7 +252,8 @@ function renderBestSellingCard(product) {
       <div class="relative">
         <a href="products/detail/${product.id}" class="block">
           <div class="h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
-            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" />
+            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover" 
+                 onerror="this.src='https://spencil.vn/wp-content/uploads/2024/11/chup-anh-san-pham-SPencil-Agency-1.jpg'" />
           </div>
         </a>
         ${product.outOfStock
@@ -347,7 +280,9 @@ function renderBestSellingCard(product) {
         </div>
         <div class="flex items-center justify-between mb-3">
           <span class="text-2xl font-bold ${priceColor}">${product.price}</span>
-          <button class="bg-[#2f604a] text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#1e3d2e] transition-colors">
+          <button onclick="addToCart(${product.id}, '${product.name}', ${parseInt(product.price.replace(/[^\d]/g, ''))})" 
+                  class="${product.outOfStock ? "bg-gray-400 cursor-not-allowed" : "bg-[#2f604a] hover:bg-[#1e3d2e]"} text-white w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                  ${product.outOfStock ? "disabled" : ""}>
             <i class="fas fa-shopping-cart text-sm"></i>
           </button>
         </div>
@@ -370,7 +305,9 @@ function renderBestSellingCard(product) {
 function renderProducts() {
   const productsGrid = document.getElementById("products-grid");
   if (productsGrid) {
-    productsGrid.innerHTML = products.map((product) => renderProductCard(product)).join("");
+    // Chỉ hiển thị 8 sản phẩm đầu tiên
+    const limitedProducts = products.slice(0, 8);
+    productsGrid.innerHTML = limitedProducts.map((product) => renderProductCard(product)).join("");
   }
 }
 
@@ -378,7 +315,9 @@ function renderProducts() {
 function renderNewProducts() {
   const newProductsGrid = document.getElementById("new-products-grid");
   if (newProductsGrid) {
-    newProductsGrid.innerHTML = newProducts.map((product) => renderProductCard(product)).join("");
+    // Chỉ hiển thị 4 sản phẩm mới đầu tiên
+    const limitedNewProducts = newProducts.slice(0, 4);
+    newProductsGrid.innerHTML = limitedNewProducts.map((product) => renderProductCard(product)).join("");
   }
 }
 
@@ -386,7 +325,9 @@ function renderNewProducts() {
 function renderBestSellingProducts() {
   const bestSellingGrid = document.getElementById("best-selling-grid");
   if (bestSellingGrid) {
-    bestSellingGrid.innerHTML = bestSellingProducts.map((product) => renderBestSellingCard(product)).join("");
+    // Chỉ hiển thị 5 sản phẩm bán chạy đầu tiên
+    const limitedBestSelling = bestSellingProducts.slice(0, 5);
+    bestSellingGrid.innerHTML = limitedBestSelling.map((product) => renderBestSellingCard(product)).join("");
   }
 }
 
@@ -523,80 +464,160 @@ function renderReviews() {
     .join("");
 }
 
-// Knowledge Articles data + renderer (fashion)
-const articles = [
-  {
-    image: "https://blog.dktcdn.net/files/cach-chup-san-pham-quan-ao-ban-hang-3.jpg",
-    alt: "Mix & Match áo thun",
-    date: { day: "08", month: "TH3" },
-    author: "Monamedia — Fashion, Lifestyle",
-    title: "5 Cách Phối Áo Thun Chuẩn Trend",
-    excerpt: "Biến áo thun cơ bản thành set đồ cá tính cho nhiều hoàn cảnh khác nhau..."
-  },
-  {
-    image: "https://pos.nvncdn.com/86c7ad-50310/art/artCT/20210130_JvKCF5QqHMGWML6GkL6lKNSN.jpg",
-    alt: "Jeans lưng cao",
-    date: { day: "25", month: "TH2" },
-    author: "Monamedia — Fashion, Lifestyle",
-    title: "Chọn Quần Jeans Phù Hợp Dáng Người",
-    excerpt: "Mẹo chọn jeans tôn dáng, thoải mái và dễ phối đồ cho nàng..."
-  },
-  {
-    image: "https://lavenderstudio.com.vn/wp-content/uploads/2021/05/chup-hinh-san-pham-cho-shop2.png",
-    alt: "Áo sơ mi trắng",
-    date: { day: "25", month: "TH2" },
-    author: "Monamedia — Fashion, Lifestyle",
-    title: "Sơ Mi Trắng: Item Không Thể Thiếu",
-    excerpt: "Tại sao sơ mi trắng luôn là món đồ must-have trong tủ áo của bạn..."
-  },
-  {
-    image: "https://blog.dktcdn.net/files/chup-anh-quan-ao-3.jpg",
-    alt: "Phụ kiện thời trang",
-    date: { day: "25", month: "TH2" },
-    author: "Monamedia — Fashion",
-    title: "Phụ Kiện: Điểm Nhấn Cho Outfit",
-    excerpt: "Cách chọn phụ kiện giúp outfit của bạn nổi bật mà vẫn tinh tế..."
-  }
-];
 
-function renderArticles() {
-  const host = document.getElementById("articles-grid");
-  if (!host) return;
-  host.innerHTML = articles
-    .map((a) => `
-    <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-      <div class="relative">
-        <img src="${a.image}" alt="${a.alt}" class="w-full h-48 object-cover" />
-        <div class="absolute top-3 left-3 bg-[#cd5d4a] text-white px-3 py-1 rounded text-sm font-bold">
-          <div class="text-center">
-            <div class="text-xs">${a.date.month}</div>
-            <div class="text-lg font-bold">${a.date.day}</div>
-          </div>
-        </div>
-      </div>
-      <div class="p-6">
-        <div class="flex items-center text-sm text-gray-500 mb-3">
-          <i class="fas fa-user mr-2"></i>
-          <i class="fas fa-tag mr-2"></i>
-          <span>${a.author}</span>
-        </div>
-        <h3 class="font-bold text-lg text-gray-800 mb-3">${a.title}</h3>
-        <p class="text-gray-600 text-sm mb-4">${a.excerpt}</p>
-        <button class="bg-[#2f604a] text-white px-4 py-2 rounded text-sm font-semibold hover:bg-[#1e3d2e] transition-colors">
-          XEM THÊM
-        </button>
-      </div>
-    </div>
-  `)
-    .join("");
+// Add to cart function
+async function addToCart(productId, productName, price) {
+  try {
+    // Show loading state
+    const button = event.target.closest('button');
+    const originalContent = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    button.disabled = true;
+    
+    // Check if CartAPI is available
+    if (window.CartAPI) {
+      const cartAPI = new window.CartAPI();
+      const result = await cartAPI.addToCart(productId, 1);
+      
+      if (result.success) {
+        showNotification('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+      } else {
+        showNotification('Lỗi khi thêm vào giỏ hàng: ' + result.message, 'error');
+      }
+    } else {
+      // Fallback to localStorage
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const existingItem = cart.find(item => item.productId === productId);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({
+          productId: productId,
+          productName: productName,
+          price: price,
+          quantity: 1
+        });
+      }
+      
+      localStorage.setItem('cart', JSON.stringify(cart));
+      showNotification('Đã thêm sản phẩm vào giỏ hàng!', 'success');
+    }
+  } catch (error) {
+    console.error('Error adding to cart:', error);
+    showNotification('Lỗi khi thêm vào giỏ hàng: ' + error.message, 'error');
+  } finally {
+    // Reset button state
+    button.innerHTML = originalContent;
+    button.disabled = false;
+  }
+}
+
+// Show notification
+function showNotification(message, type = 'success') {
+  const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+  const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+  
+  const toast = document.createElement('div');
+  toast.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
+  toast.innerHTML = `<i class="fas ${icon} mr-2"></i>${message}`;
+  
+  document.body.appendChild(toast);
+  
+  // Show animation
+  setTimeout(() => {
+    toast.classList.remove('translate-x-full');
+  }, 100);
+  
+  // Auto hide after 3 seconds
+  setTimeout(() => {
+    toast.classList.add('translate-x-full');
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }, 3000);
+}
+
+// Load all products simultaneously
+async function loadAllProducts() {
+  try {
+    // Show loading state for all sections
+    showLoadingState('products-grid');
+    showLoadingState('best-selling-grid');
+    showLoadingState('new-products-grid');
+    
+    // Load all data simultaneously using Promise.all
+    const [productsData, bestSellingData, newProductsData] = await Promise.all([
+      fetch('api/products/paged?page=1&size=20').then(res => res.json()),
+      fetch('api/products/best-selling?limit=5').then(res => res.json()),
+      fetch('api/products/new?limit=4').then(res => res.json())
+    ]);
+    
+    // Process products data
+    if (productsData.success && productsData.data && productsData.data.items) {
+      products = productsData.data.items.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: formatPrice(product.price) + ' ₫',
+        originalPrice: null,
+        discount: null,
+        rating: 4,
+        image: product.images && product.images.length > 0 ? product.images[0].imageUrl : 'https://spencil.vn/wp-content/uploads/2024/11/chup-anh-san-pham-SPencil-Agency-1.jpg',
+        buttonType: "cart",
+        colorVariants: ["bg-gray-400", "bg-blue-500", "bg-red-500"],
+        outOfStock: product.stock <= 0,
+      }));
+    }
+    
+    // Process best selling data
+    if (bestSellingData.success && bestSellingData.data) {
+      bestSellingProducts = bestSellingData.data.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: formatPrice(product.price) + ' ₫',
+        rating: 4,
+        image: product.images && product.images.length > 0 ? product.images[0].imageUrl : 'https://spencil.vn/wp-content/uploads/2024/11/chup-anh-san-pham-SPencil-Agency-1.jpg',
+        available: product.stock || 0,
+        sold: Math.floor(Math.random() * 50) + 10,
+        outOfStock: product.stock <= 0,
+      }));
+    }
+    
+    // Process new products data
+    if (newProductsData.success && newProductsData.data) {
+      newProducts = newProductsData.data.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: formatPrice(product.price) + ' ₫',
+        originalPrice: null,
+        discount: "MỚI",
+        rating: 0,
+        image: product.images && product.images.length > 0 ? product.images[0].imageUrl : 'https://spencil.vn/wp-content/uploads/2024/11/chup-anh-san-pham-SPencil-Agency-1.jpg',
+        buttonType: "cart",
+        colorVariants: ["bg-pink-300", "bg-yellow-200", "bg-blue-300"],
+        outOfStock: product.stock <= 0,
+      }));
+    }
+    
+    // Render all sections simultaneously
+    renderProducts();
+    renderBestSellingProducts();
+    renderNewProducts();
+    
+  } catch (error) {
+    console.error('Error loading products:', error);
+    showErrorState('products-grid', 'Không thể tải sản phẩm');
+    showErrorState('best-selling-grid', 'Không thể tải sản phẩm bán chạy');
+    showErrorState('new-products-grid', 'Không thể tải sản phẩm mới');
+  }
 }
 
 // Initialize products when page loads
 document.addEventListener("DOMContentLoaded", function () {
-  renderProducts();
-  renderNewProducts();
-  renderBestSellingProducts();
+  // Load all data from API simultaneously
+  loadAllProducts();
+  
+  // Render static content
   renderPromoCards();
   renderReviews();
-  renderArticles();
 });

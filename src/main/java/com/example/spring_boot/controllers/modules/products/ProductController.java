@@ -164,4 +164,26 @@ public class ProductController {
                 page, size);
         return ApiResponse.success(response, "Products pagination completed successfully");
     }
+
+    /**
+     * Lấy sản phẩm bán chạy; GET /api/products/best-selling?limit=5
+     */
+    @GetMapping("/best-selling")
+    @Operation(summary = "Lấy sản phẩm bán chạy")
+    public ApiResponse<List<Product>> getBestSellingProducts(
+            @RequestParam(value = "limit", defaultValue = "5") int limit) {
+        List<Product> bestSellingProducts = productService.getBestSellingProducts(limit);
+        return ApiResponse.success(bestSellingProducts, "Best selling products retrieved successfully");
+    }
+
+    /**
+     * Lấy sản phẩm mới; GET /api/products/new?limit=4
+     */
+    @GetMapping("/new")
+    @Operation(summary = "Lấy sản phẩm mới")
+    public ApiResponse<List<Product>> getNewProducts(
+            @RequestParam(value = "limit", defaultValue = "4") int limit) {
+        List<Product> newProducts = productService.getNewProducts(limit);
+        return ApiResponse.success(newProducts, "New products retrieved successfully");
+    }
 }
