@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/cart")
-public class CartController {
+public class CartPageController {
     @GetMapping
     public String getCart() {
         return "clients/cart";

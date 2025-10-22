@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import com.example.spring_boot.services.VNPayService;
+import com.example.spring_boot.services.order.OrderService;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,9 @@ public class VnpayController {
     
     @Autowired
     private VNPayService vnPayService;
+    
+    @Autowired
+    private OrderService orderService;
     
     // ==================== API ENDPOINTS FOR TESTING ====================
     
@@ -27,6 +31,7 @@ public class VnpayController {
     public ResponseEntity<Map<String, Object>> createPaymentApi(
             @RequestParam("amount") int amount,
             @RequestParam("orderInfo") String orderInfo,
+            @RequestParam("orderId") String orderId,
             HttpServletRequest request) {
         
         Map<String, Object> response = new HashMap<>();
@@ -40,6 +45,7 @@ public class VnpayController {
             response.put("message", "Tạo URL thanh toán thành công");
             response.put("amount", amount);
             response.put("orderInfo", orderInfo);
+            response.put("orderId", orderId);
             
             return ResponseEntity.ok(response);
             
@@ -124,26 +130,31 @@ public class VnpayController {
     
     /**
      * API test tạo URL thanh toán đơn giản
-     * GET /api/vnpay/test-payment?amount=100000&orderInfo=Test Order
+     * GET /api/vnpay/test-payment?amount=100000&orderInfo=Test Order&orderId=ORD123
      */
     @GetMapping("/api/vnpay/test-payment")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> testPaymentApi(
             @RequestParam(value = "amount", defaultValue = "100000") int amount,
             @RequestParam(value = "orderInfo", defaultValue = "Test Payment Order") String orderInfo,
+            @RequestParam(value = "orderId", defaultValue = "ORD123456") String orderId,
             HttpServletRequest request) {
         
         Map<String, Object> response = new HashMap<>();
         
         try {
             String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-            String paymentUrl = vnPayService.createOrder(amount, orderInfo, baseUrl);
+            
+            // Tạo orderInfo với orderId
+            String finalOrderInfo = "OrderID: " + orderId + " - " + orderInfo;
+            String paymentUrl = vnPayService.createOrder(amount, finalOrderInfo, baseUrl);
             
             response.put("success", true);
             response.put("paymentUrl", paymentUrl);
             response.put("message", "Test tạo URL thanh toán thành công");
             response.put("amount", amount);
-            response.put("orderInfo", orderInfo);
+            response.put("orderInfo", finalOrderInfo);
+            response.put("orderId", orderId);
             response.put("returnUrl", baseUrl + "/vnpay-payment");
             
             return ResponseEntity.ok(response);
@@ -173,6 +184,42 @@ public class VnpayController {
         long timestamp = System.currentTimeMillis();
         int randomNum = (int)(Math.random() * 10000); // 4 digits random
         return "ORD" + timestamp + String.format("%04d", randomNum);
+    }
+    
+    /**
+     * Lấy Order ID từ orderInfo
+     * Format: "OrderID: {orderId} - {other info}"
+     */
+    private String getOrderIdFromOrderInfo(String orderInfo) {
+        if (orderInfo == null || orderInfo.isEmpty()) {
+            System.err.println("OrderInfo is null or empty");
+            return generateRandomOrderId();
+        }
+        
+        try {
+            // Parse orderInfo để lấy orderId
+            // Format: "OrderID: {orderId} - {other info}"
+            if (orderInfo.contains("OrderID:")) {
+                String[] parts = orderInfo.split("OrderID:");
+                if (parts.length > 1) {
+                    String orderIdPart = parts[1].trim();
+                    // Lấy phần trước dấu " - " nếu có
+                    if (orderIdPart.contains(" - ")) {
+                        orderIdPart = orderIdPart.split(" - ")[0].trim();
+                    }
+                    System.out.println("✅ Parsed OrderID from orderInfo: " + orderIdPart);
+                    return orderIdPart;
+                }
+            }
+            
+            // Fallback: tìm orderId trong orderInfo (có thể là format khác)
+            System.out.println("⚠️ Could not parse OrderID from orderInfo: " + orderInfo);
+            return generateRandomOrderId();
+            
+        } catch (Exception e) {
+            System.err.println("❌ Error parsing OrderID from orderInfo: " + e.getMessage());
+            return generateRandomOrderId();
+        }
     }
     
     // ==================== TEST METHODS ====================
@@ -276,12 +323,46 @@ public class VnpayController {
             
             model.addAttribute("isPaymentSuccess", isPaymentSuccess);
             
-            // Chuyển hướng đến trang tương ứng
+            // Xử lý kết quả thanh toán
             if (isPaymentSuccess) {
-                System.out.println("Payment successful - redirecting to success page");
+                System.out.println("=== VNPAY CALLBACK: THANH TOÁN THÀNH CÔNG ===");
+                System.out.println("Transaction ID: " + transactionId);
+                System.out.println("Order Info: " + orderInfo);
+                
+                try {
+                    // Lấy orderId thực từ orderInfo
+                    String realOrderId = getOrderIdFromOrderInfo(orderInfo);
+                    
+                    // Xử lý thanh toán thành công
+                    orderService.handlePaymentSuccess(realOrderId, transactionId);
+                    System.out.println("✅ Order xử lý thành công - Cart đã bị xóa");
+                    
+                } catch (Exception e) {
+                    System.err.println("❌ Lỗi xử lý thanh toán thành công: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                
                 return "clients/ordersuccess";
+                
             } else {
-                System.out.println("Payment failed - redirecting to fail page");
+                System.out.println("=== VNPAY CALLBACK: THANH TOÁN THẤT BẠI ===");
+                System.out.println("Response Code: " + responseCode);
+                System.out.println("Transaction Status: " + transactionStatus);
+                System.out.println("Order Info: " + orderInfo);
+                
+                try {
+                    // Lấy orderId thực từ orderInfo
+                    String realOrderId = getOrderIdFromOrderInfo(orderInfo);
+                    
+                    // Xử lý thanh toán thất bại
+                    orderService.handlePaymentFailure(realOrderId, "Payment failed - Response Code: " + responseCode);
+                    System.out.println("❌ Order xử lý thất bại - Cart được giữ nguyên");
+                    
+                } catch (Exception e) {
+                    System.err.println("❌ Lỗi xử lý thanh toán thất bại: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                
                 return "clients/orderfail";
             }
             

@@ -320,9 +320,48 @@
 <script>
 // Cart functionality
 let cart = [];
+let isLoadingCart = false; // Flag để tránh gọi liên tục
+let loadCartTimeout = null; // Debounce timeout
 
-// Load cart from localStorage
-function loadCartFromStorage() {
+// Load cart from API
+async function loadCartFromStorage(forceReload = false) {
+    if (isLoadingCart) {
+        console.log('Cart is already loading, skipping...');
+        return;
+    }
+    
+    // Nếu đã có data và không force reload, skip
+    if (!forceReload && cart.length > 0) {
+        console.log('Cart already has data, skipping reload...');
+        return;
+    }
+    
+    // Clear existing timeout
+    if (loadCartTimeout) {
+        clearTimeout(loadCartTimeout);
+    }
+    
+    // Debounce: chỉ gọi sau 100ms
+    loadCartTimeout = setTimeout(async () => {
+        isLoadingCart = true;
+    try {
+        // Sử dụng CartAPI nếu có
+        if (window.CartAPI) {
+            const cartAPI = new window.CartAPI();
+            const cartData = await cartAPI.getCart();
+            
+            if (cartData.success && cartData.data) {
+                // Chuyển đổi từ API response sang format cũ
+                cart = cartData.data.items || [];
+                console.log('Loaded cart from API:', cart);
+                renderCartItems();
+                updateCartSummary();
+            } else {
+                cart = [];
+                showEmptyCart();
+            }
+        } else {
+            // Fallback về localStorage
     const cartData = localStorage.getItem('cart');
     if (cartData) {
         cart = JSON.parse(cartData);
@@ -333,6 +372,15 @@ function loadCartFromStorage() {
         cart = [];
         showEmptyCart();
     }
+        }
+    } catch (error) {
+        console.error('Error loading cart:', error);
+        cart = [];
+        showEmptyCart();
+    } finally {
+        isLoadingCart = false;
+    }
+    }, 100);
 }
 
 // Render cart items
@@ -351,7 +399,7 @@ function renderCartItems() {
     
     // Render items
     cartItemsContainer.innerHTML = cart.map((item, index) => `
-        <div class="cart-item p-6" data-product-id="${item.id}">
+        <div class="cart-item p-6" data-product-id="${item.productId}">
             <div class="flex items-center space-x-4">
                 <!-- Product Image -->
                 <div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -360,8 +408,8 @@ function renderCartItems() {
 
                 <!-- Product Info -->
                 <div class="flex-1 min-w-0">
-                    <h3 class="text-lg font-semibold text-[#1f2d3d] mb-1">${item.name}</h3>
-                    <p class="text-sm text-gray-600 mb-2">SKU: ${item.id}</p>
+                    <h3 class="text-lg font-semibold text-[#1f2d3d] mb-1">${item.productName}</h3>
+                    <p class="text-sm text-gray-600 mb-2">Mã sản phẩm: ${item.productId}</p>
                     <div class="flex items-center space-x-4">
                         <span class="text-[#cb5439] font-bold text-lg">${formatPrice(item.price)}₫</span>
                     </div>
@@ -425,51 +473,114 @@ function showEmptyCart() {
 }
 
 // Update quantity
-function updateQuantity(index, delta) {
+async function updateQuantity(index, delta) {
     if (index >= 0 && index < cart.length) {
-        cart[index].quantity += delta;
-        if (cart[index].quantity < 1) {
-            cart[index].quantity = 1;
+        const item = cart[index];
+        const newQuantity = item.quantity + delta;
+        
+        if (newQuantity < 1) {
+            return; // Không cho phép quantity < 1
         }
         
-        // Save to localStorage
+        try {
+            // Sử dụng CartAPI nếu có
+            if (window.CartAPI) {
+                const cartAPI = new window.CartAPI();
+                const result = await cartAPI.updateCartItem(item.productId, newQuantity);
+                
+                if (result.success) {
+                    cart[index].quantity = newQuantity;
+                    showNotification('Đã cập nhật số lượng!', 'success');
+                } else {
+                    showNotification('Lỗi khi cập nhật số lượng: ' + result.message, 'error');
+                    return;
+                }
+            } else {
+                // Fallback về localStorage
+                cart[index].quantity = newQuantity;
         localStorage.setItem('cart', JSON.stringify(cart));
+            }
         
         // Re-render
         renderCartItems();
         updateCartSummary();
+            
+        } catch (error) {
+            console.error('Error updating quantity:', error);
+            showNotification('Lỗi khi cập nhật số lượng: ' + error.message, 'error');
+        }
     }
 }
 
 // Update quantity from input
-function updateQuantityInput(index, value) {
+async function updateQuantityInput(index, value) {
     if (index >= 0 && index < cart.length) {
-        const newQuantity = parseInt(value) || 1;
-        cart[index].quantity = Math.max(1, newQuantity);
+        const item = cart[index];
+        const newQuantity = Math.max(1, parseInt(value) || 1);
         
-        // Save to localStorage
+        try {
+            // Sử dụng CartAPI nếu có
+            if (window.CartAPI) {
+                const cartAPI = new window.CartAPI();
+                const result = await cartAPI.updateCartItem(item.productId, newQuantity);
+                
+                if (result.success) {
+                    cart[index].quantity = newQuantity;
+                    showNotification('Đã cập nhật số lượng!', 'success');
+                } else {
+                    showNotification('Lỗi khi cập nhật số lượng: ' + result.message, 'error');
+                    return;
+                }
+            } else {
+                // Fallback về localStorage
+                cart[index].quantity = newQuantity;
         localStorage.setItem('cart', JSON.stringify(cart));
+            }
         
         // Re-render
         renderCartItems();
         updateCartSummary();
+            
+        } catch (error) {
+            console.error('Error updating quantity:', error);
+            showNotification('Lỗi khi cập nhật số lượng: ' + error.message, 'error');
+        }
     }
 }
 
 // Remove item
-function removeItem(index) {
+async function removeItem(index) {
     if (index >= 0 && index < cart.length) {
-        cart.splice(index, 1);
+        const item = cart[index];
         
-        // Save to localStorage
+        try {
+            // Sử dụng CartAPI nếu có
+            if (window.CartAPI) {
+                const cartAPI = new window.CartAPI();
+                const result = await cartAPI.removeFromCart(item.productId);
+                
+                if (result.success) {
+                    cart.splice(index, 1);
+                    showNotification('Đã xóa sản phẩm khỏi giỏ hàng!', 'success');
+                } else {
+                    showNotification('Lỗi khi xóa sản phẩm: ' + result.message, 'error');
+                    return;
+                }
+            } else {
+                // Fallback về localStorage
+        cart.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cart));
+                showNotification('Đã xóa sản phẩm khỏi giỏ hàng!', 'success');
+            }
         
         // Re-render
         renderCartItems();
         updateCartSummary();
         
-        // Show notification
-        showNotification('Đã xóa sản phẩm khỏi giỏ hàng!', 'success');
+        } catch (error) {
+            console.error('Error removing item:', error);
+            showNotification('Lỗi khi xóa sản phẩm: ' + error.message, 'error');
+        }
     }
 }
 
@@ -519,15 +630,38 @@ function continueShopping() {
 }
 
 // Clear all items
-function clearAllItems() {
+async function clearAllItems() {
     if (cart.length === 0) return;
     
     if (confirm('Bạn có chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ hàng?')) {
+        try {
+            // Sử dụng CartAPI nếu có
+            if (window.CartAPI) {
+                const cartAPI = new window.CartAPI();
+                const result = await cartAPI.clearCart();
+                
+                if (result.success) {
+                    cart = [];
+                    showNotification('Đã xóa tất cả sản phẩm khỏi giỏ hàng!', 'success');
+                } else {
+                    showNotification('Lỗi khi xóa giỏ hàng: ' + result.message, 'error');
+                    return;
+                }
+            } else {
+                // Fallback về localStorage
         cart = [];
         localStorage.setItem('cart', JSON.stringify(cart));
+                showNotification('Đã xóa tất cả sản phẩm khỏi giỏ hàng!', 'success');
+            }
+            
+            // Re-render
         renderCartItems();
         updateCartSummary();
-        showNotification('Đã xóa tất cả sản phẩm khỏi giỏ hàng!', 'success');
+            
+        } catch (error) {
+            console.error('Error clearing cart:', error);
+            showNotification('Lỗi khi xóa giỏ hàng: ' + error.message, 'error');
+        }
     }
 }
 
@@ -604,7 +738,7 @@ function updateModalSummary() {
 }
 
 // Process checkout
-function processCheckout() {
+async function processCheckout() {
     const form = document.getElementById('checkoutForm');
     const formData = new FormData(form);
     
@@ -632,41 +766,60 @@ function processCheckout() {
     // Create order info string
     const orderInfo = `Đơn hàng của ${username} - ${phone} - ${address}${notes ? ' - Ghi chú: ' + notes : ''}`;
     
-    // Create order object
-    const order = {
-        id: Date.now().toString(),
-        customer: {
-            name: username,
-            phone: phone,
-            address: address,
-            notes: notes
-        },
-        items: cart.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity
-        })),
-        total: totalAmount,
-        status: 'pending',
-        createdAt: new Date().toISOString()
-    };
-    
-    console.log('Order created:', order);
-    console.log('Order info:', orderInfo);
-    console.log('Total amount:', totalAmount);
-    
-    // Save order to localStorage
-    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-    orders.push(order);
-    localStorage.setItem('orders', JSON.stringify(orders));
-    
-    // Call VNPay API to create payment
-    createVnPayPayment(totalAmount, orderInfo);
+    try {
+        // Sử dụng OrderAPI nếu có
+        if (window.OrderAPI) {
+            const orderAPI = new window.OrderAPI();
+            const result = await orderAPI.createOrder(username, phone, address, notes, 'VNPAY');
+            
+            if (result.success) {
+                console.log('Order created via API:', result.data);
+                // Call VNPay API to create payment với orderId
+                createVnPayPayment(totalAmount, orderInfo, result.data.id);
+            } else {
+                showNotification('Lỗi khi tạo đơn hàng: ' + result.message, 'error');
+                return;
+            }
+        } else {
+            // Fallback về localStorage
+            const order = {
+                id: Date.now().toString(),
+                customer: {
+                    name: username,
+                    phone: phone,
+                    address: address,
+                    notes: notes
+                },
+                items: cart.map(item => ({
+                    id: item.productId,
+                    name: item.productName,
+                    price: item.price,
+                    quantity: item.quantity
+                })),
+                total: totalAmount,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+            };
+            
+            console.log('Order created:', order);
+            
+            // Save order to localStorage
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            
+            // Call VNPay API to create payment với orderId
+            createVnPayPayment(totalAmount, orderInfo, order.id);
+        }
+        
+    } catch (error) {
+        console.error('Error creating order:', error);
+        showNotification('Lỗi khi tạo đơn hàng: ' + error.message, 'error');
+    }
 }
 
 // Create VNPay payment
-async function createVnPayPayment(amount, orderInfo) {
+async function createVnPayPayment(amount, orderInfo, orderId = null) {
     try {
         // Show loading state
         const checkoutBtn = document.querySelector('button[onclick="processCheckout()"]');
@@ -674,7 +827,13 @@ async function createVnPayPayment(amount, orderInfo) {
         checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Đang tạo thanh toán...';
         checkoutBtn.disabled = true;
         
-        console.log('Creating VNPay payment...', { amount, orderInfo });
+        console.log('Creating VNPay payment...', { amount, orderInfo, orderId });
+        
+        // Tạo orderInfo với orderId nếu có
+        let finalOrderInfo = orderInfo;
+        if (orderId) {
+            finalOrderInfo = `OrderID: ${orderId} - ${orderInfo}`;
+        }
         
         // Call VNPay API
         const response = await fetch('/api/vnpay/create-payment', {
@@ -684,7 +843,8 @@ async function createVnPayPayment(amount, orderInfo) {
             },
             body: new URLSearchParams({
                 amount: amount,
-                orderInfo: orderInfo
+                orderInfo: finalOrderInfo,
+                orderId: orderId || ''
             })
         });
         
@@ -780,6 +940,7 @@ function handlePaymentResult() {
 
 // Initialize cart when page loads
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing cart...');
     loadCartFromStorage();
     handlePaymentResult();
 });
