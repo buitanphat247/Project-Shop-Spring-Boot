@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -48,4 +50,10 @@ public class Product {
     private Instant createdAt = Instant.now();
     private Instant updatedAt;
     private Instant deletedAt;
+
+    // Cho phép nhận categoryId dạng chuỗi từ JSON và convert sang ObjectId
+    @JsonSetter("categoryId")
+    public void setCategoryIdFromString(String categoryId) {
+        this.categoryId = StringUtils.hasText(categoryId) ? new ObjectId(categoryId) : null;
+    }
 }

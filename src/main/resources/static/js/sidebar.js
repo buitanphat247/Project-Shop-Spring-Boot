@@ -30,14 +30,14 @@
             
             // Quản lý tài khoản
             { type: 'link', href: '/admin/users', icon: 'fas fa-users text-purple-500', text: 'Danh sách người dùng' },
-            { type: 'link', href: '/admin/customers', icon: 'fas fa-user-friends text-purple-500', text: 'Danh sách khách hàng' },
+            // { type: 'link', href: '/admin/customers', icon: 'fas fa-user-friends text-purple-500', text: 'Danh sách khách hàng' },
             
             // Đơn hàng
             { type: 'link', href: '/admin/orders', icon: 'fas fa-shopping-cart text-orange-500', text: 'Tất cả đơn hàng' },
             { type: 'link', href: '/admin/orders/pending', icon: 'fas fa-clock text-orange-500', text: 'Chờ xử lý' },
             
             // Thống kê
-            { type: 'link', href: '/admin/analytics', icon: 'fas fa-chart-bar text-red-500', text: 'Thống kê tổng quan' },
+            // { type: 'link', href: '/admin/analytics', icon: 'fas fa-chart-bar text-red-500', text: 'Thống kê tổng quan' },
             
             // Đăng xuất
             { type: 'link', href: '/auth/logout', icon: 'fas fa-sign-out-alt text-red-500', text: 'Đăng xuất', extra: 'hover:bg-red-50 text-red-500' }
